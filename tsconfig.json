@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "outFile": "docs/js/main.js",
+        "sourceMap": true, //niet goed leesbaar + alles aan elkaar geplakt. Met deze optie zeg je = er is een vertaling van Typescript bestanden (Overzicht) mijn browser snapt dat je JS gekoppeld is met Typescript.
+        "removeComments": true
+    },
+    "include": [
+        "dev/**/*"
+    ]
+}
