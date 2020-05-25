@@ -1,0 +1,44 @@
+body {
+    /* font-family: (Eigen font); */
+    overflow:hidden;
+    margin:0px; padding:0px;
+}
+
+game * {
+    position: absolute;
+    display: block;
+    box-sizing: border-box;
+    background-repeat: no-repeat;
+}
+
+robot {
+    background-image: url(../img/robot.png);
+    width:320px; height: 320px;
+}
+
+enemy1 {
+    background-image: url(../img/enemy1.png);
+    width:160px; height: 160px;
+}
+
+tree {
+    background-image: url(../img/treeglitched.gif);
+    width:320px; height: 320px;
+}
+
+background {
+    background-image: url(../img/background.png);
+    width:1440px; height: 900px;
+    background-size: inherit;
+    border-image-outset: 10px inherit black;
+}
+
+code {
+    background-image: url(../img/code.png);
+    width: 512px; height: 512px;
+}
+
+canvas {
+    width:1440px; height: 900px;
+    border: 3px inherit black;
+}
