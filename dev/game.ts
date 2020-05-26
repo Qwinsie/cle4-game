@@ -22,6 +22,7 @@ class Game {
 
     private gameLoop() {
         this.enemy1.update()
+        this.robot.update()
         requestAnimationFrame(()=>this.gameLoop())
     }
     
