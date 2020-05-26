@@ -92,6 +92,12 @@ class Robot {
             this.y_velo = 0;
         }
 
+        if (this.x < -200){
+            this.x = 1240
+        } else if(this.x > 1240){
+            this.x = -200
+        }
+
         console.log(this.left)
         this.robot.style.transform = `translate(${this.x}px, ${this.y}px)`
     }
