@@ -99,6 +99,7 @@ class Robot {
         }
 
         console.log(this.left)
+        console.log(this.robot.style.transform)
         this.robot.style.transform = `translate(${this.x}px, ${this.y}px)`
     }
 
