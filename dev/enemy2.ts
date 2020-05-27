@@ -16,7 +16,7 @@ class Enemy2 {
     private y_velo: number = 0
     private jumping: boolean = true
 
-    public canvas : HTMLElement
+    public canvas: HTMLElement
 
     constructor() {
         this.enemy2 = document.createElement("enemy2")
