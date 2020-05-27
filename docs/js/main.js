@@ -35,7 +35,7 @@ class Enemy1 {
         game.appendChild(this.enemy1);
         this.leftkey = 65;
         this.rightkey = 68;
-        this.x = 1000;
+        this.x = 1200;
         this.y = 630;
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
@@ -156,7 +156,9 @@ class Game {
         }
         if (this.checkCollision(this.robot.getFutureRectangle(), this.code.getRectangle())) {
             this.code.collected = true;
+            this.tree.fixed = true;
         }
+        this.tree.update();
         this.enemy1.update();
         this.enemy2.update();
         this.robot.update();
@@ -256,12 +258,19 @@ class Robot {
 }
 class Tree {
     constructor() {
+        this.fixed = false;
         this.tree = document.createElement("tree");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.tree);
         this.x = 500;
         this.y = 400;
         this.tree.style.transform = `translate(${this.x}px, ${this.y}px)`;
+    }
+    update() {
+        if (this.fixed) {
+            this.tree.classList.add("fixed");
+            this.fixed = false;
+        }
     }
 }
 //# sourceMappingURL=main.js.map
