@@ -21,6 +21,12 @@ enemy1 {
     width:160px; height: 160px;
 }
 
+enemy2 {
+    background-image: url(../img/enemy2.gif);
+    width:120px; height: 192px;
+    background-size: contain;
+}
+
 tree {
     background-image: url(../img/treeglitched.gif);
     width:320px; height: 320px;
