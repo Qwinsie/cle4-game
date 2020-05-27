@@ -1,0 +1,96 @@
+class Code {
+    constructor() {
+        this.createCode();
+    }
+    createCode() {
+        this.code = document.createElement("code");
+        let game = document.getElementsByTagName("game")[0];
+        game.appendChild(this.code);
+        this.x = 0;
+        this.y = 0;
+        this.code.style.transform = `translate(${this.x}px, ${this.y}px)`;
+    }
+}
+class Enemy1 {
+    constructor() {
+        this.leftspeed = 0;
+        this.rightspeed = 0;
+        this.enemy1 = document.createElement("enemy1");
+        let game = document.getElementsByTagName("game")[0];
+        game.appendChild(this.enemy1);
+        this.leftkey = 65;
+        this.rightkey = 68;
+        this.x = 1000;
+        this.y = 630;
+        console.log(this.enemy1.clientWidth);
+        window.addEventListener("keydown", (e) => this.onKeyDown(e));
+        window.addEventListener("keyup", (e) => this.onKeyUp(e));
+    }
+    onKeyDown(e) {
+        switch (e.keyCode) {
+            case this.leftkey:
+                this.leftspeed = 10;
+                break;
+            case this.rightkey:
+                this.rightspeed = 10;
+                break;
+        }
+    }
+    onKeyUp(e) {
+        switch (e.keyCode) {
+            case this.leftkey:
+                this.leftspeed = 0;
+                break;
+            case this.rightkey:
+                this.rightspeed = 0;
+                break;
+        }
+    }
+    update() {
+        let newX = this.x - this.leftspeed + this.rightspeed;
+        if (newX > 0 && newX + 100 < (1440 - this.enemy1.clientWidth)) {
+            this.x = newX;
+        }
+        this.enemy1.style.transform = `translate(${this.x}px, ${this.y}px)`;
+    }
+}
+class Game {
+    constructor() {
+        this.canvas = document.createElement("canvas");
+        let game = document.getElementsByTagName("game")[0];
+        game.appendChild(this.canvas);
+        this.robot = new Robot;
+        this.tree = new Tree;
+        this.enemy1 = new Enemy1;
+        this.code = new Code;
+        this.gameLoop();
+    }
+    gameLoop() {
+        this.enemy1.update();
+        requestAnimationFrame(() => this.gameLoop());
+    }
+}
+window.addEventListener("load", () => new Game());
+class Robot {
+    constructor() {
+        this.xspeed = 1;
+        this.yspeed = 1;
+        this.robot = document.createElement("robot");
+        let game = document.getElementsByTagName("game")[0];
+        game.appendChild(this.robot);
+        this.x = 100;
+        this.y = 500;
+        this.robot.style.transform = `translate(${this.x}px, ${this.y}px)`;
+    }
+}
+class Tree {
+    constructor() {
+        this.tree = document.createElement("tree");
+        let game = document.getElementsByTagName("game")[0];
+        game.appendChild(this.tree);
+        this.x = 500;
+        this.y = 400;
+        this.tree.style.transform = `translate(${this.x}px, ${this.y}px)`;
+    }
+}
+//# sourceMappingURL=main.js.map
