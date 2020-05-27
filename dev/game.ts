@@ -26,7 +26,15 @@ class Game {
         this.enemy1.update()
         this.enemy2.update()
         this.robot.update()
+        
         requestAnimationFrame(()=>this.gameLoop())
+    }
+
+    checkCollision(a: ClientRect, b: ClientRect) {
+        return (a.left <= b.right &&
+                b.left <= a.right &&
+                a.top <= b.bottom &&
+                b.top <= a.bottom)
     }
     
 }
