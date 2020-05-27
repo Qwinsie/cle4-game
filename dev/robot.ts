@@ -108,8 +108,6 @@ class Robot {
             this.x = -200
         }
 
-        console.log(this.flip)
-        console.log(this.robot.style.transform)
         this.robot.style.transform = `translate(${this.x}px, ${this.y}px) scalex(${this.flip})`
     }
 

@@ -6,9 +6,12 @@ class Code {
         this.code = document.createElement("code");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.code);
-        this.x = 0;
-        this.y = 0;
+        this.x = 250;
+        this.y = 250;
         this.code.style.transform = `translate(${this.x}px, ${this.y}px) scale(0.1)`;
+    }
+    getRectangle() {
+        return this.code.getBoundingClientRect();
     }
 }
 class Enemy1 {
@@ -71,6 +74,10 @@ class Enemy2 {
         this.y = 600;
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
+        this.enemy2.style.transform = `translate(${this.x}px, ${this.y}px)`;
+    }
+    getRectangle() {
+        return this.enemy2.getBoundingClientRect();
     }
     onKeyDown(e) {
         switch (e.keyCode) {
@@ -100,10 +107,10 @@ class Enemy2 {
     }
     update() {
         if (this.space && this.jumping == false) {
-            this.y_velo -= 60;
+            this.y_velo -= 70;
             this.jumping = true;
         }
-        this.y_velo += 1.2;
+        this.y_velo += 1.7;
         this.y += this.y_velo;
         this.y_velo *= 0.9;
         if (this.y > 600) {
@@ -131,10 +138,29 @@ class Game {
         this.gameLoop();
     }
     gameLoop() {
+        if (this.checkCollisionEnemy2(this.robot.getFutureRectangle(), this.enemy2.getRectangle())) {
+            console.log("collision enemy2");
+        }
+        if (this.checkCollisionCodeCloud(this.robot.getFutureRectangle(), this.code.getRectangle())) {
+            console.log("collision code!");
+            this.collisionRobotCode = true;
+        }
         this.enemy1.update();
         this.enemy2.update();
         this.robot.update();
         requestAnimationFrame(() => this.gameLoop());
+    }
+    checkCollisionEnemy2(a, b) {
+        return (a.left <= b.right &&
+            b.left <= a.right &&
+            a.top <= b.bottom &&
+            b.top <= a.bottom);
+    }
+    checkCollisionCodeCloud(a, b) {
+        return (a.left <= b.right &&
+            b.left <= a.right &&
+            a.top <= b.bottom &&
+            b.top <= a.bottom);
     }
 }
 window.addEventListener("load", () => new Game());
@@ -184,6 +210,11 @@ class Robot {
                 break;
         }
     }
+    getFutureRectangle() {
+        let rect = this.robot.getBoundingClientRect();
+        rect.x += this.x_velo;
+        return rect;
+    }
     update() {
         if (this.space && this.jumping == false) {
             this.y_velo -= 40;
@@ -213,8 +244,6 @@ class Robot {
         else if (this.x > 1240) {
             this.x = -200;
         }
-        console.log(this.flip);
-        console.log(this.robot.style.transform);
         this.robot.style.transform = `translate(${this.x}px, ${this.y}px) scalex(${this.flip})`;
     }
 }

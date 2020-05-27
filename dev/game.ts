@@ -6,6 +6,7 @@ class Game {
     private tree : Tree
     public canvas : HTMLElement
     private code : Code
+    protected collisionRobotCode: boolean
 
     constructor() {
         this.canvas = document.createElement("canvas")
@@ -19,14 +20,22 @@ class Game {
         this.enemy2 = new Enemy2
         this.code = new Code
 
+
         this.gameLoop()
     }
 
     private gameLoop() {
-        if (this.checkCollision(this.robot.getFutureRectangle(), this.enemy2.getRectangle())) {
+        if (this.checkCollisionEnemy2(this.robot.getFutureRectangle(), this.enemy2.getRectangle())) {
             //collision event
-            console.log("collision")
+            console.log("collision enemy2")
         }
+
+        if(this.checkCollisionCodeCloud(this.robot.getFutureRectangle(), this.code.getRectangle())){
+            console.log("collision code!")
+            this.collisionRobotCode = true
+        }
+
+
 
         this.enemy1.update()
         this.enemy2.update()
@@ -35,12 +44,18 @@ class Game {
         requestAnimationFrame(()=>this.gameLoop())
     }
 
-    checkCollision(a: ClientRect, b: ClientRect) {
+    checkCollisionEnemy2(a: ClientRect, b: ClientRect) {
         return (a.left <= b.right &&
                 b.left <= a.right &&
                 a.top <= b.bottom &&
                 b.top <= a.bottom)
     }
     
+    checkCollisionCodeCloud(a: ClientRect, b:ClientRect){
+        return (a.left <= b.right &&
+            b.left <= a.right &&
+            a.top <= b.bottom &&
+            b.top <= a.bottom)
+    }
 }
 window.addEventListener("load", () => new Game())
