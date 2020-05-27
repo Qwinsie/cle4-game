@@ -12,9 +12,9 @@ class Game {
 
         let game =document.getElementsByTagName("game")[0]
         game.appendChild(this.canvas)
-
-        this.robot = new Robot
+        
         this.tree = new Tree
+        this.robot = new Robot
         this.enemy1 = new Enemy1
         this.enemy2 = new Enemy2
         this.code = new Code
@@ -27,10 +27,14 @@ class Game {
             //collision event
             console.log("collision")
         }
-
+        if (this.checkCollision(this.robot.getFutureRectangle(), this.code.getRectangle())) {
+            //collision event code wolkje
+            this.code.collected = true
+        }
         this.enemy1.update()
         this.enemy2.update()
         this.robot.update()
+        this.code.update()
 
         requestAnimationFrame(()=>this.gameLoop())
     }
