@@ -86,10 +86,12 @@ class Enemy2 {
         }
 
         let newX = this.x - this.leftspeed + this.rightspeed
-        // check of het monster binnen het beeld blijft
+
         if (newX > 0 && newX + 100 < (1440 - this.enemy2.clientWidth)){
-         this.x = newX
+            if (newX < this.x || newX > this.x) {
+                this.x = newX
+                this.enemy2.style.transform = `translate(${this.x}px, ${this.y}px)`
+            }
         }
-        this.enemy2.style.transform = `translate(${this.x}px, ${this.y}px)`
     }
 }
