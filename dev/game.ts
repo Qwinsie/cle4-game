@@ -2,6 +2,7 @@ class Game {
 
     private robot : Robot
     private enemy1 : Enemy1
+    private enemy2 : Enemy2
     private tree : Tree
     public canvas : HTMLElement
     private code : Code
@@ -15,6 +16,7 @@ class Game {
         this.robot = new Robot
         this.tree = new Tree
         this.enemy1 = new Enemy1
+        this.enemy2 = new Enemy2
         this.code = new Code
 
         this.gameLoop()
@@ -22,6 +24,7 @@ class Game {
 
     private gameLoop() {
         this.enemy1.update()
+        this.enemy2.update()
         this.robot.update()
         requestAnimationFrame(()=>this.gameLoop())
     }
