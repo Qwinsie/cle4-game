@@ -62,7 +62,7 @@ class Enemy1 {
     }
     update() {
         let newX = this.x - this.leftspeed + this.rightspeed;
-        if (newX > 0 && newX + 100 < (1440 - this.enemy1.clientWidth)) {
+        if (newX > 0 && newX < (1440 - this.enemy1.clientWidth)) {
             this.x = newX;
         }
         this.enemy1.style.transform = `translate(${this.x}px, ${this.y}px)`;
