@@ -22,7 +22,7 @@ enemy1 {
 }
 
 enemy2 {
-    background-image: url(../img/Virus\ 2.gif);
+    background-image: url(../img/enemy2.gif);
     width:120px; height: 192px;
     background-size: contain;
 }
