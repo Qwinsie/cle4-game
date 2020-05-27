@@ -9,10 +9,12 @@ class Robot {
 
     private left : boolean = false
     private right: boolean = false
+    private duck: boolean = false
     private space: boolean = false
 
     private leftKey: number
     private rightKey: number
+    private downKey: number
     private spaceKey: number
 
     private x_velo: number = 0
@@ -30,6 +32,7 @@ class Robot {
 
         this.leftKey = 37
         this.rightKey = 39
+        this.downKey = 40
         this.spaceKey = 32
 
         this.x = 200
@@ -49,6 +52,9 @@ class Robot {
             case this.rightKey:
                 this.right = true
                 break;
+            case this.downKey:
+                this.duck = true
+                break;
             case this.spaceKey:
                 this.space = true
                 break;
@@ -62,6 +68,9 @@ class Robot {
                 break;
             case this.rightKey:
                 this.right = false
+                break;
+            case this.downKey:
+                this.duck = false
                 break;
             case this.spaceKey:
                 this.space = false
@@ -89,6 +98,12 @@ class Robot {
         if(this.right){
             this.x_velo += 1;
             this.flip = 1
+        }
+
+        if(this.duck){
+            this.robot.classList.add("robot-duck")
+        } else {
+            this.robot.classList.remove("robot-duck")
         }
 
         this.y_velo += 1.7;
