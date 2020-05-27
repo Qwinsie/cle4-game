@@ -152,12 +152,8 @@ class Game {
         this.gameLoop();
     }
     gameLoop() {
-        if (this.checkCollisionEnemy2(this.robot.getFutureRectangle(), this.enemy2.getRectangle())) {
-            console.log("collision enemy2");
-        }
-        if (this.checkCollisionCodeCloud(this.robot.getFutureRectangle(), this.code.getRectangle())) {
-            console.log("collision code!");
-            this.code.hideCodeCloud();
+        if (this.checkCollision(this.robot.getFutureRectangle(), this.enemy2.getRectangle())) {
+            console.log("collision");
         }
         if (this.checkCollision(this.robot.getFutureRectangle(), this.code.getRectangle())) {
             this.code.collected = true;
@@ -170,13 +166,7 @@ class Game {
         this.code.update();
         requestAnimationFrame(() => this.gameLoop());
     }
-    checkCollisionEnemy2(a, b) {
-        return (a.left <= b.right &&
-            b.left <= a.right &&
-            a.top <= b.bottom &&
-            b.top <= a.bottom);
-    }
-    checkCollisionCodeCloud(a, b) {
+    checkCollision(a, b) {
         return (a.left <= b.right &&
             b.left <= a.right &&
             a.top <= b.bottom &&

@@ -19,19 +19,13 @@ class Game {
         this.enemy2 = new Enemy2
         this.code = new Code
 
-
         this.gameLoop()
     }
 
     private gameLoop() {
-        if (this.checkCollisionEnemy2(this.robot.getFutureRectangle(), this.enemy2.getRectangle())) {
+        if (this.checkCollision(this.robot.getFutureRectangle(), this.enemy2.getRectangle())) {
             //collision event
-            console.log("collision enemy2")
-        }
-
-        if(this.checkCollisionCodeCloud(this.robot.getFutureRectangle(), this.code.getRectangle())){
-            console.log("collision code!")
-            this.code.hideCodeCloud()
+            console.log("collision")
         }
         if (this.checkCollision(this.robot.getFutureRectangle(), this.code.getRectangle())) {
             //collision event code wolkje
@@ -48,18 +42,12 @@ class Game {
         requestAnimationFrame(()=>this.gameLoop())
     }
 
-    checkCollisionEnemy2(a: ClientRect, b: ClientRect) {
+    checkCollision(a: ClientRect, b: ClientRect) {
         return (a.left <= b.right &&
                 b.left <= a.right &&
                 a.top <= b.bottom &&
                 b.top <= a.bottom)
     }
     
-    checkCollisionCodeCloud(a: ClientRect, b:ClientRect){
-        return (a.left <= b.right &&
-            b.left <= a.right &&
-            a.top <= b.bottom &&
-            b.top <= a.bottom)
-    }
 }
 window.addEventListener("load", () => new Game())
