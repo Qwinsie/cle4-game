@@ -18,6 +18,8 @@ class Robot {
     private x_velo: number = 0
     private y_velo: number = 0
 
+    private flip : number = 1
+
     public canvas: HTMLElement
 
     constructor() {
@@ -74,10 +76,12 @@ class Robot {
 
         if(this.left){
             this.x_velo -= 1;
+            this.flip = -1
         }
 
         if(this.right){
             this.x_velo += 1;
+            this.flip = 1
         }
 
         this.y_velo += 1.7;
@@ -98,9 +102,9 @@ class Robot {
             this.x = -200
         }
 
-        console.log(this.left)
+        console.log(this.flip)
         console.log(this.robot.style.transform)
-        this.robot.style.transform = `translate(${this.x}px, ${this.y}px)`
+        this.robot.style.transform = `translate(${this.x}px, ${this.y}px) scalex(${this.flip})`
     }
 
 

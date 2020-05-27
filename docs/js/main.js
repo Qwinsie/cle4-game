@@ -8,7 +8,7 @@ class Code {
         game.appendChild(this.code);
         this.x = 0;
         this.y = 0;
-        this.code.style.transform = `translate(${this.x}px, ${this.y}px)`;
+        this.code.style.transform = `translate(${this.x}px, ${this.y}px) scale(0.1)`;
     }
 }
 class Enemy1 {
@@ -146,6 +146,7 @@ class Robot {
         this.space = false;
         this.x_velo = 0;
         this.y_velo = 0;
+        this.flip = 1;
         this.robot = document.createElement("robot");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.robot);
@@ -190,9 +191,11 @@ class Robot {
         }
         if (this.left) {
             this.x_velo -= 1;
+            this.flip = -1;
         }
         if (this.right) {
             this.x_velo += 1;
+            this.flip = 1;
         }
         this.y_velo += 1.7;
         this.x += this.x_velo;
@@ -210,9 +213,9 @@ class Robot {
         else if (this.x > 1240) {
             this.x = -200;
         }
-        console.log(this.left);
+        console.log(this.flip);
         console.log(this.robot.style.transform);
-        this.robot.style.transform = `translate(${this.x}px, ${this.y}px)`;
+        this.robot.style.transform = `translate(${this.x}px, ${this.y}px) scalex(${this.flip})`;
     }
 }
 class Tree {
