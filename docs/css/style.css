@@ -30,6 +30,7 @@ enemy2 {
 tree {
     background-image: url(../img/treeglitched.gif);
     width:320px; height: 320px;
+    z-index: -1;
 }
 
 background {
@@ -37,6 +38,7 @@ background {
     width:1440px; height: 900px;
     background-size: inherit;
     border-image-outset: 10px inherit black;
+    z-index: -2;
 }
 
 code {
