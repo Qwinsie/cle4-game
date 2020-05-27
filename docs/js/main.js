@@ -154,7 +154,7 @@ class Robot {
         this.rightKey = 39;
         this.spaceKey = 32;
         this.x = 200;
-        this.y = 630;
+        this.y = 600;
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
     }
@@ -202,9 +202,9 @@ class Robot {
         this.y += this.y_velo;
         this.x_velo *= 0.9;
         this.y_velo *= 0.9;
-        if (this.y > 550 - 16 - 32) {
+        if (this.y > 600 - 16 - 32) {
             this.jumping = false;
-            this.y = 550 - 16 - 32;
+            this.y = 600 - 16 - 32;
             this.y_velo = 0;
         }
         if (this.x < -200) {

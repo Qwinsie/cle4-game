@@ -1,2 +1,7 @@
 # Build
+<<<<<<< HEAD
+docs/js
+.vscode/settings.json
+=======
 .vscode
+>>>>>>> 0b457e2828805ac72b7cc5ffe9d24733e0909446

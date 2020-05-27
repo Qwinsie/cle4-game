@@ -33,7 +33,7 @@ class Robot {
         this.spaceKey = 32
 
         this.x = 200
-        this.y = 630
+        this.y = 600
 
         window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e))
         window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
@@ -90,9 +90,9 @@ class Robot {
         this.x_velo *= 0.9;
         this.y_velo *= 0.9;
 
-        if(this.y > 550 - 16 -32){
+        if(this.y > 600 - 16 -32){
             this.jumping = false;
-            this.y = 550 - 16 - 32;
+            this.y = 600 - 16 - 32;
             this.y_velo = 0;
         }
 
