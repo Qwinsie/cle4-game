@@ -21,7 +21,7 @@ class Enemy1 {
         this.leftkey = 65
         this.rightkey = 68
 
-        this.x = 1000
+        this.x = 1200
         this.y = 630
 
         window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e))
