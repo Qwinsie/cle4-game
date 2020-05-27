@@ -16,6 +16,11 @@ robot {
     width:150px; height: 230px;
 }
 
+.robot-duck{
+    background-image: url(../img/robot-duck.png);
+    width:150px; height: 230px;
+}
+
 enemy1 {
     background-image: url(../img/enemy1.png);
     width:160px; height: 160px;
