@@ -67,19 +67,85 @@ class Game {
     }
     gameLoop() {
         this.enemy1.update();
+        this.robot.update();
         requestAnimationFrame(() => this.gameLoop());
     }
 }
 window.addEventListener("load", () => new Game());
 class Robot {
     constructor() {
-        this.xspeed = 1;
-        this.yspeed = 1;
+        this.jumping = true;
+        this.left = false;
+        this.right = false;
+        this.space = false;
+        this.x_velo = 0;
+        this.y_velo = 0;
         this.robot = document.createElement("robot");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.robot);
-        this.x = 100;
-        this.y = 500;
+        this.leftKey = 37;
+        this.rightKey = 39;
+        this.spaceKey = 32;
+        this.x = 200;
+        this.y = 630;
+        window.addEventListener("keydown", (e) => this.onKeyDown(e));
+        window.addEventListener("keyup", (e) => this.onKeyUp(e));
+    }
+    onKeyDown(e) {
+        switch (e.keyCode) {
+            case this.leftKey:
+                this.left = true;
+                break;
+            case this.rightKey:
+                this.right = true;
+                break;
+            case this.spaceKey:
+                this.space = true;
+                break;
+        }
+    }
+    onKeyUp(e) {
+        switch (e.keyCode) {
+            case this.leftKey:
+                this.left = false;
+                break;
+            case this.rightKey:
+                this.right = false;
+                break;
+            case this.spaceKey:
+                this.space = false;
+                break;
+        }
+    }
+    update() {
+        if (this.space && this.jumping == false) {
+            this.y_velo -= 40;
+            this.jumping = true;
+        }
+        if (this.left) {
+            this.x_velo -= 1;
+        }
+        if (this.right) {
+            this.x_velo += 1;
+        }
+        this.y_velo += 1.7;
+        this.x += this.x_velo;
+        this.y += this.y_velo;
+        this.x_velo *= 0.9;
+        this.y_velo *= 0.9;
+        if (this.y > 550 - 16 - 32) {
+            this.jumping = false;
+            this.y = 550 - 16 - 32;
+            this.y_velo = 0;
+        }
+        if (this.x < -200) {
+            this.x = 1240;
+        }
+        else if (this.x > 1240) {
+            this.x = -200;
+        }
+        console.log(this.left);
+        console.log(this.robot.style.transform);
         this.robot.style.transform = `translate(${this.x}px, ${this.y}px)`;
     }
 }
