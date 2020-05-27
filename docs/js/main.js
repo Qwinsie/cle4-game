@@ -1,7 +1,6 @@
 class Code {
     constructor() {
-        this.x = 0;
-        this.y = 0;
+        this.collisionRobotCode = false;
         this.collected = false;
         this.createCode();
     }
@@ -15,6 +14,10 @@ class Code {
     }
     getRectangle() {
         return this.code.getBoundingClientRect();
+    }
+    getFutureRectangle() {
+        let rect = this.code.getBoundingClientRect();
+        return rect;
     }
     update() {
         if (this.collected) {
@@ -37,6 +40,7 @@ class Enemy1 {
         this.y = 630;
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
+        this.enemy1.style.transform = `translate(${this.x}px, ${this.y}px)`;
     }
     getRectangle() {
         return this.enemy1.getBoundingClientRect();
@@ -194,6 +198,7 @@ class Robot {
         this.jumping = true;
         this.left = false;
         this.right = false;
+        this.duck = false;
         this.space = false;
         this.x_velo = 0;
         this.y_velo = 0;
@@ -203,11 +208,13 @@ class Robot {
         game.appendChild(this.robot);
         this.leftKey = 37;
         this.rightKey = 39;
+        this.downKey = 40;
         this.spaceKey = 32;
         this.x = 200;
         this.y = 600;
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
+        this.robot.style.transform = `translate(${this.x}px, ${this.y}px)`;
     }
     onKeyDown(e) {
         switch (e.keyCode) {
@@ -216,6 +223,9 @@ class Robot {
                 break;
             case this.rightKey:
                 this.right = true;
+                break;
+            case this.downKey:
+                this.duck = true;
                 break;
             case this.spaceKey:
                 this.space = true;
@@ -229,6 +239,9 @@ class Robot {
                 break;
             case this.rightKey:
                 this.right = false;
+                break;
+            case this.downKey:
+                this.duck = false;
                 break;
             case this.spaceKey:
                 this.space = false;
@@ -252,6 +265,12 @@ class Robot {
         if (this.right) {
             this.x_velo += 1;
             this.flip = 1;
+        }
+        if (this.duck) {
+            this.robot.classList.add("robot-duck");
+        }
+        else {
+            this.robot.classList.remove("robot-duck");
         }
         this.y_velo += 1.7;
         this.x += this.x_velo;
