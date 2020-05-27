@@ -17,6 +17,6 @@ class Code {
         this.x = 0
         this.y = 0
 
-        this.code.style.transform = `translate(${this.x}px, ${this.y}px)`
+        this.code.style.transform = `translate(${this.x}px, ${this.y}px) scale(0.1)`
     }
 }

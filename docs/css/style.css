@@ -42,6 +42,7 @@ background {
 code {
     background-image: url(../img/code.png);
     width: 512px; height: 512px;
+    transform: scale(0.1)
 }
 
 canvas {
