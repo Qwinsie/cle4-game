@@ -17,13 +17,12 @@ class Enemy1 {
 
         let game =document.getElementsByTagName("game")[0]
         game.appendChild(this.enemy1)
-
+        // 65 = A, 68 = D
         this.leftkey = 65
         this.rightkey = 68
 
         this.x = 1000
         this.y = 630
-        console.log(this.enemy1.clientWidth)
 
         window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e))
         window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
