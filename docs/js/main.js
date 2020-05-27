@@ -1,7 +1,5 @@
 class Code {
     constructor() {
-        this.x = 0;
-        this.y = 0;
         this.collected = false;
         this.createCode();
     }
@@ -15,6 +13,10 @@ class Code {
     }
     getRectangle() {
         return this.code.getBoundingClientRect();
+    }
+    getFutureRectangle() {
+        let rect = this.code.getBoundingClientRect();
+        return rect;
     }
     update() {
         if (this.collected) {
