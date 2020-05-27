@@ -40,6 +40,10 @@ class Enemy1 {
         this.y = 630;
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
+        this.enemy1.style.transform = `translate(${this.x}px, ${this.y}px)`;
+    }
+    getRectangle() {
+        return this.enemy1.getBoundingClientRect();
     }
     onKeyDown(e) {
         switch (e.keyCode) {
@@ -63,7 +67,7 @@ class Enemy1 {
     }
     update() {
         let newX = this.x - this.leftspeed + this.rightspeed;
-        if (newX > 0 && newX + 100 < (1440 - this.enemy1.clientWidth)) {
+        if (newX > 0 && newX < (1440 - this.enemy1.clientWidth)) {
             this.x = newX;
         }
         this.enemy1.style.transform = `translate(${this.x}px, ${this.y}px)`;
@@ -141,6 +145,9 @@ class Enemy2 {
 }
 class Game {
     constructor() {
+        this.score = 0;
+        this.enemy1killed = false;
+        this.enemy2killed = false;
         this.canvas = document.createElement("canvas");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.canvas);
@@ -152,12 +159,20 @@ class Game {
         this.gameLoop();
     }
     gameLoop() {
-        if (this.checkCollision(this.robot.getFutureRectangle(), this.enemy2.getRectangle())) {
+        if (this.checkCollision(this.robot.getFutureRectangle(), this.enemy2.getRectangle()) && !this.enemy2killed) {
             console.log("collision");
+            this.updateScore(1);
+            this.enemy2killed = true;
+        }
+        if (this.checkCollision(this.robot.getFutureRectangle(), this.enemy1.getRectangle()) && !this.enemy1killed) {
+            console.log("collision");
+            this.updateScore(1);
+            this.enemy1killed = true;
         }
         if (this.checkCollision(this.robot.getFutureRectangle(), this.code.getRectangle())) {
             this.code.collected = true;
             this.tree.fixed = true;
+            this.updateScore(1);
         }
         this.tree.update();
         this.enemy1.update();
@@ -171,6 +186,10 @@ class Game {
             b.left <= a.right &&
             a.top <= b.bottom &&
             b.top <= a.bottom);
+    }
+    updateScore(addScoreAmount) {
+        this.score += addScoreAmount;
+        document.getElementsByTagName("score")[0].innerHTML = `Score: ${this.score}`;
     }
 }
 window.addEventListener("load", () => new Game());
@@ -195,6 +214,7 @@ class Robot {
         this.y = 600;
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
+        this.robot.style.transform = `translate(${this.x}px, ${this.y}px)`;
     }
     onKeyDown(e) {
         switch (e.keyCode) {

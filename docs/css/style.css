@@ -50,6 +50,13 @@ background {
     z-index: -2;
 }
 
+score {
+    color:white;
+    font-size:26px;
+    font-family: 'Press Start 2P', cursive;
+    margin: 20px;
+}
+
 code {
     background-image: url(../img/code.png);
     width: 512px; height: 512px;

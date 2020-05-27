@@ -41,6 +41,7 @@ class Robot {
         window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e))
         window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
 
+        this.robot.style.transform = `translate(${this.x}px, ${this.y}px)`
     }
 
     private onKeyDown(e: KeyboardEvent): void{
