@@ -1,9 +1,12 @@
 class Code{
 
     private code : HTMLElement
+
     public x : number
     public y : number
     protected collisionRobotCode: boolean = false
+
+    public collected : boolean = false
 
     constructor() {
         this.createCode()
@@ -15,21 +18,27 @@ class Code{
         let game =document.getElementsByTagName("game")[0]
         game.appendChild(this.code)
 
-        this.x = 250
-        this.y = 250
+        this.x = 500
+        this.y = 200
 
-
-        this.code.style.transform = `translate(${this.x}px, ${this.y}px) scale(0.1)`
-
-        
-    }
-
-    public hideCodeCloud(){
-        this.collisionRobotCode = true
-        this.code.style.display = "none"
+        this.code.style.transform = `translate(${this.x}px, ${this.y}px) scale(0.2)`
     }
 
     public getRectangle() {
         return this.code.getBoundingClientRect()
+    }
+
+    public getFutureRectangle(){
+        let rect = this.code.getBoundingClientRect()
+        return rect
+    }
+
+    public update() : void {
+
+        if(this.collected) {
+            console.log("collected")
+            this.code.remove()
+            this.collected = false
+        }
     }
 }

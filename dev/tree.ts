@@ -4,6 +4,8 @@ class Tree {
     public x : number
     public y : number
 
+    public fixed : boolean = false
+
     constructor() {
         this.tree = document.createElement("tree")
 
@@ -16,4 +18,11 @@ class Tree {
         this.tree.style.transform = `translate(${this.x}px, ${this.y}px)`
     }
 
+    public update() {
+        if(this.fixed) {
+            this.tree.classList.add("fixed")
+            this.fixed = false
+        }
+
+    }
 }

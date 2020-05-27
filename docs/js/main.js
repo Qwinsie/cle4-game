@@ -1,22 +1,30 @@
 class Code {
     constructor() {
         this.collisionRobotCode = false;
+        this.collected = false;
         this.createCode();
     }
     createCode() {
         this.code = document.createElement("code");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.code);
-        this.x = 250;
-        this.y = 250;
-        this.code.style.transform = `translate(${this.x}px, ${this.y}px) scale(0.1)`;
-    }
-    hideCodeCloud() {
-        this.collisionRobotCode = true;
-        this.code.style.display = "none";
+        this.x = 500;
+        this.y = 200;
+        this.code.style.transform = `translate(${this.x}px, ${this.y}px) scale(0.2)`;
     }
     getRectangle() {
         return this.code.getBoundingClientRect();
+    }
+    getFutureRectangle() {
+        let rect = this.code.getBoundingClientRect();
+        return rect;
+    }
+    update() {
+        if (this.collected) {
+            console.log("collected");
+            this.code.remove();
+            this.collected = false;
+        }
     }
 }
 class Enemy1 {
@@ -28,9 +36,8 @@ class Enemy1 {
         game.appendChild(this.enemy1);
         this.leftkey = 65;
         this.rightkey = 68;
-        this.x = 1000;
+        this.x = 1200;
         this.y = 630;
-        console.log(this.enemy1.clientWidth);
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
     }
@@ -112,22 +119,24 @@ class Enemy2 {
     }
     update() {
         if (this.space && this.jumping == false) {
-            this.y_velo -= 70;
+            this.y_velo -= 50;
             this.jumping = true;
         }
-        this.y_velo += 1.7;
+        this.y_velo += 1.2;
         this.y += this.y_velo;
-        this.y_velo *= 0.9;
+        this.y_velo *= 0.95;
         if (this.y > 600) {
             this.jumping = false;
             this.y = 600;
             this.y_velo = 0;
         }
         let newX = this.x - this.leftspeed + this.rightspeed;
-        if (newX > 0 && newX + 100 < (1440 - this.enemy2.clientWidth)) {
-            this.x = newX;
+        if (newX < this.x || newX > this.x || this.y <= 600) {
+            if (newX > 0 && newX < (1440 - this.enemy2.clientWidth)) {
+                this.x = newX;
+            }
+            this.enemy2.style.transform = `translate(${this.x}px, ${this.y}px)`;
         }
-        this.enemy2.style.transform = `translate(${this.x}px, ${this.y}px)`;
     }
 }
 class Game {
@@ -135,8 +144,8 @@ class Game {
         this.canvas = document.createElement("canvas");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.canvas);
-        this.robot = new Robot;
         this.tree = new Tree;
+        this.robot = new Robot;
         this.enemy1 = new Enemy1;
         this.enemy2 = new Enemy2;
         this.code = new Code;
@@ -150,9 +159,15 @@ class Game {
             console.log("collision code!");
             this.code.hideCodeCloud();
         }
+        if (this.checkCollision(this.robot.getFutureRectangle(), this.code.getRectangle())) {
+            this.code.collected = true;
+            this.tree.fixed = true;
+        }
+        this.tree.update();
         this.enemy1.update();
         this.enemy2.update();
         this.robot.update();
+        this.code.update();
         requestAnimationFrame(() => this.gameLoop());
     }
     checkCollisionEnemy2(a, b) {
@@ -254,12 +269,19 @@ class Robot {
 }
 class Tree {
     constructor() {
+        this.fixed = false;
         this.tree = document.createElement("tree");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.tree);
         this.x = 500;
         this.y = 400;
         this.tree.style.transform = `translate(${this.x}px, ${this.y}px)`;
+    }
+    update() {
+        if (this.fixed) {
+            this.tree.classList.add("fixed");
+            this.fixed = false;
+        }
     }
 }
 //# sourceMappingURL=main.js.map

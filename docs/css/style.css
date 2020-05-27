@@ -30,6 +30,11 @@ enemy2 {
 tree {
     background-image: url(../img/treeglitched.gif);
     width:320px; height: 320px;
+    z-index: -1;
+}
+
+.fixed {
+    background-image: url(../img/boom.png);
 }
 
 background {
@@ -37,12 +42,12 @@ background {
     width:1440px; height: 900px;
     background-size: inherit;
     border-image-outset: 10px inherit black;
+    z-index: -2;
 }
 
 code {
     background-image: url(../img/code.png);
     width: 512px; height: 512px;
-    transform: scale(0.1)
 }
 
 canvas {

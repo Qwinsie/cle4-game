@@ -71,13 +71,13 @@ class Enemy2 {
 
     public update() {
         if(this.space && this.jumping == false){
-            this.y_velo -= 70;
+            this.y_velo -= 50;
             this.jumping = true;
         }
 
-        this.y_velo += 1.7;
+        this.y_velo += 1.2;
         this.y += this.y_velo;
-        this.y_velo *= 0.9;
+        this.y_velo *= 0.95;
 
         if(this.y > 600){
             this.jumping = false;
@@ -86,10 +86,12 @@ class Enemy2 {
         }
 
         let newX = this.x - this.leftspeed + this.rightspeed
-        // check of het monster binnen het beeld blijft
-        if (newX > 0 && newX + 100 < (1440 - this.enemy2.clientWidth)){
-         this.x = newX
+
+        if (newX < this.x || newX > this.x || this.y <= 600){
+            if (newX > 0 && newX < (1440 - this.enemy2.clientWidth)) {
+                this.x = newX
+            }
+            this.enemy2.style.transform = `translate(${this.x}px, ${this.y}px)`
         }
-        this.enemy2.style.transform = `translate(${this.x}px, ${this.y}px)`
     }
 }
