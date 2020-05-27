@@ -2,8 +2,8 @@ class Code {
 
     private code : HTMLElement
 
-    public x : number
-    public y : number
+    public x : number = 0
+    public y : number = 0
 
     public collected : boolean = false
 
@@ -27,13 +27,7 @@ class Code {
         return this.code.getBoundingClientRect()
     }
 
-    public getFutureRectangle(){
-        let rect = this.code.getBoundingClientRect()
-        return rect
-    }
-
     public update() : void {
-
         if(this.collected) {
             console.log("collected")
             this.code.remove()
