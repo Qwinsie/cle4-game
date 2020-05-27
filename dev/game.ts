@@ -8,7 +8,8 @@ class Game {
     private code : Code
 
     private score : number = 0
-    private killed : boolean = false
+    private enemy1killed : boolean = false
+    private enemy2killed : boolean = false
 
     constructor() {
         this.canvas = document.createElement("canvas")
@@ -26,12 +27,19 @@ class Game {
     }
 
     private gameLoop() {
-        if (this.checkCollision(this.robot.getFutureRectangle(), this.enemy2.getRectangle()) && !this.killed) {
+        if (this.checkCollision(this.robot.getFutureRectangle(), this.enemy2.getRectangle()) && !this.enemy2killed) {
             //collision event enemy2
             console.log("collision")
             
             this.updateScore(1)
-            this.killed = true
+            this.enemy2killed = true
+        }
+        if (this.checkCollision(this.robot.getFutureRectangle(), this.enemy1.getRectangle()) && !this.enemy1killed) {
+            //collision event enemy1
+            console.log("collision")
+            
+            this.updateScore(1)
+            this.enemy1killed = true
         }
         if (this.checkCollision(this.robot.getFutureRectangle(), this.code.getRectangle())) {
             //collision event code wolkje

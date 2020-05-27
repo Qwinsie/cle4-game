@@ -28,6 +28,10 @@ class Enemy1 {
         window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
     }
 
+    public getRectangle() {
+        return this.enemy1.getBoundingClientRect()
+    }
+
     private onKeyDown(e: KeyboardEvent): void {
         switch (e.keyCode) {
             case this.leftkey:
