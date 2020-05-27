@@ -1,8 +1,9 @@
-class Code {
+class Code{
 
     private code : HTMLElement
     public x : number
     public y : number
+    protected collisionRobotCode: boolean = false
 
     constructor() {
         this.createCode()
@@ -23,7 +24,12 @@ class Code {
         
     }
 
-    protected getRectangle() {
+    public hideCodeCloud(){
+        this.collisionRobotCode = true
+        this.code.style.display = "none"
+    }
+
+    public getRectangle() {
         return this.code.getBoundingClientRect()
     }
 }

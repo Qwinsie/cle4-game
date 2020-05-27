@@ -6,7 +6,6 @@ class Game {
     private tree : Tree
     public canvas : HTMLElement
     private code : Code
-    protected collisionRobotCode: boolean
 
     constructor() {
         this.canvas = document.createElement("canvas")
@@ -32,7 +31,7 @@ class Game {
 
         if(this.checkCollisionCodeCloud(this.robot.getFutureRectangle(), this.code.getRectangle())){
             console.log("collision code!")
-            this.collisionRobotCode = true
+            this.code.hideCodeCloud()
         }
 
 

@@ -37,7 +37,7 @@ class Enemy2 {
         this.enemy2.style.transform = `translate(${this.x}px, ${this.y}px)`
     }
 
-    protected getRectangle() {
+    public getRectangle() {
         return this.enemy2.getBoundingClientRect()
     }
 

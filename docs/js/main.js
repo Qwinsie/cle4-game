@@ -1,5 +1,6 @@
 class Code {
     constructor() {
+        this.collisionRobotCode = false;
         this.createCode();
     }
     createCode() {
@@ -9,6 +10,10 @@ class Code {
         this.x = 250;
         this.y = 250;
         this.code.style.transform = `translate(${this.x}px, ${this.y}px) scale(0.1)`;
+    }
+    hideCodeCloud() {
+        this.collisionRobotCode = true;
+        this.code.style.display = "none";
     }
     getRectangle() {
         return this.code.getBoundingClientRect();
@@ -143,7 +148,7 @@ class Game {
         }
         if (this.checkCollisionCodeCloud(this.robot.getFutureRectangle(), this.code.getRectangle())) {
             console.log("collision code!");
-            this.collisionRobotCode = true;
+            this.code.hideCodeCloud();
         }
         this.enemy1.update();
         this.enemy2.update();
