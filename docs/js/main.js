@@ -1,14 +1,29 @@
 class Code {
     constructor() {
+        this.collected = false;
         this.createCode();
     }
     createCode() {
         this.code = document.createElement("code");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.code);
-        this.x = 0;
-        this.y = 0;
-        this.code.style.transform = `translate(${this.x}px, ${this.y}px) scale(0.1)`;
+        this.x = 500;
+        this.y = 200;
+        this.code.style.transform = `translate(${this.x}px, ${this.y}px) scale(0.2)`;
+    }
+    getRectangle() {
+        return this.code.getBoundingClientRect();
+    }
+    getFutureRectangle() {
+        let rect = this.code.getBoundingClientRect();
+        return rect;
+    }
+    update() {
+        if (this.collected) {
+            console.log("collected");
+            this.code.remove();
+            this.collected = false;
+        }
     }
 }
 class Enemy1 {
@@ -22,7 +37,6 @@ class Enemy1 {
         this.rightkey = 68;
         this.x = 1000;
         this.y = 630;
-        console.log(this.enemy1.clientWidth);
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
     }
@@ -71,6 +85,10 @@ class Enemy2 {
         this.y = 600;
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
+        this.enemy2.style.transform = `translate(${this.x}px, ${this.y}px)`;
+    }
+    getRectangle() {
+        return this.enemy2.getBoundingClientRect();
     }
     onKeyDown(e) {
         switch (e.keyCode) {
@@ -100,10 +118,10 @@ class Enemy2 {
     }
     update() {
         if (this.space && this.jumping == false) {
-            this.y_velo -= 60;
+            this.y_velo -= 70;
             this.jumping = true;
         }
-        this.y_velo += 1.2;
+        this.y_velo += 1.7;
         this.y += this.y_velo;
         this.y_velo *= 0.9;
         if (this.y > 600) {
@@ -123,18 +141,31 @@ class Game {
         this.canvas = document.createElement("canvas");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.canvas);
-        this.robot = new Robot;
         this.tree = new Tree;
+        this.robot = new Robot;
         this.enemy1 = new Enemy1;
         this.enemy2 = new Enemy2;
         this.code = new Code;
         this.gameLoop();
     }
     gameLoop() {
+        if (this.checkCollision(this.robot.getFutureRectangle(), this.enemy2.getRectangle())) {
+            console.log("collision");
+        }
+        if (this.checkCollision(this.robot.getFutureRectangle(), this.code.getRectangle())) {
+            this.code.collected = true;
+        }
         this.enemy1.update();
         this.enemy2.update();
         this.robot.update();
+        this.code.update();
         requestAnimationFrame(() => this.gameLoop());
+    }
+    checkCollision(a, b) {
+        return (a.left <= b.right &&
+            b.left <= a.right &&
+            a.top <= b.bottom &&
+            b.top <= a.bottom);
     }
 }
 window.addEventListener("load", () => new Game());
@@ -184,6 +215,11 @@ class Robot {
                 break;
         }
     }
+    getFutureRectangle() {
+        let rect = this.robot.getBoundingClientRect();
+        rect.x += this.x_velo;
+        return rect;
+    }
     update() {
         if (this.space && this.jumping == false) {
             this.y_velo -= 40;
@@ -213,8 +249,6 @@ class Robot {
         else if (this.x > 1240) {
             this.x = -200;
         }
-        console.log(this.flip);
-        console.log(this.robot.style.transform);
         this.robot.style.transform = `translate(${this.x}px, ${this.y}px) scalex(${this.flip})`;
     }
 }
