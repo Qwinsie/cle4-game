@@ -140,6 +140,8 @@ class Enemy2 {
 }
 class Game {
     constructor() {
+        this.score = 0;
+        this.killed = false;
         this.canvas = document.createElement("canvas");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.canvas);
@@ -151,12 +153,15 @@ class Game {
         this.gameLoop();
     }
     gameLoop() {
-        if (this.checkCollision(this.robot.getFutureRectangle(), this.enemy2.getRectangle())) {
+        if (this.checkCollision(this.robot.getFutureRectangle(), this.enemy2.getRectangle()) && !this.killed) {
             console.log("collision");
+            this.updateScore(1);
+            this.killed = true;
         }
         if (this.checkCollision(this.robot.getFutureRectangle(), this.code.getRectangle())) {
             this.code.collected = true;
             this.tree.fixed = true;
+            this.updateScore(1);
         }
         this.tree.update();
         this.enemy1.update();
@@ -170,6 +175,10 @@ class Game {
             b.left <= a.right &&
             a.top <= b.bottom &&
             b.top <= a.bottom);
+    }
+    updateScore(addScoreAmount) {
+        this.score += addScoreAmount;
+        document.getElementsByTagName("score")[0].innerHTML = `Score: ${this.score}`;
     }
 }
 window.addEventListener("load", () => new Game());
