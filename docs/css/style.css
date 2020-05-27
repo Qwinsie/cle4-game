@@ -33,6 +33,10 @@ tree {
     z-index: -1;
 }
 
+.fixed {
+    background-image: url(../img/boom.png);
+}
+
 background {
     background-image: url(../img/background.png);
     width:1440px; height: 900px;

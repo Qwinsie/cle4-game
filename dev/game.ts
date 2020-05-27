@@ -12,7 +12,7 @@ class Game {
 
         let game =document.getElementsByTagName("game")[0]
         game.appendChild(this.canvas)
-        
+
         this.tree = new Tree
         this.robot = new Robot
         this.enemy1 = new Enemy1
@@ -30,7 +30,10 @@ class Game {
         if (this.checkCollision(this.robot.getFutureRectangle(), this.code.getRectangle())) {
             //collision event code wolkje
             this.code.collected = true
+            this.tree.fixed = true
         }
+
+        this.tree.update()
         this.enemy1.update()
         this.enemy2.update()
         this.robot.update()
