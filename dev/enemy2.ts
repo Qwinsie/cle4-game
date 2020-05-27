@@ -33,6 +33,12 @@ class Enemy2 {
 
         window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e))
         window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
+
+        this.enemy2.style.transform = `translate(${this.x}px, ${this.y}px)`
+    }
+
+    public getRectangle() {
+        return this.enemy2.getBoundingClientRect()
     }
 
     private onKeyDown(e: KeyboardEvent): void {

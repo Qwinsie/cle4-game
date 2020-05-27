@@ -68,6 +68,12 @@ class Robot {
         }
     }
 
+    getFutureRectangle(){
+        let rect = this.robot.getBoundingClientRect()
+        rect.x += this.x_velo
+        return rect
+    }
+
     public update(){
         if(this.space && this.jumping == false){
             this.y_velo -= 40;

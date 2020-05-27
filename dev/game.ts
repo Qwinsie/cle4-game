@@ -23,10 +23,15 @@ class Game {
     }
 
     private gameLoop() {
+        if (this.checkCollision(this.robot.getFutureRectangle(), this.enemy2.getRectangle())) {
+            //collision event
+            console.log("collision")
+        }
+
         this.enemy1.update()
         this.enemy2.update()
         this.robot.update()
-        
+
         requestAnimationFrame(()=>this.gameLoop())
     }
 
