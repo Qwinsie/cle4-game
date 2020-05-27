@@ -7,6 +7,9 @@ class Game {
     public canvas : HTMLElement
     private code : Code
 
+    private score : number = 0
+    private killed : boolean = false
+
     constructor() {
         this.canvas = document.createElement("canvas")
 
@@ -23,14 +26,18 @@ class Game {
     }
 
     private gameLoop() {
-        if (this.checkCollision(this.robot.getFutureRectangle(), this.enemy2.getRectangle())) {
-            //collision event
+        if (this.checkCollision(this.robot.getFutureRectangle(), this.enemy2.getRectangle()) && !this.killed) {
+            //collision event enemy2
             console.log("collision")
+            
+            this.updateScore(1)
+            this.killed = true
         }
         if (this.checkCollision(this.robot.getFutureRectangle(), this.code.getRectangle())) {
             //collision event code wolkje
             this.code.collected = true
             this.tree.fixed = true
+            this.updateScore(1)
         }
 
         this.tree.update()
@@ -47,6 +54,11 @@ class Game {
                 b.left <= a.right &&
                 a.top <= b.bottom &&
                 b.top <= a.bottom)
+    }
+
+    updateScore(addScoreAmount: number) {
+        this.score += addScoreAmount
+        document.getElementsByTagName("score")[0].innerHTML = `Score: ${this.score}`
     }
     
 }
