@@ -39,6 +39,7 @@ class Enemy1 {
         this.y = 630;
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
+        this.enemy1.style.transform = `translate(${this.x}px, ${this.y}px)`;
     }
     getRectangle() {
         return this.enemy1.getBoundingClientRect();
@@ -210,6 +211,7 @@ class Robot {
         this.y = 600;
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
+        this.robot.style.transform = `translate(${this.x}px, ${this.y}px)`;
     }
     onKeyDown(e) {
         switch (e.keyCode) {

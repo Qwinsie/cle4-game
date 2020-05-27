@@ -26,6 +26,8 @@ class Enemy1 {
 
         window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e))
         window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
+
+        this.enemy1.style.transform = `translate(${this.x}px, ${this.y}px)`
     }
 
     public getRectangle() {
