@@ -71,13 +71,13 @@ class Enemy2 {
 
     public update() {
         if(this.space && this.jumping == false){
-            this.y_velo -= 70;
+            this.y_velo -= 50;
             this.jumping = true;
         }
 
-        this.y_velo += 1.7;
+        this.y_velo += 1.2;
         this.y += this.y_velo;
-        this.y_velo *= 0.9;
+        this.y_velo *= 0.95;
 
         if(this.y > 600){
             this.jumping = false;
