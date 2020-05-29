@@ -1,16 +1,16 @@
 class Code {
-    constructor() {
+    constructor(x, y) {
         this.collisionRobotCode = false;
         this.collected = false;
-        this.createCode();
+        this.createCode(x, y);
     }
-    createCode() {
+    createCode(x, y) {
         this.code = document.createElement("code");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.code);
-        this.x = 500;
-        this.y = 200;
-        this.code.style.transform = `translate(${this.x}px, ${this.y}px) scale(0.2)`;
+        this._x = x;
+        this._y = y;
+        this.code.style.transform = `translate(${this._x}px, ${this._y}px) scale(0.2)`;
     }
     getRectangle() {
         return this.code.getBoundingClientRect();
@@ -28,81 +28,70 @@ class Code {
     }
 }
 class Enemy1 {
-    constructor() {
+    constructor(x, y) {
+        this._x = 0;
+        this._y = 0;
         this.leftspeed = 0;
         this.rightspeed = 0;
+        this.createEnemy1(x, y);
+    }
+    get x() {
+        return this._x;
+    }
+    get y() {
+        return this._y;
+    }
+    createEnemy1(x, y) {
         this.enemy1 = document.createElement("enemy1");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.enemy1);
-        this.leftkey = 65;
-        this.rightkey = 68;
-        this.x = 1200;
-        this.y = 630;
-        window.addEventListener("keydown", (e) => this.onKeyDown(e));
-        window.addEventListener("keyup", (e) => this.onKeyUp(e));
-        this.enemy1.style.transform = `translate(${this.x}px, ${this.y}px)`;
+        this._x = x;
+        this._y = y;
+        this.enemy1.style.transform = `translate(${this._x}px, ${this._y}px)`;
     }
     getRectangle() {
         return this.enemy1.getBoundingClientRect();
     }
-    onKeyDown(e) {
-        switch (e.keyCode) {
-            case this.leftkey:
-                this.leftspeed = 10;
-                break;
-            case this.rightkey:
-                this.rightspeed = 10;
-                break;
-        }
-    }
-    onKeyUp(e) {
-        switch (e.keyCode) {
-            case this.leftkey:
-                this.leftspeed = 0;
-                break;
-            case this.rightkey:
-                this.rightspeed = 0;
-                break;
-        }
-    }
     update() {
-        let newX = this.x - this.leftspeed + this.rightspeed;
-        if (newX > 0 && newX < (1440 - this.enemy1.clientWidth)) {
-            this.x = newX;
+        this.leftspeed = +1;
+        let newX = this._x - this.leftspeed + this.rightspeed;
+        if (newX < (1440 - this.enemy1.clientWidth)) {
+            this._x = newX;
         }
-        this.enemy1.style.transform = `translate(${this.x}px, ${this.y}px)`;
+        if (newX < 0 - this.enemy1.clientWidth) {
+            this.enemy1.remove();
+        }
+        this.enemy1.style.transform = `translate(${this._x}px, ${this._y}px)`;
     }
 }
 class Enemy2 {
-    constructor() {
+    constructor(x, y) {
+        this._x = 0;
+        this._y = 0;
         this.space = false;
+        this.spaceKey = 0;
         this.leftspeed = 0;
         this.rightspeed = 0;
         this.y_velo = 0;
         this.jumping = true;
+        this.spaceKey = 88;
+        this.createEnemy2(x, y);
+        window.addEventListener("keydown", (e) => this.onKeyDown(e));
+        window.addEventListener("keyup", (e) => this.onKeyUp(e));
+    }
+    createEnemy2(x, y) {
         this.enemy2 = document.createElement("enemy2");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.enemy2);
-        this.leftkey = 90;
-        this.rightkey = 67;
-        this.spaceKey = 88;
-        this.x = 1000;
-        this.y = 600;
-        window.addEventListener("keydown", (e) => this.onKeyDown(e));
-        window.addEventListener("keyup", (e) => this.onKeyUp(e));
-        this.enemy2.style.transform = `translate(${this.x}px, ${this.y}px)`;
+        this._x = x;
+        this._y = y;
+        this.enemy2.style.transform = `translate(${this._x}px, ${this._y}px)`;
     }
     getRectangle() {
         return this.enemy2.getBoundingClientRect();
     }
     onKeyDown(e) {
         switch (e.keyCode) {
-            case this.leftkey:
-                this.leftspeed = 10;
-                break;
-            case this.rightkey:
-                this.rightspeed = 10;
-                break;
             case this.spaceKey:
                 this.space = true;
                 break;
@@ -110,12 +99,6 @@ class Enemy2 {
     }
     onKeyUp(e) {
         switch (e.keyCode) {
-            case this.leftkey:
-                this.leftspeed = 0;
-                break;
-            case this.rightkey:
-                this.rightspeed = 0;
-                break;
             case this.spaceKey:
                 this.space = false;
                 break;
@@ -127,19 +110,19 @@ class Enemy2 {
             this.jumping = true;
         }
         this.y_velo += 1.2;
-        this.y += this.y_velo;
+        this._y += this.y_velo;
         this.y_velo *= 0.95;
-        if (this.y > 600) {
+        if (this._y > 600) {
             this.jumping = false;
-            this.y = 600;
+            this._y = 600;
             this.y_velo = 0;
         }
-        let newX = this.x - this.leftspeed + this.rightspeed;
-        if (newX < this.x || newX > this.x || this.y <= 600) {
+        let newX = this._x - this.leftspeed + this.rightspeed;
+        if (newX < this._x || newX > this._x || this._y <= 600) {
             if (newX > 0 && newX < (1440 - this.enemy2.clientWidth)) {
-                this.x = newX;
+                this._x = newX;
             }
-            this.enemy2.style.transform = `translate(${this.x}px, ${this.y}px)`;
+            this.enemy2.style.transform = `translate(${this._x}px, ${this._y}px)`;
         }
     }
 }
@@ -151,11 +134,11 @@ class Game {
         this.canvas = document.createElement("canvas");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.canvas);
-        this.tree = new Tree;
-        this.robot = new Robot;
-        this.enemy1 = new Enemy1;
-        this.enemy2 = new Enemy2;
-        this.code = new Code;
+        this.tree = new Tree(500, 400);
+        this.robot = new Robot(200, 600);
+        this.enemy1 = new Enemy1(1000, 630);
+        this.enemy2 = new Enemy2(1200, 630);
+        this.code = new Code(500, 200);
         this.gameLoop();
     }
     gameLoop() {
@@ -194,27 +177,38 @@ class Game {
 }
 window.addEventListener("load", () => new Game());
 class Robot {
-    constructor() {
+    constructor(x, y) {
         this.jumping = true;
+        this._x = 0;
+        this._y = 0;
         this.left = false;
         this.right = false;
         this.duck = false;
         this.space = false;
+        this.leftKey = 0;
+        this.rightKey = 0;
+        this.downKey = 0;
+        this.spaceKey = 0;
+        this.spaceKey2 = 0;
         this.x_velo = 0;
         this.y_velo = 0;
         this.flip = 1;
+        this.leftKey = 65;
+        this.rightKey = 68;
+        this.downKey = 83;
+        this.spaceKey = 32;
+        this.spaceKey2 = 87;
+        this.createRobot(x, y);
+        window.addEventListener("keydown", (e) => this.onKeyDown(e));
+        window.addEventListener("keyup", (e) => this.onKeyUp(e));
+    }
+    createRobot(x, y) {
         this.robot = document.createElement("robot");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.robot);
-        this.leftKey = 37;
-        this.rightKey = 39;
-        this.downKey = 40;
-        this.spaceKey = 32;
-        this.x = 200;
-        this.y = 600;
-        window.addEventListener("keydown", (e) => this.onKeyDown(e));
-        window.addEventListener("keyup", (e) => this.onKeyUp(e));
-        this.robot.style.transform = `translate(${this.x}px, ${this.y}px)`;
+        this._x = x;
+        this._y = y;
+        this.robot.style.transform = `translate(${this._x}px, ${this._y}px)`;
     }
     onKeyDown(e) {
         switch (e.keyCode) {
@@ -228,6 +222,9 @@ class Robot {
                 this.duck = true;
                 break;
             case this.spaceKey:
+                this.space = true;
+                break;
+            case this.spaceKey2:
                 this.space = true;
                 break;
         }
@@ -244,6 +241,9 @@ class Robot {
                 this.duck = false;
                 break;
             case this.spaceKey:
+                this.space = false;
+                break;
+            case this.spaceKey2:
                 this.space = false;
                 break;
         }
@@ -273,33 +273,38 @@ class Robot {
             this.robot.classList.remove("robot-duck");
         }
         this.y_velo += 1.7;
-        this.x += this.x_velo;
-        this.y += this.y_velo;
+        this._x += this.x_velo;
+        this._y += this.y_velo;
         this.x_velo *= 0.9;
         this.y_velo *= 0.9;
-        if (this.y > 600 - 16 - 32) {
+        if (this._y > 600 - 16 - 32) {
             this.jumping = false;
-            this.y = 600 - 16 - 32;
+            this._y = 600 - 16 - 32;
             this.y_velo = 0;
         }
-        if (this.x < -200) {
-            this.x = 1240;
+        if (this._x < -200) {
+            this._x = 1240;
         }
-        else if (this.x > 1240) {
-            this.x = -200;
+        else if (this._x > 1240) {
+            this._x = -200;
         }
-        this.robot.style.transform = `translate(${this.x}px, ${this.y}px) scalex(${this.flip})`;
+        this.robot.style.transform = `translate(${this._x}px, ${this._y}px) scalex(${this.flip})`;
     }
 }
 class Tree {
-    constructor() {
+    constructor(x, y) {
+        this._x = 0;
+        this._y = 0;
         this.fixed = false;
+        this.createTree(x, y);
+    }
+    createTree(x, y) {
         this.tree = document.createElement("tree");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.tree);
-        this.x = 500;
-        this.y = 400;
-        this.tree.style.transform = `translate(${this.x}px, ${this.y}px)`;
+        this._x = x;
+        this._y = y;
+        this.tree.style.transform = `translate(${this._x}px, ${this._y}px)`;
     }
     update() {
         if (this.fixed) {
