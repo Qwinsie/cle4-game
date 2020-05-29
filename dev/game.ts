@@ -4,8 +4,9 @@ class Game {
     private enemy1 : Enemy1
     private enemy2 : Enemy2
     private tree : Tree
-    public canvas : HTMLElement
     private code : Code
+
+    public canvas : HTMLElement
 
     private score : number = 0
     private enemy1killed : boolean = false
@@ -17,11 +18,11 @@ class Game {
         let game =document.getElementsByTagName("game")[0]
         game.appendChild(this.canvas)
 
-        this.tree = new Tree
-        this.robot = new Robot
-        this.enemy1 = new Enemy1
-        this.enemy2 = new Enemy2
-        this.code = new Code
+        this.tree = new Tree(500,400)
+        this.robot = new Robot(200,600)
+        this.enemy1 = new Enemy1(1000,630)
+        this.enemy2 = new Enemy2(1200,630)
+        this.code = new Code(500,200)
 
         this.gameLoop()
     }
