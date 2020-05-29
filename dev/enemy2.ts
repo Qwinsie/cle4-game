@@ -2,39 +2,38 @@ class Enemy2 {
 
     private enemy2 : HTMLElement
 
-    public x : number
-    public y : number
+    public _x : number = 0
+    public _y : number = 0
 
-    private leftkey: number 
-    private rightkey: number
-    private space: boolean = false
-    private spaceKey: number
+    private space : boolean = false
+    private spaceKey : number = 0
 
     private leftspeed : number = 0
     private rightspeed : number = 0
 
-    private y_velo: number = 0
-    private jumping: boolean = true
+    private y_velo : number = 0
+    private jumping : boolean = true
 
-    public canvas: HTMLElement
+    public canvas : HTMLElement
 
-    constructor() {
-        this.enemy2 = document.createElement("enemy2")
-
-        let game = document.getElementsByTagName("game")[0]
-        game.appendChild(this.enemy2)
-
-        this.leftkey = 90
-        this.rightkey = 67
+    constructor(x:number,y:number) {
         this.spaceKey = 88
 
-        this.x = 1000
-        this.y = 600
+        this.createEnemy2(x,y)
 
         window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e))
         window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
+}
 
-        this.enemy2.style.transform = `translate(${this.x}px, ${this.y}px)`
+    private createEnemy2(x:number,y:number) {
+        this.enemy2 = document.createElement("enemy2")
+        let game = document.getElementsByTagName("game")[0]
+        game.appendChild(this.enemy2)
+
+        this._x = x
+        this._y = y
+
+        this.enemy2.style.transform = `translate(${this._x}px, ${this._y}px)`
     }
 
     public getRectangle() {
@@ -43,12 +42,6 @@ class Enemy2 {
 
     private onKeyDown(e: KeyboardEvent): void {
         switch (e.keyCode) {
-            case this.leftkey:
-                this.leftspeed = 10
-                break
-            case this.rightkey:
-                this.rightspeed = 10
-                break
             case this.spaceKey:
                 this.space = true
                 break
@@ -57,12 +50,6 @@ class Enemy2 {
 
     private onKeyUp(e: KeyboardEvent): void {
         switch (e.keyCode) {
-            case this.leftkey:
-                this.leftspeed = 0
-                break
-            case this.rightkey:
-                this.rightspeed = 0
-                break
             case this.spaceKey:
                 this.space = false
                 break
@@ -76,22 +63,24 @@ class Enemy2 {
         }
 
         this.y_velo += 1.2;
-        this.y += this.y_velo;
+        this._y += this.y_velo;
         this.y_velo *= 0.95;
 
-        if(this.y > 600){
+        // Land on the ground
+        if(this._y > 600){
             this.jumping = false;
-            this.y = 600;
+            this._y = 600;
             this.y_velo = 0;
         }
 
-        let newX = this.x - this.leftspeed + this.rightspeed
+        // Moving Enemy left OR right
+        let newX = this._x - this.leftspeed + this.rightspeed
 
-        if (newX < this.x || newX > this.x || this.y <= 600){
+        if (newX < this._x || newX > this._x || this._y <= 600){
             if (newX > 0 && newX < (1440 - this.enemy2.clientWidth)) {
-                this.x = newX
+                this._x = newX
             }
-            this.enemy2.style.transform = `translate(${this.x}px, ${this.y}px)`
+            this.enemy2.style.transform = `translate(${this._x}px, ${this._y}px)`
         }
     }
 }
