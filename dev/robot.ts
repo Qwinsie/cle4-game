@@ -2,46 +2,48 @@ class Robot {
 
     private robot : HTMLElement
 
-    private jumping: boolean = true
+    private jumping : boolean = true
 
-    private x: number
-    private y: number
+    private _x : number = 0
+    private _y : number = 0
 
     private left : boolean = false
-    private right: boolean = false
-    private duck: boolean = false
-    private space: boolean = false
+    private right : boolean = false
+    private duck : boolean = false
+    private space : boolean = false
 
-    private leftKey: number
-    private rightKey: number
-    private downKey: number
-    private spaceKey: number
+    private leftKey : number = 0
+    private rightKey : number = 0
+    private downKey : number = 0
+    private spaceKey : number = 0
+    private spaceKey2 : number = 0
 
-    private x_velo: number = 0
-    private y_velo: number = 0
+    private x_velo : number = 0
+    private y_velo : number = 0
 
     private flip : number = 1
 
-    public canvas: HTMLElement
+    public canvas : HTMLElement
 
-    constructor() {
-        this.robot = document.createElement("robot")
-
-        let game = document.getElementsByTagName("game")[0]
-        game.appendChild(this.robot)
-
-        this.leftKey = 37
-        this.rightKey = 39
-        this.downKey = 40
+    constructor(x:number,y:number) {
+        this.leftKey = 65
+        this.rightKey = 68
+        this.downKey = 83
         this.spaceKey = 32
+        this.spaceKey2 = 87
 
-        this.x = 200
-        this.y = 600
-
+        this.createRobot(x,y)
         window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e))
         window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
+    }
 
-        this.robot.style.transform = `translate(${this.x}px, ${this.y}px)`
+    private createRobot(x:number,y:number) {
+        this.robot = document.createElement("robot")
+        let game = document.getElementsByTagName("game")[0]
+        game.appendChild(this.robot)
+        this._x = x
+        this._y = y
+        this.robot.style.transform = `translate(${this._x}px, ${this._y}px)`
     }
 
     private onKeyDown(e: KeyboardEvent): void{
@@ -56,6 +58,9 @@ class Robot {
                 this.duck = true
                 break;
             case this.spaceKey:
+                this.space = true
+                break;
+            case this.spaceKey2:
                 this.space = true
                 break;
         }
@@ -73,6 +78,9 @@ class Robot {
                 this.duck = false
                 break;
             case this.spaceKey:
+                this.space = false
+                break;
+            case this.spaceKey2:
                 this.space = false
                 break;
         }
@@ -107,25 +115,23 @@ class Robot {
         }
 
         this.y_velo += 1.7;
-        this.x += this.x_velo;
-        this.y += this.y_velo;
+        this._x += this.x_velo;
+        this._y += this.y_velo;
         this.x_velo *= 0.9;
         this.y_velo *= 0.9;
 
-        if(this.y > 600 - 16 -32){
+        if(this._y > 600 - 16 -32){
             this.jumping = false;
-            this.y = 600 - 16 - 32;
+            this._y = 600 - 16 - 32;
             this.y_velo = 0;
         }
 
-        if (this.x < -200){
-            this.x = 1240
-        } else if(this.x > 1240){
-            this.x = -200
+        if (this._x < -200){
+            this._x = 1240
+        } else if(this._x > 1240){
+            this._x = -200
         }
 
-        this.robot.style.transform = `translate(${this.x}px, ${this.y}px) scalex(${this.flip})`
+        this.robot.style.transform = `translate(${this._x}px, ${this._y}px) scalex(${this.flip})`
     }
-
-
 }
