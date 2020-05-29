@@ -2,26 +2,25 @@ class Code{
 
     private code : HTMLElement
 
-    public x : number
-    public y : number
+    public _x : number
+    public _y : number
     protected collisionRobotCode: boolean = false
 
     public collected : boolean = false
 
-    constructor() {
-        this.createCode()
+    constructor(x:number,y:number) {
+        this.createCode(x,y)
     }
 
-    createCode() {
+    private createCode(x:number,y:number) {
         this.code = document.createElement("code")
-
         let game =document.getElementsByTagName("game")[0]
         game.appendChild(this.code)
 
-        this.x = 500
-        this.y = 200
+        this._x = x
+        this._y = y
 
-        this.code.style.transform = `translate(${this.x}px, ${this.y}px) scale(0.2)`
+        this.code.style.transform = `translate(${this._x}px, ${this._y}px) scale(0.2)`
     }
 
     public getRectangle() {
