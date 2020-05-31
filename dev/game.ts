@@ -1,4 +1,12 @@
+/// <reference path="robot.ts"/>
+/// <reference path="code.ts"/>
+/// <reference path="enemy1.ts"/>
+/// <reference path="enemy2.ts"/>
+/// <reference path="tree.ts"/>
+
 class Game {
+    // Fields
+    private div : HTMLElement
 
     private robot : Robot
     private enemy1 : Enemy1
@@ -6,17 +14,21 @@ class Game {
     private tree : Tree
     private code : Code
 
-    public canvas : HTMLElement
-
     private score : number = 0
+
     private enemy1killed : boolean = false
     private enemy2killed : boolean = false
 
+    
+    // Properties
+
+
+    // Constructor 
     constructor() {
-        this.canvas = document.createElement("canvas")
+        this.div = document.createElement("div")
 
         let game =document.getElementsByTagName("game")[0]
-        game.appendChild(this.canvas)
+        game.appendChild(this.div)
 
         this.tree = new Tree(500,400)
         this.robot = new Robot(200,600)
@@ -27,20 +39,24 @@ class Game {
         this.gameLoop()
     }
 
+
+    // Functions
+
+    // gameLoop
     private gameLoop() {
         if (this.checkCollision(this.robot.getFutureRectangle(), this.enemy2.getRectangle()) && !this.enemy2killed) {
             //collision event enemy2
             console.log("collision")
             
             this.updateScore(1)
-            this.enemy2killed = true
+            this.enemy2.kill()
         }
         if (this.checkCollision(this.robot.getFutureRectangle(), this.enemy1.getRectangle()) && !this.enemy1killed) {
             //collision event enemy1
             console.log("collision")
             
             this.updateScore(1)
-            this.enemy1killed = true
+            this.enemy1.kill()
         }
         if (this.checkCollision(this.robot.getFutureRectangle(), this.code.getRectangle())) {
             //collision event code wolkje
@@ -58,6 +74,7 @@ class Game {
         requestAnimationFrame(()=>this.gameLoop())
     }
 
+    // Loop Functions
     checkCollision(a: ClientRect, b: ClientRect) {
         return (a.left <= b.right &&
                 b.left <= a.right &&
@@ -70,5 +87,9 @@ class Game {
         document.getElementsByTagName("score")[0].innerHTML = `Score: ${this.score}`
     }
     
+    // Launch Functions
+    public launchGameTerminal1() {
+        
+    }
 }
 window.addEventListener("load", () => new Game())

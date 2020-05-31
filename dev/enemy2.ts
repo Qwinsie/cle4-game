@@ -1,45 +1,57 @@
 class Enemy2 {
+    // Fields
+    private _div : HTMLElement
 
-    private enemy2 : HTMLElement
+    private _x : number = 0
+    private _y : number = 0
 
-    public _x : number = 0
-    public _y : number = 0
-
-    private space : boolean = false
-    private spaceKey : number = 0
+    private xVelo : number = 0
+    private yVelo : number = 0
 
     private leftspeed : number = 0
     private rightspeed : number = 0
 
-    private y_velo : number = 0
+    private alive : boolean = true
+
+    // Inputs
+    private spaceKey : number = 0
+
+    private space : boolean = false
+
     private jumping : boolean = true
 
-    public canvas : HTMLElement
 
-    constructor(x:number,y:number) {
+    // Properties
+    public get div(): HTMLElement           { return this._div }
+
+    public get x(): number                  { return this._x }
+    public get y(): number                  { return this._y }
+
+
+    constructor(xStart : number, yStart : number) {
         this.spaceKey = 88
 
-        this.createEnemy2(x,y)
+        this.spawnEnemy2(xStart, yStart)
 
         window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e))
         window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
 }
 
-    private createEnemy2(x:number,y:number) {
-        this.enemy2 = document.createElement("enemy2")
+    // Functions
+
+    // Init Functions
+    private spawnEnemy2(xStart : number, yStart : number) {
+        this._div = document.createElement("enemy2")
         let game = document.getElementsByTagName("game")[0]
-        game.appendChild(this.enemy2)
+        game.appendChild(this._div)
 
-        this._x = x
-        this._y = y
+        this._x = xStart
+        this._y = yStart
 
-        this.enemy2.style.transform = `translate(${this._x}px, ${this._y}px)`
+        this._div.style.transform = `translate(${this._x}px, ${this._y}px)`
     }
 
-    public getRectangle() {
-        return this.enemy2.getBoundingClientRect()
-    }
-
+    // Loop Functions
     private onKeyDown(e: KeyboardEvent): void {
         switch (e.keyCode) {
             case this.spaceKey:
@@ -58,29 +70,39 @@ class Enemy2 {
 
     public update() {
         if(this.space && this.jumping == false){
-            this.y_velo -= 50;
+            this.yVelo -= 50;
             this.jumping = true;
         }
 
-        this.y_velo += 1.2;
-        this._y += this.y_velo;
-        this.y_velo *= 0.95;
+        this.yVelo += 1.2;
+        this._y += this.yVelo;
+        this.yVelo *= 0.95;
 
         // Land on the ground
         if(this._y > 600){
             this.jumping = false;
             this._y = 600;
-            this.y_velo = 0;
+            this.yVelo = 0;
         }
 
         // Moving Enemy left OR right
         let newX = this._x - this.leftspeed + this.rightspeed
 
         if (newX < this._x || newX > this._x || this._y <= 600){
-            if (newX > 0 && newX < (1440 - this.enemy2.clientWidth)) {
+            if (newX > 0 && newX < (1440 - this._div.clientWidth)) {
                 this._x = newX
             }
-            this.enemy2.style.transform = `translate(${this._x}px, ${this._y}px)`
+            this._div.style.transform = `translate(${this._x}px, ${this._y}px)`
         }
+    }
+
+    // General Functions
+    public getRectangle() {
+        return this._div.getBoundingClientRect()
+    }
+
+    public kill() {
+        this.alive = false
+        this._div.remove()
     }
 }
