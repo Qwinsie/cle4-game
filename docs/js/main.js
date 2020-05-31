@@ -105,13 +105,13 @@ class Enemy2 {
         }
     }
     update() {
-        if (this.space && this.jumping == false) {
-            this.y_velo -= 50;
+        if (this.jumping == false) {
+            this.y_velo -= 40;
             this.jumping = true;
         }
-        this.y_velo += 1.2;
+        this.y_velo += 1;
         this._y += this.y_velo;
-        this.y_velo *= 0.95;
+        this.y_velo *= 0.98;
         if (this._y > 600) {
             this.jumping = false;
             this._y = 600;
