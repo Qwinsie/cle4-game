@@ -19,6 +19,7 @@ class Game {
     private enemy1killed : boolean = false
     private enemy2killed : boolean = false
 
+    public playingTerminal1 : boolean = false
     
     // Properties
 
@@ -27,7 +28,7 @@ class Game {
     constructor() {
         this.div = document.createElement("div")
 
-        let game =document.getElementsByTagName("game")[0]
+        let game = document.getElementsByTagName("game")[0]
         game.appendChild(this.div)
 
         this.tree = new Tree(500,400)
@@ -43,7 +44,7 @@ class Game {
     // Functions
 
     // gameLoop
-    private gameLoop() {
+    public gameLoop() {
         if (this.checkCollision(this.robot.getFutureRectangle(), this.enemy2.getRectangle()) && !this.enemy2killed) {
             //collision event enemy2
             console.log("collision")
@@ -61,6 +62,7 @@ class Game {
         if (this.checkCollision(this.robot.getFutureRectangle(), this.code.getRectangle())) {
             //collision event code wolkje
             this.code.collected = true
+            this.launchGameTerminal1()
             this.tree.fixed = true
             this.updateScore(1)
         }
@@ -71,7 +73,9 @@ class Game {
         this.robot.update()
         this.code.update()
 
-        requestAnimationFrame(()=>this.gameLoop())
+        if(!this.playingTerminal1) {
+            requestAnimationFrame(()=>this.gameLoop())
+        }
     }
 
     // Loop Functions
@@ -89,7 +93,10 @@ class Game {
     
     // Launch Functions
     public launchGameTerminal1() {
-        
+        let gameTerminal1 : GameTerminal1
+        console.log("TERMINAL STARTING")
+        gameTerminal1 = new GameTerminal1(this)
+        console.log("TERMINAL STARTED")
     }
 }
 window.addEventListener("load", () => new Game())

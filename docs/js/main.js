@@ -295,6 +295,7 @@ class Game {
         this.score = 0;
         this.enemy1killed = false;
         this.enemy2killed = false;
+        this.playingTerminal1 = false;
         this.div = document.createElement("div");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.div);
@@ -318,6 +319,7 @@ class Game {
         }
         if (this.checkCollision(this.robot.getFutureRectangle(), this.code.getRectangle())) {
             this.code.collected = true;
+            this.launchGameTerminal1();
             this.tree.fixed = true;
             this.updateScore(1);
         }
@@ -326,7 +328,9 @@ class Game {
         this.enemy2.update();
         this.robot.update();
         this.code.update();
-        requestAnimationFrame(() => this.gameLoop());
+        if (!this.playingTerminal1) {
+            requestAnimationFrame(() => this.gameLoop());
+        }
     }
     checkCollision(a, b) {
         return (a.left <= b.right &&
@@ -339,7 +343,169 @@ class Game {
         document.getElementsByTagName("score")[0].innerHTML = `Score: ${this.score}`;
     }
     launchGameTerminal1() {
+        let gameTerminal1;
+        console.log("TERMINAL STARTING");
+        gameTerminal1 = new GameTerminal1(this);
+        console.log("TERMINAL STARTED");
     }
 }
 window.addEventListener("load", () => new Game());
+class Terminal1Player {
+    constructor() {
+        this.rightSpeed = 0;
+        this.leftSpeed = 0;
+        this.speed = 10;
+        this._div = document.createElement("Terminal1Player");
+        let game = document.getElementsByTagName("game")[0];
+        game.appendChild(this._div);
+        this.rightKey = 68;
+        this.leftKey = 65;
+        this._x = 0;
+        this._y = 700;
+        window.addEventListener("keydown", (e) => this.onKeyDown(e));
+        window.addEventListener("keyup", (e) => this.onKeyUp(e));
+    }
+    get div() { return this._div; }
+    get x() { return this._x; }
+    get y() { return this._y; }
+    onKeyDown(e) {
+        switch (e.keyCode) {
+            case this.leftKey:
+                this.leftSpeed = this.speed;
+                break;
+            case this.rightKey:
+                this.rightSpeed = this.speed;
+                break;
+        }
+    }
+    onKeyUp(e) {
+        switch (e.keyCode) {
+            case this.leftKey:
+                this.leftSpeed = 0;
+                break;
+            case this.rightKey:
+                this.rightSpeed = 0;
+                break;
+        }
+    }
+    update() {
+        let newPosX = this._x - this.leftSpeed + this.rightSpeed;
+        if (newPosX > 0 && newPosX + 100 < window.innerWidth)
+            this._x = newPosX;
+        this._div.style.transform = `translate(${this._x}px, ${this._y}px) scale(0.3)`;
+    }
+    getRectangle() {
+        return this._div.getBoundingClientRect();
+    }
+}
+class Terminal1Block {
+    constructor() {
+        this.downSpeed = 0;
+        this.upSpeed = 0;
+        this.blockSpeed = 20;
+        this._div = document.createElement("Terminal1Block");
+        let game = document.getElementsByTagName("game")[0];
+        game.appendChild(this._div);
+        this.upkey = 80;
+        this.downkey = 76;
+        this._x = 0;
+        this._y = -500;
+        window.addEventListener("keydown", (e) => this.onKeyDown(e));
+        window.addEventListener("keyup", (e) => this.onKeyUp(e));
+    }
+    get div() { return this._div; }
+    get x() { return this._x; }
+    get y() { return this._y; }
+    onKeyDown(e) {
+        switch (e.keyCode) {
+            case this.upkey:
+                this.upSpeed = this.blockSpeed;
+                break;
+            case this.downkey:
+                this.downSpeed = this.blockSpeed;
+                break;
+        }
+    }
+    onKeyUp(e) {
+        switch (e.keyCode) {
+            case this.upkey:
+                this.upSpeed = 0;
+                break;
+            case this.downkey:
+                this.downSpeed = 0;
+                break;
+        }
+    }
+    update() {
+        let newPosY = this._y - this.upSpeed + this.downSpeed;
+        this._y = newPosY;
+        this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
+    }
+    getRectangle() {
+        return this._div.getBoundingClientRect();
+    }
+}
+class GameTerminal1 {
+    constructor(gameInstance) {
+        this.score = 0;
+        console.log("TERMINAL CLASS STARTED");
+        this._div = document.createElement("div");
+        this.gameInstance = gameInstance;
+        let game = document.getElementsByTagName("gameterminal1")[0];
+        game.appendChild(this._div);
+        this.xKey = 88;
+        this.player = new Terminal1Player();
+        this.block = new Terminal1Block();
+        this.gameInstance.playingTerminal1 = true;
+        window.addEventListener("keydown", (e) => this.onKeyDown(e));
+        window.addEventListener("keyup", (e) => this.onKeyUp(e));
+        this.gameLoop();
+    }
+    gameLoop() {
+        this.player.update();
+        this.block.update();
+        this.checkBlockPlayerCollision(this.player);
+        console.log("onegameloop");
+        if (this.gameInstance.playingTerminal1) {
+            requestAnimationFrame(() => this.gameLoop());
+        }
+    }
+    onKeyDown(e) {
+        switch (e.keyCode) {
+            case this.xKey:
+                this.finnishGame();
+                break;
+        }
+    }
+    onKeyUp(e) {
+        switch (e.keyCode) {
+            case this.xKey:
+                break;
+        }
+    }
+    checkBlockPlayerCollision(player) {
+        let hit = this.checkCollision(player.getRectangle(), this.block.getRectangle());
+        if (hit) {
+            this.updateScore(-1);
+            this.gameOver();
+        }
+    }
+    updateScore(addScoreAmount) {
+        this.score += addScoreAmount;
+    }
+    checkCollision(a, b) {
+        return (a.left <= b.right &&
+            b.left <= a.right &&
+            a.top <= b.bottom &&
+            b.top <= a.bottom);
+    }
+    gameOver() {
+        console.log("YOU HAVE DIED");
+        document.getElementsByTagName("message")[0].innerHTML = `YOU HAVE DIED`;
+    }
+    finnishGame() {
+        this.gameInstance.playingTerminal1 = false;
+        this.gameInstance.gameLoop();
+    }
+}
 //# sourceMappingURL=main.js.map
