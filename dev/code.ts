@@ -1,43 +1,58 @@
 class Code{
+    // Fields
+    private _div : HTMLElement
 
-    private code : HTMLElement
-
-    public _x : number
-    public _y : number
+    private _x : number
+    private _y : number
     protected collisionRobotCode: boolean = false
 
     public collected : boolean = false
 
-    constructor(x:number,y:number) {
-        this.createCode(x,y)
+    
+    // Properties
+    public get div(): HTMLElement           { return this._div }
+
+    public get x(): number                  { return this._x }
+    public get y(): number                  { return this._y }
+
+
+    // Constructor
+    constructor(xStart: number, yStart: number) {
+        this.spawnCode(xStart, yStart)
     }
 
-    private createCode(x:number,y:number) {
-        this.code = document.createElement("code")
-        let game =document.getElementsByTagName("game")[0]
-        game.appendChild(this.code)
 
-        this._x = x
-        this._y = y
+    // Functions
 
-        this.code.style.transform = `translate(${this._x}px, ${this._y}px) scale(0.2)`
+    // Init Functions
+    private spawnCode(xStart: number, yStart: number) {
+        this._div = document.createElement("code")
+        let game = document.getElementsByTagName("game")[0]
+        game.appendChild(this._div)
+
+        this._x = xStart
+        this._y = yStart
+
+        this._div.style.transform = `translate(${this._x}px, ${this._y}px) scale(0.2)`
     }
 
-    public getRectangle() {
-        return this.code.getBoundingClientRect()
-    }
-
-    public getFutureRectangle(){
-        let rect = this.code.getBoundingClientRect()
-        return rect
-    }
-
+    // Loop Functions
     public update() : void {
 
         if(this.collected) {
             console.log("collected")
-            this.code.remove()
+            this._div.remove()
             this.collected = false
         }
     }
+
+    // General Functions
+    public getRectangle() {
+        return this._div.getBoundingClientRect()
+    }
+
+    public getFutureRectangle(){
+        return this._div.getBoundingClientRect()
+    }
+
 }

@@ -1,51 +1,67 @@
 class Robot {
-
-    private robot : HTMLElement
-
-    private jumping : boolean = true
+    // Fields
+    private _div : HTMLElement
 
     private _x : number = 0
     private _y : number = 0
 
-    private left : boolean = false
-    private right : boolean = false
-    private duck : boolean = false
-    private space : boolean = false
+    private xVelo : number = 0
+    private yVelo : number = 0
 
+    private flip : number = 1
+
+    // Inputs
     private leftKey : number = 0
     private rightKey : number = 0
     private downKey : number = 0
     private spaceKey : number = 0
     private spaceKey2 : number = 0
 
-    private x_velo : number = 0
-    private y_velo : number = 0
+    private left : boolean = false
+    private right : boolean = false
+    private duck : boolean = false
+    private space : boolean = false
+    
+    private jumping : boolean = false
 
-    private flip : number = 1
 
-    public canvas : HTMLElement
+    // Properties
+    public get div(): HTMLElement           { return this._div }
 
-    constructor(x:number,y:number) {
+    public get x(): number                  { return this._x }
+    public get y(): number                  { return this._y }
+
+
+    // Constructor
+    constructor(xStart : number, yStart : number) {
         this.leftKey = 65
         this.rightKey = 68
         this.downKey = 83
         this.spaceKey = 32
         this.spaceKey2 = 87
 
-        this.createRobot(x,y)
+        this.spawnRobot(xStart, yStart)
+
         window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e))
         window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
     }
 
-    private createRobot(x:number,y:number) {
-        this.robot = document.createElement("robot")
+    
+    // Functions
+
+    // Init Functions
+    private spawnRobot(xStart: number, yStart: number) {
+        this._div = document.createElement("robot")
         let game = document.getElementsByTagName("game")[0]
-        game.appendChild(this.robot)
-        this._x = x
-        this._y = y
-        this.robot.style.transform = `translate(${this._x}px, ${this._y}px)`
+        game.appendChild(this._div)
+
+        this._x = xStart
+        this._y = yStart
+
+        this._div.style.transform = `translate(${this._x}px, ${this._y}px)`
     }
 
+    // Loop Functions
     private onKeyDown(e: KeyboardEvent): void{
         switch (e.keyCode){
             case this.leftKey:
@@ -86,44 +102,38 @@ class Robot {
         }
     }
 
-    getFutureRectangle(){
-        let rect = this.robot.getBoundingClientRect()
-        rect.x += this.x_velo
-        return rect
-    }
-
     public update(){
         if(this.space && this.jumping == false){
-            this.y_velo -= 40;
+            this.yVelo -= 40;
             this.jumping = true;
         }
 
         if(this.left){
-            this.x_velo -= 1;
+            this.xVelo -= 1;
             this.flip = -1
         }
 
         if(this.right){
-            this.x_velo += 1;
+            this.xVelo += 1;
             this.flip = 1
         }
 
         if(this.duck){
-            this.robot.classList.add("robot-duck")
+            this._div.classList.add("robot-duck")
         } else {
-            this.robot.classList.remove("robot-duck")
+            this._div.classList.remove("robot-duck")
         }
 
-        this.y_velo += 1.7;
-        this._x += this.x_velo;
-        this._y += this.y_velo;
-        this.x_velo *= 0.9;
-        this.y_velo *= 0.9;
+        this.yVelo += 1.7;
+        this._x += this.xVelo;
+        this._y += this.yVelo;
+        this.xVelo *= 0.9;
+        this.yVelo *= 0.9;
 
         if(this._y > 600 - 16 -32){
             this.jumping = false;
             this._y = 600 - 16 - 32;
-            this.y_velo = 0;
+            this.yVelo = 0;
         }
 
         if (this._x < -200){
@@ -132,6 +142,17 @@ class Robot {
             this._x = -200
         }
 
-        this.robot.style.transform = `translate(${this._x}px, ${this._y}px) scalex(${this.flip})`
+        this._div.style.transform = `translate(${this._x}px, ${this._y}px) scalex(${this.flip})`
+    }
+
+    // General Functions
+    public getRectangle() {
+        return this._div.getBoundingClientRect()
+    }
+
+    public getFutureRectangle(){
+        let rect = this._div.getBoundingClientRect()
+        rect.x += this.xVelo
+        return rect
     }
 }

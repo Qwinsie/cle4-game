@@ -1,30 +1,54 @@
 class Tree {
-
+    // Fields
+    private _div : HTMLElement
     private tree : HTMLElement
-    public _x : number = 0
-    public _y : number = 0
+
+    private _x : number = 0
+    private _y : number = 0
 
     public fixed : boolean = false
 
-    constructor(x:number,y:number) {
-        this.createTree(x,y)
+    // Inputs
+    // no inputs
+
+
+    // Properties
+    public get div(): HTMLElement           { return this._div }
+
+    public get x(): number                  { return this._x }
+    public get y(): number                  { return this._y }
+
+
+    // Constructor
+    constructor(xStart: number, yStart: number) {
+        this.spawnTree(xStart, yStart)
    }
 
-    private createTree(x:number,y:number) {
-        this.tree = document.createElement("tree")
+   
+    // Functions
+
+    // Init Functions
+    private spawnTree(xStart: number, yStart: number) {
+        this._div = document.createElement("tree")
          let game = document.getElementsByTagName("game")[0]
-        game.appendChild(this.tree)
+        game.appendChild(this._div)
 
-        this._x = x
-        this._y = y
+        this._x = xStart
+        this._y = yStart
 
-        this.tree.style.transform = `translate(${this._x}px, ${this._y}px)`
+        this._div.style.transform = `translate(${this._x}px, ${this._y}px)`
     }
 
+    // Loop Functions
     public update() {
         if(this.fixed) {
-            this.tree.classList.add("fixed")
+            this._div.classList.add("fixed")
             this.fixed = false
         }
+    }
+
+    // General Functions
+    public getRectangle() {
+        return this._div.getBoundingClientRect()
     }
 }

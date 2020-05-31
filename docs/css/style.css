@@ -66,3 +66,28 @@ canvas {
     width:1440px; height: 900px;
     border: 3px inherit black;
 }
+
+
+
+
+
+Terminal1Player {
+    background-image: url(../img/terminal1/terminal_enemy1_player.png);
+    width:257px; height:338px;
+    transform: scale(0.1)
+}
+
+Terminal1Block {
+    background-image: url(../img/terminal1/block1.png);
+    width:382px; height:1080px;
+}
+
+messagebox {
+    z-index: 2;
+    position: fixed;
+
+}
+
+message {
+    font-size: 100px;
+}
