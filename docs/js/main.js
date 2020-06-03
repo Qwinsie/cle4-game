@@ -120,7 +120,6 @@ class Enemy2 {
         this.yVelo += 1.2;
         this._y += this.yVelo;
         this.yVelo *= 0.95;
-
         if (this._y > 600) {
             this.jumping = false;
             this._y = 600;
