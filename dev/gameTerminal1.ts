@@ -8,11 +8,12 @@ class GameTerminal1 {
 
     private player : Terminal1Player
     private block : Terminal1Block
+    private background : Terminal1Background
 
     private score : number = 0
 
     // Inputs
-     private xKey : number
+    private xKey : number
 
     // Constructor
     constructor(gameInstance : Game) {
@@ -29,6 +30,7 @@ class GameTerminal1 {
 
         this.player = new Terminal1Player()
         this.block = new Terminal1Block()
+        this.background = new Terminal1Background()
 
         this.gameInstance.playingTerminal1 = true
 
@@ -102,10 +104,29 @@ class GameTerminal1 {
     gameOver() {
         console.log("YOU HAVE DIED")
         document.getElementsByTagName("message")[0].innerHTML = `YOU HAVE DIED`
+        this.killAll()
+        this.gameInstance.playingTerminal1 = false
+        this.gameInstance.reset()
+        this.gameInstance.gameLoop()
     }
 
     finnishGame() {
+        this.killAll()
         this.gameInstance.playingTerminal1 = false
         this.gameInstance.gameLoop()
     }
+
+    killAll() {
+        this.block.div.remove()
+        this.player.div.remove()
+
+    }
+
+    sleep(milliseconds : number) {
+        const date = Date.now();
+        let currentDate = null;
+        do {
+          currentDate = Date.now();
+        } while (currentDate - date < milliseconds);
+      }
 }

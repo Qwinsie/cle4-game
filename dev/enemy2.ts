@@ -69,14 +69,14 @@ class Enemy2 {
     }
 
     public update() {
-        if(this.space && this.jumping == false){
-            this.yVelo -= 50;
+        if(this.jumping == false){
+            this.yVelo -= 40;
             this.jumping = true;
         }
 
-        this.yVelo += 1.2;
+        this.yVelo += 1.0;
         this._y += this.yVelo;
-        this.yVelo *= 0.95;
+        this.yVelo *= 0.98;
 
         // Land on the ground
         if(this._y > 600){

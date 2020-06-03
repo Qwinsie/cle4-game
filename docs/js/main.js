@@ -113,13 +113,13 @@ class Enemy2 {
         }
     }
     update() {
-        if (this.space && this.jumping == false) {
-            this.yVelo -= 50;
+        if (this.jumping == false) {
+            this.yVelo -= 40;
             this.jumping = true;
         }
-        this.yVelo += 1.2;
+        this.yVelo += 1.0;
         this._y += this.yVelo;
-        this.yVelo *= 0.95;
+        this.yVelo *= 0.98;
         if (this._y > 600) {
             this.jumping = false;
             this._y = 600;
@@ -348,6 +348,22 @@ class Game {
         gameTerminal1 = new GameTerminal1(this);
         console.log("TERMINAL STARTED");
     }
+    reset() {
+        this.score = 0;
+        document.getElementsByTagName("score")[0].innerHTML = `Score: ${this.score}`;
+        document.getElementsByTagName("message")[0].innerHTML = ``;
+        this.tree.div.remove();
+        this.robot.div.remove();
+        this.enemy1.div.remove();
+        this.enemy2.div.remove();
+        this.code.div.remove();
+        this.tree = new Tree(500, 400);
+        this.robot = new Robot(200, 600);
+        this.enemy1 = new Enemy1(1000, 630);
+        this.enemy2 = new Enemy2(1200, 630);
+        this.code = new Code(500, 200);
+        this.gameLoop();
+    }
 }
 window.addEventListener("load", () => new Game());
 class Terminal1Player {
@@ -456,6 +472,7 @@ class GameTerminal1 {
         this.xKey = 88;
         this.player = new Terminal1Player();
         this.block = new Terminal1Block();
+        this.background = new Terminal1Background();
         this.gameInstance.playingTerminal1 = true;
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
@@ -502,10 +519,28 @@ class GameTerminal1 {
     gameOver() {
         console.log("YOU HAVE DIED");
         document.getElementsByTagName("message")[0].innerHTML = `YOU HAVE DIED`;
+        this.killAll();
+        this.gameInstance.playingTerminal1 = false;
+        this.gameInstance.reset();
+        this.gameInstance.gameLoop();
     }
     finnishGame() {
+        this.killAll();
         this.gameInstance.playingTerminal1 = false;
         this.gameInstance.gameLoop();
     }
+    killAll() {
+        this.block.div.remove();
+        this.player.div.remove();
+    }
+    sleep(milliseconds) {
+        const date = Date.now();
+        let currentDate = null;
+        do {
+            currentDate = Date.now();
+        } while (currentDate - date < milliseconds);
+    }
+}
+class Terminal1Background {
 }
 //# sourceMappingURL=main.js.map
