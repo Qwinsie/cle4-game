@@ -11,26 +11,6 @@ game * {
     background-repeat: no-repeat;
 }
 
-h2 {
-    color: #fff;
-    font-size: 32px;
-    margin: 5px;
-}
-
-.canvas {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    grid-column-gap: 10px;
-    grid-row-gap: 10px;
-    height: 100%;
-    width: 1440px;
-    height: 900px;
-    background-color: #0d0d0d;
-    border: solid gray 40px;
-    padding: 20px;
-    }
-
 robot {
     background-image: url(../img/robot.png);
     width:150px; height: 230px;
@@ -110,57 +90,4 @@ messagebox {
 
 message {
     font-size: 100px;
-}
-
-
-
-
-.walk {
-    grid-area: 2 / 1 / 4 / 2;
-    text-align: center;
-}
-.jump {
-    grid-area: 2 / 2 / 3 / 3;
-    text-align: center;
-    padding-right: 100px;
-}
-.sneak {
-    grid-area: 2 / 3 / 3 / 4;
-    text-align: center;
-    padding-right: 100px;
-}
-.dash {
-    grid-area: 2 / 4 / 3 / 5;
-    text-align: center;
-    padding-right: 100px;
-}
-.div5 {
-    grid-area: 3 / 2 / 4 / 3;
-    text-align: center;
-    padding-left: 100px;
-}
-.div6 {
-    grid-area: 3 / 3 / 4 / 4;
-    text-align: center;
-    padding-left: 100px;
-}
-.div7 {
-    grid-area: 3 / 4 / 4 / 5;
-    text-align: center;
-    padding-left: 100px;
-}
-.div8 {
-    grid-area: 1 / 1 / 2 / 5;
-    margin: 20px;
-}
-.div9 { grid-area: 4 / 1 / 5 / 5; }
-
-.joystick {
-    height: 240px;
-    width: 240px;
-}
-
-.button {
-    width: 100px;
-    height: 100px;
 }
