@@ -24,17 +24,20 @@ class Terminal1Block {
 
 
     // Construtor
-    constructor() {
+    constructor(x : number = 0, 
+                upkey : number = 73, 
+                downkey : number = 74, 
+                y : number = -800) {
         this._div = document.createElement("Terminal1Block")
 
         let game = document.getElementsByTagName("game")[0]
         game.appendChild(this._div)
 
-        this.upkey   = 80
-        this.downkey = 76
+        this.upkey   = upkey
+        this.downkey = downkey
 
-        this._x = 0
-        this._y = -500
+        this._x = x
+        this._y = y
 
         window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e))
         window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))

@@ -1,4 +1,4 @@
-class Terminal1Background {
+class Terminal1Border {
     // Fields
     private _div : HTMLElement
     private gameInstance : Game
@@ -15,7 +15,7 @@ class Terminal1Background {
 
         // Construtor
         constructor() {
-            this._div = document.createElement("terminalBackground")
+            this._div = document.createElement("terminalBorder")
     
             let game = document.getElementsByTagName("game")[0]
             game.appendChild(this._div)

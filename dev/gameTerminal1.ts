@@ -8,7 +8,9 @@ class GameTerminal1 {
 
     private player : Terminal1Player
     private block : Terminal1Block
+    private block2 : Terminal1Block
     private background : Terminal1Background
+    private border : Terminal1Border
 
     private score : number = 0
 
@@ -26,11 +28,13 @@ class GameTerminal1 {
         let game = document.getElementsByTagName("gameterminal1")[0]
         game.appendChild(this._div)
 
-        this.xKey = 88
+        this.xKey = 100
 
         this.player = new Terminal1Player()
-        this.block = new Terminal1Block()
+        this.block = new Terminal1Block(100)
+        this.block2 = new Terminal1Block(1000, 79, 75)
         this.background = new Terminal1Background()
+        this.border = new Terminal1Border()
 
         this.gameInstance.playingTerminal1 = true
 
@@ -49,6 +53,7 @@ class GameTerminal1 {
     private gameLoop(){
         this.player.update()
         this.block.update()
+        this.block2.update()
 
         this.checkBlockPlayerCollision(this.player)
 
@@ -79,13 +84,19 @@ class GameTerminal1 {
     checkBlockPlayerCollision(player : Terminal1Player) {
 
         let hit = this.checkCollision(player.getRectangle(), this.block.getRectangle())
-        // let hit2 = this.checkCollision(player.getRectangle(), this.block2.getRectangle())
+        let hit2 = this.checkCollision(player.getRectangle(), this.block2.getRectangle())
 
         if (hit) {
             this.updateScore(-1)
             this.gameOver()
         }
+
+        if (hit2) {
+            this.updateScore(2)
+            this.gameWin()
+        }
     }
+    
     
     updateScore(addScoreAmount: number) {
         this.score += addScoreAmount
@@ -110,6 +121,12 @@ class GameTerminal1 {
         this.gameInstance.gameLoop()
     }
 
+    gameWin() {
+        this.killAll()
+        this.gameInstance.playingTerminal1 = false
+        this.gameInstance.gameLoop()
+    }
+
     finnishGame() {
         this.killAll()
         this.gameInstance.playingTerminal1 = false
@@ -118,8 +135,10 @@ class GameTerminal1 {
 
     killAll() {
         this.block.div.remove()
+        this.block2.div.remove()
         this.player.div.remove()
-
+        this.background.div.remove()
+        this.border.div.remove()
     }
 
     sleep(milliseconds : number) {

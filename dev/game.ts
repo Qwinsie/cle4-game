@@ -21,6 +21,23 @@ class Game {
 
     public playingTerminal1 : boolean = false
     
+    // Inputs
+    private upKey : number = 87
+    private downKey : number = 83
+    private leftKey : number = 65
+    private rightKey : number = 68
+
+    private oneKey : number = 74
+    private twoKey : number = 75
+    private threeKey : number = 76
+    private fourKey : number = 73
+    private fiveKey : number = 79
+    private sixKey : number = 80
+
+    private spaceKey : number = 32
+    private escapeKey : number = 27
+
+
     // Properties
 
 
