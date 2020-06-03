@@ -50,13 +50,7 @@ background {
     z-index: -2;
 }
 
-terminalBackground {
-    background-image: url(../img/terminal1/console_terminal_backround.png);
-    width:1440px; height: 900px;
-    background-size: inherit;
-    border-image-outset: 10px inherit black;
-    z-index: -2;
-}
+
 
 score {
     color:white;
@@ -78,24 +72,36 @@ canvas {
 
 
 
+terminalBackground {
+    background-image: url(../img/terminal1/console_terminal_backround.png);
+    width:1920px; height: 1080px;
+    background-size: inherit;
+    border-image-outset: 10px inherit black;
+    z-index: 10;
+}
+
 
 Terminal1Player {
     background-image: url(../img/terminal1/terminal_enemy1_player.png);
     width:257px; height:338px;
-    transform: scale(0.1)
+    transform: scale(0.1);
+    z-index: 11;
 }
 
 Terminal1Block {
-    background-image: url(../img/terminal1/block1.png);
-    width:382px; height:1080px;
+    background-image: url(../img/terminal1/terminal1_block1.png);
+    width:811px; height:1059px;
+    z-index: 11;
 }
 
 messagebox {
     z-index: 2;
     position: fixed;
-
+    z-index: 12;
 }
 
 message {
     font-size: 100px;
+    z-index: 12;
 }
+

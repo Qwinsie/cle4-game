@@ -415,17 +415,17 @@ class Terminal1Player {
     }
 }
 class Terminal1Block {
-    constructor() {
+    constructor(x = 0, upkey = 73, downkey = 74, y = -800) {
         this.downSpeed = 0;
         this.upSpeed = 0;
         this.blockSpeed = 20;
         this._div = document.createElement("Terminal1Block");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this._div);
-        this.upkey = 80;
-        this.downkey = 76;
-        this._x = 0;
-        this._y = -500;
+        this.upkey = upkey;
+        this.downkey = downkey;
+        this._x = x;
+        this._y = y;
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
     }
@@ -472,6 +472,7 @@ class GameTerminal1 {
         this.xKey = 88;
         this.player = new Terminal1Player();
         this.block = new Terminal1Block();
+        this.block2 = new Terminal1Block(1000, 79, 75);
         this.background = new Terminal1Background();
         this.gameInstance.playingTerminal1 = true;
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
@@ -481,6 +482,7 @@ class GameTerminal1 {
     gameLoop() {
         this.player.update();
         this.block.update();
+        this.block2.update();
         this.checkBlockPlayerCollision(this.player);
         console.log("onegameloop");
         if (this.gameInstance.playingTerminal1) {
@@ -502,9 +504,14 @@ class GameTerminal1 {
     }
     checkBlockPlayerCollision(player) {
         let hit = this.checkCollision(player.getRectangle(), this.block.getRectangle());
+        let hit2 = this.checkCollision(player.getRectangle(), this.block2.getRectangle());
         if (hit) {
             this.updateScore(-1);
             this.gameOver();
+        }
+        if (hit2) {
+            this.updateScore(2);
+            this.gameWin();
         }
     }
     updateScore(addScoreAmount) {
@@ -524,6 +531,11 @@ class GameTerminal1 {
         this.gameInstance.reset();
         this.gameInstance.gameLoop();
     }
+    gameWin() {
+        this.killAll();
+        this.gameInstance.playingTerminal1 = false;
+        this.gameInstance.gameLoop();
+    }
     finnishGame() {
         this.killAll();
         this.gameInstance.playingTerminal1 = false;
@@ -531,7 +543,9 @@ class GameTerminal1 {
     }
     killAll() {
         this.block.div.remove();
+        this.block2.div.remove();
         this.player.div.remove();
+        this.background.div.remove();
     }
     sleep(milliseconds) {
         const date = Date.now();
@@ -542,5 +556,13 @@ class GameTerminal1 {
     }
 }
 class Terminal1Background {
+    constructor() {
+        this._div = document.createElement("terminalBackground");
+        let game = document.getElementsByTagName("game")[0];
+        game.appendChild(this._div);
+    }
+    get div() { return this._div; }
+    get x() { return this._x; }
+    get y() { return this._y; }
 }
 //# sourceMappingURL=main.js.map
