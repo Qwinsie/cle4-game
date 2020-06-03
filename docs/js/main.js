@@ -481,11 +481,12 @@ class GameTerminal1 {
         this.gameInstance = gameInstance;
         let game = document.getElementsByTagName("gameterminal1")[0];
         game.appendChild(this._div);
-        this.xKey = 88;
+        this.xKey = 100;
         this.player = new Terminal1Player();
-        this.block = new Terminal1Block();
+        this.block = new Terminal1Block(100);
         this.block2 = new Terminal1Block(1000, 79, 75);
         this.background = new Terminal1Background();
+        this.border = new Terminal1Border();
         this.gameInstance.playingTerminal1 = true;
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
@@ -558,6 +559,7 @@ class GameTerminal1 {
         this.block2.div.remove();
         this.player.div.remove();
         this.background.div.remove();
+        this.border.div.remove();
     }
     sleep(milliseconds) {
         const date = Date.now();
@@ -570,6 +572,16 @@ class GameTerminal1 {
 class Terminal1Background {
     constructor() {
         this._div = document.createElement("terminalBackground");
+        let game = document.getElementsByTagName("game")[0];
+        game.appendChild(this._div);
+    }
+    get div() { return this._div; }
+    get x() { return this._x; }
+    get y() { return this._y; }
+}
+class Terminal1Border {
+    constructor() {
+        this._div = document.createElement("terminalBorder");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this._div);
     }

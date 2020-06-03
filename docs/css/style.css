@@ -80,6 +80,14 @@ terminalBackground {
     z-index: 10;
 }
 
+terminalBorder {
+    background-image: url(../img/terminal1/terminal_border.png);
+    width:1920px; height: 1080px;
+    background-size: inherit;
+    border-image-outset: 10px inherit black;
+    z-index: 19;
+}
+
 
 Terminal1Player {
     background-image: url(../img/terminal1/terminal_enemy1_player.png);

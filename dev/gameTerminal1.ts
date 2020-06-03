@@ -10,6 +10,7 @@ class GameTerminal1 {
     private block : Terminal1Block
     private block2 : Terminal1Block
     private background : Terminal1Background
+    private border : Terminal1Border
 
     private score : number = 0
 
@@ -27,12 +28,13 @@ class GameTerminal1 {
         let game = document.getElementsByTagName("gameterminal1")[0]
         game.appendChild(this._div)
 
-        this.xKey = 88
+        this.xKey = 100
 
         this.player = new Terminal1Player()
-        this.block = new Terminal1Block()
+        this.block = new Terminal1Block(100)
         this.block2 = new Terminal1Block(1000, 79, 75)
         this.background = new Terminal1Background()
+        this.border = new Terminal1Border()
 
         this.gameInstance.playingTerminal1 = true
 
@@ -136,6 +138,7 @@ class GameTerminal1 {
         this.block2.div.remove()
         this.player.div.remove()
         this.background.div.remove()
+        this.border.div.remove()
     }
 
     sleep(milliseconds : number) {
