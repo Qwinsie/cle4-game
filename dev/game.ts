@@ -98,5 +98,26 @@ class Game {
         gameTerminal1 = new GameTerminal1(this)
         console.log("TERMINAL STARTED")
     }
+
+    public reset() {
+        this.score = 0
+        document.getElementsByTagName("score")[0].innerHTML = `Score: ${this.score}`
+        document.getElementsByTagName("message")[0].innerHTML = ``
+
+        this.tree.div.remove()
+        this.robot.div.remove()
+        this.enemy1.div.remove()
+        this.enemy2.div.remove()
+        this.code.div.remove()
+
+        this.tree = new Tree(500,400)
+        this.robot = new Robot(200,600)
+        this.enemy1 = new Enemy1(1000,630)
+        this.enemy2 = new Enemy2(1200,630)
+        this.code = new Code(500,200)
+
+        this.gameLoop()
+
+    }
 }
 window.addEventListener("load", () => new Game())

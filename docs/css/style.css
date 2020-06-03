@@ -50,6 +50,14 @@ background {
     z-index: -2;
 }
 
+terminalBackground {
+    background-image: url(../img/terminal1/console_terminal_backround.png);
+    width:1440px; height: 900px;
+    background-size: inherit;
+    border-image-outset: 10px inherit black;
+    z-index: -2;
+}
+
 score {
     color:white;
     font-size:26px;
