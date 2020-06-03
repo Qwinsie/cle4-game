@@ -296,6 +296,18 @@ class Game {
         this.enemy1killed = false;
         this.enemy2killed = false;
         this.playingTerminal1 = false;
+        this.upKey = 87;
+        this.downKey = 83;
+        this.leftKey = 65;
+        this.rightKey = 68;
+        this.oneKey = 74;
+        this.twoKey = 75;
+        this.threeKey = 76;
+        this.fourKey = 73;
+        this.fiveKey = 79;
+        this.sixKey = 80;
+        this.spaceKey = 32;
+        this.escapeKey = 27;
         this.div = document.createElement("div");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.div);
