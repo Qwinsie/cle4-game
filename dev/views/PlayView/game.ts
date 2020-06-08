@@ -1,8 +1,8 @@
-/// <reference path="robot.ts"/>
-/// <reference path="code.ts"/>
-/// <reference path="enemy1.ts"/>
-/// <reference path="enemy2.ts"/>
-/// <reference path="tree.ts"/>
+/// <reference path="GameObject/robot.ts"/>
+/// <reference path="GameObject/code.ts"/>
+/// <reference path="GameObject/enemy1.ts"/>
+/// <reference path="GameObject/enemy2.ts"/>
+/// <reference path="GameObject/tree.ts"/>
 
 class Game {
     // Fields
@@ -48,11 +48,11 @@ class Game {
         let game = document.getElementsByTagName("game")[0]
         game.appendChild(this.div)
 
-        this.tree = new Tree(500,400)
-        this.robot = new Robot(200,600)
-        this.enemy1 = new Enemy1(1000,630)
-        this.enemy2 = new Enemy2(1200,630)
-        this.code = new Code(500,200)
+        this.tree = new Tree(500,400,"tree")
+        this.robot = new Robot(200,600,"robot")
+        this.enemy1 = new Enemy1(1000,630,"enemy1")
+        this.enemy2 = new Enemy2(1200,630,"enemy2")
+        this.code = new Code(500,200,"code")
 
         this.gameLoop()
     }
@@ -127,11 +127,11 @@ class Game {
         this.enemy2.div.remove()
         this.code.div.remove()
 
-        this.tree = new Tree(500,400)
-        this.robot = new Robot(200,600)
-        this.enemy1 = new Enemy1(1000,630)
-        this.enemy2 = new Enemy2(1200,630)
-        this.code = new Code(500,200)
+        this.tree = new Tree(500,400,"tree")
+        this.robot = new Robot(200,600,"robot")
+        this.enemy1 = new Enemy1(1000,630,"enemy1")
+        this.enemy2 = new Enemy2(1200,630,"enemy2")
+        this.code = new Code(500,200,"code")
 
         this.gameLoop()
 
