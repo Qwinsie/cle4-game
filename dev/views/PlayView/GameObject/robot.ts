@@ -1,10 +1,7 @@
-class Robot {
+/// <reference path="../gameobject.ts"/>
+
+class Robot extends GameObject {
     // Fields
-    private _div : HTMLElement
-
-    private _x : number = 0
-    private _y : number = 0
-
     private xVelo : number = 0
     private yVelo : number = 0
 
@@ -24,41 +21,18 @@ class Robot {
     
     private jumping : boolean = false
 
-
-    // Properties
-    public get div(): HTMLElement           { return this._div }
-
-    public get x(): number                  { return this._x }
-    public get y(): number                  { return this._y }
-
-
     // Constructor
-    constructor(xStart : number, yStart : number) {
+    constructor(xStart : number, yStart : number, name : string) {        
+        super(xStart, yStart, name)
+
         this.leftKey = 65
         this.rightKey = 68
         this.downKey = 83
         this.spaceKey = 32
         this.spaceKey2 = 87
 
-        this.spawnRobot(xStart, yStart)
-
         window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e))
         window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
-    }
-
-    
-    // Functions
-
-    // Init Functions
-    private spawnRobot(xStart: number, yStart: number) {
-        this._div = document.createElement("robot")
-        let game = document.getElementsByTagName("game")[0]
-        game.appendChild(this._div)
-
-        this._x = xStart
-        this._y = yStart
-
-        this._div.style.transform = `translate(${this._x}px, ${this._y}px)`
     }
 
     // Loop Functions
@@ -103,6 +77,7 @@ class Robot {
     }
 
     public update(){
+
         if(this.space && this.jumping == false){
             this.yVelo -= 40;
             this.jumping = true;

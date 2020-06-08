@@ -1,150 +1,34 @@
-class Code {
-    constructor(xStart, yStart) {
-        this.collisionRobotCode = false;
-        this.collected = false;
-        this.spawnCode(xStart, yStart);
-    }
-    get div() { return this._div; }
-    get x() { return this._x; }
-    get y() { return this._y; }
-    spawnCode(xStart, yStart) {
-        this._div = document.createElement("code");
-        let game = document.getElementsByTagName("game")[0];
-        game.appendChild(this._div);
-        this._x = xStart;
-        this._y = yStart;
-        this._div.style.transform = `translate(${this._x}px, ${this._y}px) scale(0.2)`;
-    }
-    update() {
-        if (this.collected) {
-            console.log("collected");
-            this._div.remove();
-            this.collected = false;
-        }
-    }
-    getRectangle() {
-        return this._div.getBoundingClientRect();
-    }
-    getFutureRectangle() {
-        return this._div.getBoundingClientRect();
-    }
-}
-class Enemy1 {
-    constructor(xStart, yStart) {
+class GameObject {
+    constructor(xStart, yStart, name) {
         this._x = 0;
         this._y = 0;
-        this.xVelo = 0;
-        this.yVelo = 0;
-        this.leftspeed = 0;
-        this.rightspeed = 0;
-        this.alive = true;
-        this.spawnEnemy1(xStart, yStart);
+        this.spawn(xStart, yStart, name);
     }
     get div() { return this._div; }
     get x() { return this._x; }
     get y() { return this._y; }
-    spawnEnemy1(xStart, yStart) {
-        this._div = document.createElement("enemy1");
+    spawn(xStart, yStart, name) {
+        this._div = document.createElement(`${name}`);
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this._div);
         this._x = xStart;
         this._y = yStart;
-        this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
-    }
-    update() {
-        this.leftspeed = +1;
-        let newX = this._x - this.leftspeed + this.rightspeed;
-        if (newX < (1440 - this._div.clientWidth)) {
-            this._x = newX;
-        }
-        if (newX < 0 - this._div.clientWidth) {
-            this._div.remove();
-        }
-        this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
-    }
-    getRectangle() {
-        return this._div.getBoundingClientRect();
-    }
-    kill() {
-        this.alive = false;
-        this._div.remove();
-    }
-}
-class Enemy2 {
-    constructor(xStart, yStart) {
-        this._x = 0;
-        this._y = 0;
-        this.xVelo = 0;
-        this.yVelo = 0;
-        this.leftspeed = 0;
-        this.rightspeed = 0;
-        this.alive = true;
-        this.spaceKey = 0;
-        this.space = false;
-        this.jumping = true;
-        this.spaceKey = 88;
-        this.spawnEnemy2(xStart, yStart);
-        window.addEventListener("keydown", (e) => this.onKeyDown(e));
-        window.addEventListener("keyup", (e) => this.onKeyUp(e));
-    }
-    get div() { return this._div; }
-    get x() { return this._x; }
-    get y() { return this._y; }
-    spawnEnemy2(xStart, yStart) {
-        this._div = document.createElement("enemy2");
-        let game = document.getElementsByTagName("game")[0];
-        game.appendChild(this._div);
-        this._x = xStart;
-        this._y = yStart;
-        this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
-    }
-    onKeyDown(e) {
-        switch (e.keyCode) {
-            case this.spaceKey:
-                this.space = true;
-                break;
-        }
-    }
-    onKeyUp(e) {
-        switch (e.keyCode) {
-            case this.spaceKey:
-                this.space = false;
-                break;
-        }
-    }
-    update() {
-        if (this.jumping == false) {
-            this.yVelo -= 40;
-            this.jumping = true;
-        }
-        this.yVelo += 1.0;
-        this._y += this.yVelo;
-        this.yVelo *= 0.98;
-        if (this._y > 600) {
-            this.jumping = false;
-            this._y = 600;
-            this.yVelo = 0;
-        }
-        let newX = this._x - this.leftspeed + this.rightspeed;
-        if (newX < this._x || newX > this._x || this._y <= 600) {
-            if (newX > 0 && newX < (1440 - this._div.clientWidth)) {
-                this._x = newX;
-            }
+        console.log(`${name} has been created`);
+        if (name !== "code") {
             this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
         }
+        else {
+            this._div.style.transform = `translate(${this._x}px, ${this._y}px) scale(0.2)`;
+        }
     }
-    getRectangle() {
-        return this._div.getBoundingClientRect();
-    }
-    kill() {
-        this.alive = false;
-        this._div.remove();
+    move(name) {
+        if (name !== "robot") {
+        }
     }
 }
-class Robot {
-    constructor(xStart, yStart) {
-        this._x = 0;
-        this._y = 0;
+class Robot extends GameObject {
+    constructor(xStart, yStart, name) {
+        super(xStart, yStart, name);
         this.xVelo = 0;
         this.yVelo = 0;
         this.flip = 1;
@@ -163,20 +47,8 @@ class Robot {
         this.downKey = 83;
         this.spaceKey = 32;
         this.spaceKey2 = 87;
-        this.spawnRobot(xStart, yStart);
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
-    }
-    get div() { return this._div; }
-    get x() { return this._x; }
-    get y() { return this._y; }
-    spawnRobot(xStart, yStart) {
-        this._div = document.createElement("robot");
-        let game = document.getElementsByTagName("game")[0];
-        game.appendChild(this._div);
-        this._x = xStart;
-        this._y = yStart;
-        this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
     }
     onKeyDown(e) {
         switch (e.keyCode) {
@@ -262,23 +134,97 @@ class Robot {
         return rect;
     }
 }
-class Tree {
-    constructor(xStart, yStart) {
-        this._x = 0;
-        this._y = 0;
-        this.fixed = false;
-        this.spawnTree(xStart, yStart);
+class Code extends GameObject {
+    constructor(xStart, yStart, name) {
+        super(xStart, yStart, name);
+        this.collisionRobotCode = false;
+        this.collected = false;
     }
-    get div() { return this._div; }
-    get x() { return this._x; }
-    get y() { return this._y; }
-    spawnTree(xStart, yStart) {
-        this._div = document.createElement("tree");
-        let game = document.getElementsByTagName("game")[0];
-        game.appendChild(this._div);
-        this._x = xStart;
-        this._y = yStart;
+    update() {
+        if (this.collected) {
+            console.log("collected");
+            this._div.remove();
+            this.collected = false;
+        }
+    }
+    getRectangle() {
+        return this._div.getBoundingClientRect();
+    }
+    getFutureRectangle() {
+        return this._div.getBoundingClientRect();
+    }
+}
+class Enemy1 extends GameObject {
+    constructor(xStart, yStart, name) {
+        super(xStart, yStart, name);
+        this.xVelo = 0;
+        this.yVelo = 0;
+        this.leftspeed = 0;
+        this.rightspeed = 0;
+        this.alive = true;
+    }
+    update() {
+        this.leftspeed = +1;
+        let newX = this._x - this.leftspeed + this.rightspeed;
+        if (newX < (1440 - this._div.clientWidth)) {
+            this._x = newX;
+        }
+        if (newX < 0 - this._div.clientWidth) {
+            this._div.remove();
+        }
         this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
+    }
+    getRectangle() {
+        return this._div.getBoundingClientRect();
+    }
+    kill() {
+        this.alive = false;
+        this._div.remove();
+    }
+}
+class Enemy2 extends GameObject {
+    constructor(xStart, yStart, name) {
+        super(xStart, yStart, name);
+        this.xVelo = 0;
+        this.yVelo = 0;
+        this.leftspeed = 0;
+        this.rightspeed = 0;
+        this.alive = true;
+        this.jumping = true;
+    }
+    update() {
+        if (this.jumping == false) {
+            this.yVelo -= 40;
+            this.jumping = true;
+        }
+        this.yVelo += 1.0;
+        this._y += this.yVelo;
+        this.yVelo *= 0.98;
+        if (this._y > 600) {
+            this.jumping = false;
+            this._y = 600;
+            this.yVelo = 0;
+        }
+        let newX = this._x - this.leftspeed + this.rightspeed;
+        if (newX < this._x || newX > this._x || this._y <= 600) {
+            if (newX > 0 && newX < (1440 - this._div.clientWidth)) {
+                this._x = newX;
+            }
+            this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
+        }
+    }
+    getRectangle() {
+        return this._div.getBoundingClientRect();
+    }
+    kill() {
+        this.alive = false;
+        this._div.remove();
+    }
+}
+class Tree extends GameObject {
+    constructor(xStart, yStart, name) {
+        super(xStart, yStart, name);
+        this.fixed = false;
     }
     update() {
         if (this.fixed) {
@@ -311,11 +257,11 @@ class Game {
         this.div = document.createElement("div");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.div);
-        this.tree = new Tree(500, 400);
-        this.robot = new Robot(200, 600);
-        this.enemy1 = new Enemy1(1000, 630);
-        this.enemy2 = new Enemy2(1200, 630);
-        this.code = new Code(500, 200);
+        this.tree = new Tree(500, 400, "tree");
+        this.robot = new Robot(200, 600, "robot");
+        this.enemy1 = new Enemy1(1000, 630, "enemy1");
+        this.enemy2 = new Enemy2(1200, 630, "enemy2");
+        this.code = new Code(500, 200, "code");
         this.gameLoop();
     }
     gameLoop() {
@@ -369,11 +315,11 @@ class Game {
         this.enemy1.div.remove();
         this.enemy2.div.remove();
         this.code.div.remove();
-        this.tree = new Tree(500, 400);
-        this.robot = new Robot(200, 600);
-        this.enemy1 = new Enemy1(1000, 630);
-        this.enemy2 = new Enemy2(1200, 630);
-        this.code = new Code(500, 200);
+        this.tree = new Tree(500, 400, "tree");
+        this.robot = new Robot(200, 600, "robot");
+        this.enemy1 = new Enemy1(1000, 630, "enemy1");
+        this.enemy2 = new Enemy2(1200, 630, "enemy2");
+        this.code = new Code(500, 200, "code");
         this.gameLoop();
     }
 }
