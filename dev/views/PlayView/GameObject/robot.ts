@@ -2,7 +2,7 @@
 
 class Robot extends GameObject {
     // Fields
-    private xVelo : number = 0
+    public xVelo : number = 0
     private yVelo : number = 0
 
     private flip : number = 1
@@ -117,7 +117,9 @@ class Robot extends GameObject {
             this._x = -200
         }
 
-        this._div.style.transform = `translate(${this._x}px, ${this._y}px) scalex(${this.flip})`
+        this._div.style.transform = `translateY(${this._y}px)`
+
+        return this.xVelo
     }
 
     // General Functions

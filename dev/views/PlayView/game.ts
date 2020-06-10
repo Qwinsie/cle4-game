@@ -3,11 +3,13 @@
 /// <reference path="GameObject/enemy1.ts"/>
 /// <reference path="GameObject/enemy2.ts"/>
 /// <reference path="GameObject/tree.ts"/>
+/// <reference path="GameObject/background.ts"/>
 
 class Game {
     // Fields
     private div : HTMLElement
 
+    private background : Background
     private robot : Robot
     private enemy1 : Enemy1
     private enemy2 : Enemy2
@@ -48,6 +50,7 @@ class Game {
         let game = document.getElementsByTagName("game")[0]
         game.appendChild(this.div)
 
+        this.background = new Background(0,0,"background")
         this.tree = new Tree(500,400,"tree")
         this.robot = new Robot(200,600,"robot")
         this.enemy1 = new Enemy1(1000,630,"enemy1")
@@ -121,12 +124,14 @@ class Game {
         document.getElementsByTagName("score")[0].innerHTML = `Score: ${this.score}`
         document.getElementsByTagName("message")[0].innerHTML = ``
 
+        this.background.div.remove()
         this.tree.div.remove()
         this.robot.div.remove()
         this.enemy1.div.remove()
         this.enemy2.div.remove()
         this.code.div.remove()
 
+        this.background = new Background(0,0,"400B")
         this.tree = new Tree(500,400,"tree")
         this.robot = new Robot(200,600,"robot")
         this.enemy1 = new Enemy1(1000,630,"enemy1")
