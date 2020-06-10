@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/menu.css">
     <title>B.O.B</title>
 </head>
 <body>
@@ -20,5 +21,53 @@
     </gameterminal1>
 
     <script src='js/main.js'></script>
+    <div class="start-container">
+        <div class="start-wrapper">
+            <h1 class="start-title">B.O.B`s Adventure</h1>
+            <div class="start-controls" id="start-controls">
+                <ul class="list">
+                    <li class="selected">Start game</li>
+                    <li >Controls</li>
+                    <li >Leaderbord</li>
+                </ul>
+                
+            </div>
+        </div> 
+    </div>
+    <script>
+        $(document).on('keyup', function(e) {
+            
+            
+            if(e.which == 38){ // up arrow
+                let selected_item = $('.selected');
+                if(typeof selected_item.prev()[0] !== 'undefined') {
+                    selected_item.prev().addClass('selected');
+                    selected_item.removeClass('selected');
+                }
+            } else if (e.which == 40) { // down arrow
+                let selected_item = $('.selected');
+                if (typeof selected_item.next()[0] !== 'undefined') {
+                    selected_item.next().addClass('selected');
+                    selected_item.removeClass('selected');
+                }
+            } else if (e.which == 13 || e.which == 32){
+               let indexSelectedItem = $('.start-controls li.selected').index();
+                switch (indexSelectedItem){
+                    case 0:
+                        window.location.href = "pages/game.html";
+                        console.log("Naar Spel!")
+                        break;
+                    case 1:
+                        window.location.href = "pages/controls.html";
+                        console.log('Naar Controls!')
+                        break;
+                    case 2:
+                        window.location.href = "pages/leaderbord.html";
+                        console.log("Naar leaderbord!")
+                        break;
+                }
+            }
+            });
+    </script>
 </body>
 </html>
