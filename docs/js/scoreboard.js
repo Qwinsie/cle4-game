@@ -27,19 +27,20 @@ function init() {
     $form = document.getElementById('form');
     $nameField = document.getElementById('name');
     $scoreField = document.getElementById('score');
+
+    fillFieldsFromLocalStorage();
+
+    // Send Data to LocalStorage
+    $form.addEventListener('submit', submitHandler);
 }
 
 function addScore(name, score) {
     console.log(name + " " + score);
 
-        let h = document.querySelector("#title")
-        h.innerHTML = "Leaderboard"
-
         let list = document.querySelector("#scores")
         
         const newli = document.createElement("li")
         newli.innerHTML = `${name} ${score}`
-        list.appendChild(newli)
 }
 
 function getScore() {
@@ -48,6 +49,14 @@ function getScore() {
         return JSON.parse(score)
     } else {
         return []
+    }
+}
+
+function fillFieldsFromLocalStorage()
+{
+    if (localStorage.getItem('name') !== null) {
+        $nameField.value = localStorage.getItem('name');
+        $scoreField.value = localStorage.getItem('score');
     }
 }
 

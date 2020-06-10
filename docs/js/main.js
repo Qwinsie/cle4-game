@@ -11,6 +11,7 @@ class GameObject {
         this._div = document.createElement(`${name}`);
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this._div);
+        this._div.id = `${name}`;
         this._x = xStart;
         this._y = yStart;
         console.log(`${name} has been created`);
@@ -123,7 +124,8 @@ class Robot extends GameObject {
         else if (this._x > 1240) {
             this._x = -200;
         }
-        this._div.style.transform = `translate(${this._x}px, ${this._y}px) scalex(${this.flip})`;
+        this._div.style.transform = `translateY(${this._y}px)`;
+        return this.xVelo;
     }
     getRectangle() {
         return this._div.getBoundingClientRect();
@@ -231,9 +233,15 @@ class Tree extends GameObject {
             this._div.classList.add("fixed");
             this.fixed = false;
         }
+        this.move("tree");
     }
     getRectangle() {
         return this._div.getBoundingClientRect();
+    }
+}
+class Background extends GameObject {
+    constructor(xStart, yStart, name) {
+        super(xStart, yStart, name);
     }
 }
 class Game {
@@ -257,6 +265,7 @@ class Game {
         this.div = document.createElement("div");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.div);
+        this.background = new Background(0, 0, "background");
         this.tree = new Tree(500, 400, "tree");
         this.robot = new Robot(200, 600, "robot");
         this.enemy1 = new Enemy1(1000, 630, "enemy1");
@@ -310,11 +319,13 @@ class Game {
         this.score = 0;
         document.getElementsByTagName("score")[0].innerHTML = `Score: ${this.score}`;
         document.getElementsByTagName("message")[0].innerHTML = ``;
+        this.background.div.remove();
         this.tree.div.remove();
         this.robot.div.remove();
         this.enemy1.div.remove();
         this.enemy2.div.remove();
         this.code.div.remove();
+        this.background = new Background(0, 0, "400B");
         this.tree = new Tree(500, 400, "tree");
         this.robot = new Robot(200, 600, "robot");
         this.enemy1 = new Enemy1(1000, 630, "enemy1");
