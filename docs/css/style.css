@@ -11,6 +11,22 @@ game * {
     background-repeat: no-repeat;
 }
 
+leaderboard * {
+    position: absolute;
+}
+
+div.leaderboard {
+    position: absolute;
+    color: white;
+    text-align: center;
+    font-size:26px;
+    margin-top: 150px;
+}
+
+div.leaderboard * {
+    position: relative;
+}
+
 robot {
     background-image: url(../img/robot.png);
     width:150px; height: 230px;
