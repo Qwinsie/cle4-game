@@ -1,0 +1,15 @@
+{
+    "count": 2,
+    "next": "",
+    "previous": null,
+    "results": [
+        {
+            "name": "Quincy",
+            "score": 650
+        },
+        {
+            "name": "Dennis",
+            "score": 640
+        }
+    ]
+}
