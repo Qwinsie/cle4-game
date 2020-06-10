@@ -30,7 +30,31 @@ game {
     border: solid gray 40px;
     padding: 20px;
     }
-    
+
+.start-container {
+    height: 100%;
+    width: 1440px;
+    height: 900px;
+    background-color: #0d0d0d;
+    border: solid gray 40px;
+    padding: 20px;
+}
+
+.start-wrapper {
+    text-align: center;
+    color: white;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 35px;
+}
+
+.start-controls .list{
+    list-style: none;
+}
+
+.selected{
+    -webkit-text-stroke: 2px red;
+}
+
 .walk {
     grid-area: 2 / 1 / 4 / 2;
     text-align: center;
