@@ -106,7 +106,7 @@ class Robot extends GameObject {
             this._x = -200
         }
 
-        this._div.style.transform = `translateY(${this._y}px) scaleX(${this.flip})`
+        this._div.style.transform = `translate(${this._x}px, ${this._y}px) scaleX(${this.flip})`
     }
 
     // General Functions

@@ -164,7 +164,7 @@ class Robot extends GameObject {
         else if (this._x > 1240) {
             this._x = -200;
         }
-        this._div.style.transform = `translateY(${this._y}px) scaleX(${this.flip})`;
+        this._div.style.transform = `translate(${this._x}px, ${this._y}px) scaleX(${this.flip})`;
     }
     getRectangle() {
         return this._div.getBoundingClientRect();
@@ -306,7 +306,7 @@ class Game {
         this.gameobjects.push(new Tree(500, 400, "tree"));
         this.gameobjects.push(new Enemy1(1000, 630, "enemy1"));
         this.gameobjects.push(new Enemy2(1200, 630, "enemy2"));
-        this.gameobjects.push(new Code(500, 200, "code"));
+        this.gameobjects.push(new Code(300, 200, "code"));
         this.gameobjects.push(new Robot(200, 600, "robot"));
         this.gameLoop();
     }
@@ -316,32 +316,27 @@ class Game {
                 gameobject.update(`${gameobject}`);
                 if (gameobject instanceof Robot) {
                     let robot = gameobject;
-                    if (this.gameobjects[i] instanceof Robot) {
-                        console.log(gameobject);
-                    }
-                    else {
-                        for (const gameobjectZonderRobot of this.gameobjects)
-                            if (this.checkCollision(robot.getFutureRectangle(), gameobjectZonderRobot.getRectangle())) {
-                                if (gameobjectZonderRobot instanceof Code) {
-                                    gameobjectZonderRobot.collected = true;
-                                    this.updateScore(1);
-                                    this.launchGameTerminal1();
-                                }
-                                if (gameobjectZonderRobot instanceof Tree) {
-                                    gameobjectZonderRobot.fixed = true;
-                                }
-                                if (gameobjectZonderRobot instanceof Enemy1) {
-                                    this.updateScore(1);
-                                    gameobjectZonderRobot.kill();
-                                }
-                                if (gameobjectZonderRobot instanceof Enemy2) {
-                                    this.updateScore(1);
-                                    gameobjectZonderRobot.kill();
-                                }
+                    for (const gameobjectZonderRobot of this.gameobjects)
+                        if (this.checkCollision(robot.getFutureRectangle(), gameobjectZonderRobot.getRectangle())) {
+                            if (gameobjectZonderRobot instanceof Code) {
+                                gameobjectZonderRobot.collected = true;
+                                this.updateScore(1);
+                                this.launchGameTerminal1();
                             }
-                        if (!this.playingTerminal1) {
-                            requestAnimationFrame(() => this.gameLoop());
+                            if (gameobjectZonderRobot instanceof Tree) {
+                                gameobjectZonderRobot.fixed = true;
+                            }
+                            if (gameobjectZonderRobot instanceof Enemy1) {
+                                this.updateScore(1);
+                                gameobjectZonderRobot.kill();
+                            }
+                            if (gameobjectZonderRobot instanceof Enemy2) {
+                                this.updateScore(1);
+                                gameobjectZonderRobot.kill();
+                            }
                         }
+                    if (!this.playingTerminal1) {
+                        requestAnimationFrame(() => this.gameLoop());
                     }
                 }
             }

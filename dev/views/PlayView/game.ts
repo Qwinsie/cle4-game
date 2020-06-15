@@ -48,7 +48,7 @@ class Game {
         this.gameobjects.push(new Tree(500,400,"tree"))
         this.gameobjects.push(new Enemy1(1000,630,"enemy1"))
         this.gameobjects.push(new Enemy2(1200,630,"enemy2"))
-        this.gameobjects.push(new Code(500,200,"code"))
+        this.gameobjects.push(new Code(300,200,"code"))
         this.gameobjects.push(new Robot(200,600,"robot"))
         
         this.gameLoop()
@@ -66,24 +66,6 @@ class Game {
                 
                     let robot = gameobject
 
-
-                    // if (this.checkCollision(robot.getFutureRectangle(), this.gameobjects[i].getRectangle()) && !this.enemy2killed) {
-                    //     //collision event enemy2
-                    //     console.log("collision")
-                        
-                    //     this.updateScore(1)
-                    //     gameobject.kill()
-                    // }
-                    // if (this.checkCollision(robot.getFutureRectangle(), this.gameobjects[i].getRectangle()) && !this.enemy1killed) {
-                    //     //collision event enemy1
-                    //     console.log("collision")
-                        
-                    //     this.updateScore(1)
-                    //     this.enemy1.kill()
-                    // }
-                    if(this.gameobjects[i] instanceof Robot) {
-                        console.log(gameobject);
-                    } else {
                         for(const gameobjectZonderRobot of this.gameobjects)
                         if (this.checkCollision(robot.getFutureRectangle(), gameobjectZonderRobot.getRectangle())) {
                             //collision event code wolkje
@@ -95,6 +77,7 @@ class Game {
                             if(gameobjectZonderRobot instanceof Tree) {
                                 gameobjectZonderRobot.fixed = true
                             }
+
                             if(gameobjectZonderRobot instanceof Enemy1) {
                                 this.updateScore(1)
                                 gameobjectZonderRobot.kill()
@@ -108,7 +91,7 @@ class Game {
                         if(!this.playingTerminal1) {
                             requestAnimationFrame(()=>this.gameLoop())
                         }
-                    }   
+                      
                 }
             }
         }
