@@ -9,6 +9,7 @@ class GameObject {
     protected _y : number = 0
 
     public xVelo : number = 0
+    protected yVelo : number = 0
 
     protected leftKey : number = 0
     protected rightKey : number = 0
@@ -16,10 +17,13 @@ class GameObject {
     protected left : boolean = false
     protected right : boolean = false
 
+    protected jumping : boolean = true
+
     // Properties
     public get div(): HTMLElement           { return this._div }
     public get x(): number                  { return this._x }
     public get y(): number                  { return this._y }
+    public get name(): string               { return this.name }
 
     // Constructor
     constructor(xStart : number, yStart : number, name : string) {
@@ -72,7 +76,11 @@ class GameObject {
         }
     }
 
-    protected move(name: string) {
+    public getRectangle() {
+        return this._div.getBoundingClientRect()
+    }
+
+    public update(name: string) {
         if (name !== "robot") {
             //Hier komt een translate voor alle objecten
             //Daarvoor hebben we hier de xVelo nodig vanuit robot.ts
@@ -94,7 +102,7 @@ class GameObject {
                 this._div.style.transform = `translate(${this._x}px, ${this._y}px) scale(0.2)`
             }
         } else {
-            
+
         }
     }
 }

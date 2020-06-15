@@ -3,8 +3,6 @@
 class Robot extends GameObject {
     // Fields
 
-    private yVelo : number = 0
-
     private flip : number = 1
 
     // Inputs
@@ -14,8 +12,6 @@ class Robot extends GameObject {
 
     private duck : boolean = false
     private space : boolean = false
-    
-    private jumping : boolean = false
 
     // Constructor
     constructor(xStart : number, yStart : number, name : string) {        

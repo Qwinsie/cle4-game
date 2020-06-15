@@ -3,8 +3,6 @@
 class Enemy1 extends GameObject {
     // Fields
 
-    private yVelo : number = 0
-
     private leftspeed : number = 0
     private rightspeed : number = 0
 
@@ -27,7 +25,7 @@ class Enemy1 extends GameObject {
         if (newX < 0 - this._div.clientWidth) {
             this._div.remove()
         }
-        this.move("enemy1")
+        super.update("enemy1")
     }
 
     // General Functions

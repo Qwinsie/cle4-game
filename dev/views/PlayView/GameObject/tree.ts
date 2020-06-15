@@ -17,7 +17,7 @@ class Tree extends GameObject {
             this.fixed = false
         }
 
-        this.move("tree")
+        super.update("tree")
     }
 
     // General Functions

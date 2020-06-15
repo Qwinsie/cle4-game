@@ -8,13 +8,7 @@
 class Game {
     // Fields
     private div : HTMLElement
-
-    private background : Background
-    private robot : Robot
-    private enemy1 : Enemy1
-    private enemy2 : Enemy2
-    private tree : Tree
-    private code : Code
+    private gameobjects : GameObject[] = []
 
     private score : number = 0
 
@@ -50,55 +44,83 @@ class Game {
         let game = document.getElementsByTagName("game")[0]
         game.appendChild(this.div)
 
-        this.background = new Background(0,0,"background")
-        this.tree = new Tree(500,400,"tree")
-        this.robot = new Robot(200,600,"robot")
-        this.enemy1 = new Enemy1(1000,630,"enemy1")
-        this.enemy2 = new Enemy2(1200,630,"enemy2")
-        this.code = new Code(500,200,"code")
-
+        this.gameobjects.push(new Background(0,0,"background"))
+        this.gameobjects.push(new Tree(500,400,"tree"))
+        this.gameobjects.push(new Enemy1(1000,630,"enemy1"))
+        this.gameobjects.push(new Enemy2(1200,630,"enemy2"))
+        this.gameobjects.push(new Code(500,200,"code"))
+        this.gameobjects.push(new Robot(200,600,"robot"))
+        
         this.gameLoop()
     }
-
-
-    // Functions
-
+    
     // gameLoop
     public gameLoop() {
-        if (this.checkCollision(this.robot.getFutureRectangle(), this.enemy2.getRectangle()) && !this.enemy2killed) {
-            //collision event enemy2
-            console.log("collision")
+        
+        for (const gameobject of this.gameobjects) {
+            for (let i = 0; i < 1; i++) {
+                
+                gameobject.update(`${gameobject}`)
             
-            this.updateScore(1)
-            this.enemy2.kill()
-        }
-        if (this.checkCollision(this.robot.getFutureRectangle(), this.enemy1.getRectangle()) && !this.enemy1killed) {
-            //collision event enemy1
-            console.log("collision")
-            
-            this.updateScore(1)
-            this.enemy1.kill()
-        }
-        if (this.checkCollision(this.robot.getFutureRectangle(), this.code.getRectangle())) {
-            //collision event code wolkje
-            this.code.collected = true
-            this.launchGameTerminal1()
-            this.tree.fixed = true
-            this.updateScore(1)
-        }
+                if(gameobject instanceof Robot) {
+                
+                    let robot = gameobject
 
-        this.tree.update()
-        this.enemy1.update()
-        this.enemy2.update()
-        this.robot.update()
-        this.code.update()
 
-        if(!this.playingTerminal1) {
-            requestAnimationFrame(()=>this.gameLoop())
+                    // if (this.checkCollision(robot.getFutureRectangle(), this.gameobjects[i].getRectangle()) && !this.enemy2killed) {
+                    //     //collision event enemy2
+                    //     console.log("collision")
+                        
+                    //     this.updateScore(1)
+                    //     gameobject.kill()
+                    // }
+                    // if (this.checkCollision(robot.getFutureRectangle(), this.gameobjects[i].getRectangle()) && !this.enemy1killed) {
+                    //     //collision event enemy1
+                    //     console.log("collision")
+                        
+                    //     this.updateScore(1)
+                    //     this.enemy1.kill()
+                    // }
+                    if(this.gameobjects[i] instanceof Robot) {
+                        console.log(gameobject);
+                    } else {
+                        for(const gameobjectZonderRobot of this.gameobjects)
+                        if (this.checkCollision(robot.getFutureRectangle(), gameobjectZonderRobot.getRectangle())) {
+                            //collision event code wolkje
+                            if(gameobjectZonderRobot instanceof Code) {
+                                gameobjectZonderRobot.collected = true
+                                this.updateScore(1)
+                                this.launchGameTerminal1()
+                            }
+                            if(gameobjectZonderRobot instanceof Tree) {
+                                gameobjectZonderRobot.fixed = true
+                            }
+                            if(gameobjectZonderRobot instanceof Enemy1) {
+                                this.updateScore(1)
+                                gameobjectZonderRobot.kill()
+                            }
+                            if(gameobjectZonderRobot instanceof Enemy2) {
+                                this.updateScore(1)
+                                gameobjectZonderRobot.kill()
+                            }
+                        }
+                        
+                        if(!this.playingTerminal1) {
+                            requestAnimationFrame(()=>this.gameLoop())
+                        }
+                    }   
+                }
+            }
         }
     }
-
-    // Loop Functions
+        
+    arrayLoop() {
+        for (let i = 0; i < this.gameobjects.length; i++) {
+            
+            return [i]
+        }
+    }
+        // Loop Functions
     checkCollision(a: ClientRect, b: ClientRect) {
         return (a.left <= b.right &&
                 b.left <= a.right &&
@@ -120,25 +142,20 @@ class Game {
     }
 
     public reset() {
-        this.score = 0
-        document.getElementsByTagName("score")[0].innerHTML = `Score: ${this.score}`
-        document.getElementsByTagName("message")[0].innerHTML = ``
+        // this.score = 0
+        // document.getElementsByTagName("score")[0].innerHTML = `Score: ${this.score}`
+        // document.getElementsByTagName("message")[0].innerHTML = ``
+        // for (const gameobject of this.gameobjects) {
+        //     gameobject.div.remove()
 
-        this.background.div.remove()
-        this.tree.div.remove()
-        this.robot.div.remove()
-        this.enemy1.div.remove()
-        this.enemy2.div.remove()
-        this.code.div.remove()
-
-        this.background = new Background(0,0,"400B")
-        this.tree = new Tree(500,400,"tree")
-        this.robot = new Robot(200,600,"robot")
-        this.enemy1 = new Enemy1(1000,630,"enemy1")
-        this.enemy2 = new Enemy2(1200,630,"enemy2")
-        this.code = new Code(500,200,"code")
-
-        this.gameLoop()
+        //     this.gameobjects.push(new Background(0,0,"background"))
+        //     this.gameobjects.push(new Tree(500,400,"tree"))
+        //     this.gameobjects.push(new Robot(200,600,"robot"))
+        //     this.gameobjects.push(new Enemy1(1000,630,"enemy1"))
+        //     this.gameobjects.push(new Enemy2(1200,630,"enemy2"))
+        //     this.gameobjects.push(new Code(500,200,"code"))
+        // }
+        // this.gameLoop()
 
     }
 }

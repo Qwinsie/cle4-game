@@ -3,15 +3,13 @@
 class Enemy2 extends GameObject {
     // Fields
 
-    private yVelo : number = 0
-
     private leftspeed : number = 0
     private rightspeed : number = 0
 
     private alive : boolean = true
 
     // Inputs
-    private jumping : boolean = true
+
 
     constructor(xStart : number, yStart : number, name : string) {
         super(xStart, yStart, name)
@@ -41,7 +39,7 @@ class Enemy2 extends GameObject {
             if (newX > 0 && newX < (1440 - this._div.clientWidth)) {
                 this._x = newX
             }
-            this.move("enemy2")
+            super.update("enemy2")
         }
     }
 

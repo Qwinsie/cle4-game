@@ -19,7 +19,7 @@ class Code extends GameObject {
             this.collected = false
         }
 
-        this.move("code")
+        super.update("code")
     }
 
     // General Functions

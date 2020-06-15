@@ -3,10 +3,12 @@ class GameObject {
         this._x = 0;
         this._y = 0;
         this.xVelo = 0;
+        this.yVelo = 0;
         this.leftKey = 0;
         this.rightKey = 0;
         this.left = false;
         this.right = false;
+        this.jumping = true;
         this.spawn(xStart, yStart, name);
         this.leftKey = 65;
         this.rightKey = 68;
@@ -16,6 +18,7 @@ class GameObject {
     get div() { return this._div; }
     get x() { return this._x; }
     get y() { return this._y; }
+    get name() { return this.name; }
     spawn(xStart, yStart, name) {
         this._div = document.createElement(`${name}`);
         let game = document.getElementsByTagName("game")[0];
@@ -51,7 +54,10 @@ class GameObject {
                 break;
         }
     }
-    move(name) {
+    getRectangle() {
+        return this._div.getBoundingClientRect();
+    }
+    update(name) {
         if (name !== "robot") {
             if (this.left) {
                 this.xVelo += 1;
@@ -75,14 +81,12 @@ class GameObject {
 class Robot extends GameObject {
     constructor(xStart, yStart, name) {
         super(xStart, yStart, name);
-        this.yVelo = 0;
         this.flip = 1;
         this.downKey = 0;
         this.spaceKey = 0;
         this.spaceKey2 = 0;
         this.duck = false;
         this.space = false;
-        this.jumping = false;
         this.downKey = 83;
         this.spaceKey = 32;
         this.spaceKey2 = 87;
@@ -183,7 +187,7 @@ class Code extends GameObject {
             this._div.remove();
             this.collected = false;
         }
-        this.move("code");
+        super.update("code");
     }
     getRectangle() {
         return this._div.getBoundingClientRect();
@@ -195,7 +199,6 @@ class Code extends GameObject {
 class Enemy1 extends GameObject {
     constructor(xStart, yStart, name) {
         super(xStart, yStart, name);
-        this.yVelo = 0;
         this.leftspeed = 0;
         this.rightspeed = 0;
         this.alive = true;
@@ -209,7 +212,7 @@ class Enemy1 extends GameObject {
         if (newX < 0 - this._div.clientWidth) {
             this._div.remove();
         }
-        this.move("enemy1");
+        super.update("enemy1");
     }
     getRectangle() {
         return this._div.getBoundingClientRect();
@@ -222,11 +225,9 @@ class Enemy1 extends GameObject {
 class Enemy2 extends GameObject {
     constructor(xStart, yStart, name) {
         super(xStart, yStart, name);
-        this.yVelo = 0;
         this.leftspeed = 0;
         this.rightspeed = 0;
         this.alive = true;
-        this.jumping = true;
     }
     update() {
         if (this.jumping == false) {
@@ -246,7 +247,7 @@ class Enemy2 extends GameObject {
             if (newX > 0 && newX < (1440 - this._div.clientWidth)) {
                 this._x = newX;
             }
-            this.move("enemy2");
+            super.update("enemy2");
         }
     }
     getRectangle() {
@@ -267,7 +268,7 @@ class Tree extends GameObject {
             this._div.classList.add("fixed");
             this.fixed = false;
         }
-        this.move("tree");
+        super.update("tree");
     }
     getRectangle() {
         return this._div.getBoundingClientRect();
@@ -276,11 +277,12 @@ class Tree extends GameObject {
 class Background extends GameObject {
     constructor(xStart, yStart, name) {
         super(xStart, yStart, name);
-        this.move("background");
+        super.update("background");
     }
 }
 class Game {
     constructor() {
+        this.gameobjects = [];
         this.score = 0;
         this.enemy1killed = false;
         this.enemy2killed = false;
@@ -300,38 +302,54 @@ class Game {
         this.div = document.createElement("div");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.div);
-        this.background = new Background(0, 0, "background");
-        this.tree = new Tree(500, 400, "tree");
-        this.robot = new Robot(200, 600, "robot");
-        this.enemy1 = new Enemy1(1000, 630, "enemy1");
-        this.enemy2 = new Enemy2(1200, 630, "enemy2");
-        this.code = new Code(500, 200, "code");
+        this.gameobjects.push(new Background(0, 0, "background"));
+        this.gameobjects.push(new Tree(500, 400, "tree"));
+        this.gameobjects.push(new Enemy1(1000, 630, "enemy1"));
+        this.gameobjects.push(new Enemy2(1200, 630, "enemy2"));
+        this.gameobjects.push(new Code(500, 200, "code"));
+        this.gameobjects.push(new Robot(200, 600, "robot"));
         this.gameLoop();
     }
     gameLoop() {
-        if (this.checkCollision(this.robot.getFutureRectangle(), this.enemy2.getRectangle()) && !this.enemy2killed) {
-            console.log("collision");
-            this.updateScore(1);
-            this.enemy2.kill();
+        for (const gameobject of this.gameobjects) {
+            for (let i = 0; i < 1; i++) {
+                gameobject.update(`${gameobject}`);
+                if (gameobject instanceof Robot) {
+                    let robot = gameobject;
+                    if (this.gameobjects[i] instanceof Robot) {
+                        console.log(gameobject);
+                    }
+                    else {
+                        for (const gameobjectZonderRobot of this.gameobjects)
+                            if (this.checkCollision(robot.getFutureRectangle(), gameobjectZonderRobot.getRectangle())) {
+                                if (gameobjectZonderRobot instanceof Code) {
+                                    gameobjectZonderRobot.collected = true;
+                                    this.updateScore(1);
+                                    this.launchGameTerminal1();
+                                }
+                                if (gameobjectZonderRobot instanceof Tree) {
+                                    gameobjectZonderRobot.fixed = true;
+                                }
+                                if (gameobjectZonderRobot instanceof Enemy1) {
+                                    this.updateScore(1);
+                                    gameobjectZonderRobot.kill();
+                                }
+                                if (gameobjectZonderRobot instanceof Enemy2) {
+                                    this.updateScore(1);
+                                    gameobjectZonderRobot.kill();
+                                }
+                            }
+                        if (!this.playingTerminal1) {
+                            requestAnimationFrame(() => this.gameLoop());
+                        }
+                    }
+                }
+            }
         }
-        if (this.checkCollision(this.robot.getFutureRectangle(), this.enemy1.getRectangle()) && !this.enemy1killed) {
-            console.log("collision");
-            this.updateScore(1);
-            this.enemy1.kill();
-        }
-        if (this.checkCollision(this.robot.getFutureRectangle(), this.code.getRectangle())) {
-            this.code.collected = true;
-            this.launchGameTerminal1();
-            this.tree.fixed = true;
-            this.updateScore(1);
-        }
-        this.tree.update();
-        this.enemy1.update();
-        this.enemy2.update();
-        this.robot.update();
-        this.code.update();
-        if (!this.playingTerminal1) {
-            requestAnimationFrame(() => this.gameLoop());
+    }
+    arrayLoop() {
+        for (let i = 0; i < this.gameobjects.length; i++) {
+            return [i];
         }
     }
     checkCollision(a, b) {
@@ -351,22 +369,6 @@ class Game {
         console.log("TERMINAL STARTED");
     }
     reset() {
-        this.score = 0;
-        document.getElementsByTagName("score")[0].innerHTML = `Score: ${this.score}`;
-        document.getElementsByTagName("message")[0].innerHTML = ``;
-        this.background.div.remove();
-        this.tree.div.remove();
-        this.robot.div.remove();
-        this.enemy1.div.remove();
-        this.enemy2.div.remove();
-        this.code.div.remove();
-        this.background = new Background(0, 0, "400B");
-        this.tree = new Tree(500, 400, "tree");
-        this.robot = new Robot(200, 600, "robot");
-        this.enemy1 = new Enemy1(1000, 630, "enemy1");
-        this.enemy2 = new Enemy2(1200, 630, "enemy2");
-        this.code = new Code(500, 200, "code");
-        this.gameLoop();
     }
 }
 window.addEventListener("load", () => new Game());
