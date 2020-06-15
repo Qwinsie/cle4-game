@@ -305,6 +305,11 @@ class Game {
         this.gameobjects.push(new Background(0, 0, "background"));
         this.gameobjects.push(new Tree(500, 400, "tree"));
         this.gameobjects.push(new Enemy1(1000, 630, "enemy1"));
+        this.gameobjects.push(new Enemy1(2000, 630, "enemy1"));
+        this.gameobjects.push(new Enemy1(3000, 630, "enemy1"));
+        this.gameobjects.push(new Enemy1(4000, 630, "enemy1"));
+        this.gameobjects.push(new Enemy1(5000, 630, "enemy1"));
+        this.gameobjects.push(new Enemy1(6000, 630, "enemy1"));
         this.gameobjects.push(new Enemy2(1200, 630, "enemy2"));
         this.gameobjects.push(new Code(300, 200, "code"));
         this.gameobjects.push(new Robot(200, 600, "robot"));
