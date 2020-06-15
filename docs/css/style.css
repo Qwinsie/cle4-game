@@ -73,6 +73,7 @@ score {
     font-size:26px;
     font-family: 'Press Start 2P', cursive;
     margin: 20px;
+    -webkit-text-stroke: 1px rgb(0, 0, 0);
 }
 
 code {
