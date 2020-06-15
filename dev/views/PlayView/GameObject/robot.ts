@@ -2,20 +2,16 @@
 
 class Robot extends GameObject {
     // Fields
-    public xVelo : number = 0
+
     private yVelo : number = 0
 
     private flip : number = 1
 
     // Inputs
-    private leftKey : number = 0
-    private rightKey : number = 0
     private downKey : number = 0
     private spaceKey : number = 0
     private spaceKey2 : number = 0
 
-    private left : boolean = false
-    private right : boolean = false
     private duck : boolean = false
     private space : boolean = false
     
@@ -25,18 +21,17 @@ class Robot extends GameObject {
     constructor(xStart : number, yStart : number, name : string) {        
         super(xStart, yStart, name)
 
-        this.leftKey = 65
-        this.rightKey = 68
         this.downKey = 83
         this.spaceKey = 32
         this.spaceKey2 = 87
+
 
         window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e))
         window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
     }
 
     // Loop Functions
-    private onKeyDown(e: KeyboardEvent): void{
+    protected onKeyDown(e: KeyboardEvent): void{
         switch (e.keyCode){
             case this.leftKey:
                 this.left = true
@@ -56,7 +51,7 @@ class Robot extends GameObject {
         }
     }
 
-    private onKeyUp(e: KeyboardEvent): void{
+    protected onKeyUp(e: KeyboardEvent): void{
         switch (e.keyCode){
             case this.leftKey:
                 this.left = false
@@ -84,12 +79,10 @@ class Robot extends GameObject {
         }
 
         if(this.left){
-            this.xVelo -= 1;
             this.flip = -1
         }
 
         if(this.right){
-            this.xVelo += 1;
             this.flip = 1
         }
 
@@ -117,9 +110,7 @@ class Robot extends GameObject {
             this._x = -200
         }
 
-        this._div.style.transform = `translateY(${this._y}px)`
-
-        return this.xVelo
+        this._div.style.transform = `translateY(${this._y}px) scaleX(${this.flip})`
     }
 
     // General Functions

@@ -3,7 +3,6 @@
 class Enemy2 extends GameObject {
     // Fields
 
-    private xVelo : number = 0
     private yVelo : number = 0
 
     private leftspeed : number = 0
@@ -42,7 +41,7 @@ class Enemy2 extends GameObject {
             if (newX > 0 && newX < (1440 - this._div.clientWidth)) {
                 this._x = newX
             }
-            this._div.style.transform = `translate(${this._x}px, ${this._y}px)`
+            this.move("enemy2")
         }
     }
 

@@ -2,7 +2,16 @@ class GameObject {
     constructor(xStart, yStart, name) {
         this._x = 0;
         this._y = 0;
+        this.xVelo = 0;
+        this.leftKey = 0;
+        this.rightKey = 0;
+        this.left = false;
+        this.right = false;
         this.spawn(xStart, yStart, name);
+        this.leftKey = 65;
+        this.rightKey = 68;
+        window.addEventListener("keydown", (e) => this.onKeyDown(e));
+        window.addEventListener("keyup", (e) => this.onKeyUp(e));
     }
     get div() { return this._div; }
     get x() { return this._x; }
@@ -22,29 +31,58 @@ class GameObject {
             this._div.style.transform = `translate(${this._x}px, ${this._y}px) scale(0.2)`;
         }
     }
+    onKeyDown(e) {
+        switch (e.keyCode) {
+            case this.leftKey:
+                this.left = true;
+                break;
+            case this.rightKey:
+                this.right = true;
+                break;
+        }
+    }
+    onKeyUp(e) {
+        switch (e.keyCode) {
+            case this.leftKey:
+                this.left = false;
+                break;
+            case this.rightKey:
+                this.right = false;
+                break;
+        }
+    }
     move(name) {
         if (name !== "robot") {
+            if (this.left) {
+                this.xVelo += 1;
+            }
+            if (this.right) {
+                this.xVelo -= 1;
+            }
+            this._x += this.xVelo;
+            this.xVelo *= 0.9;
+            if (name !== "code") {
+                this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
+            }
+            else {
+                this._div.style.transform = `translate(${this._x}px, ${this._y}px) scale(0.2)`;
+            }
+        }
+        else {
         }
     }
 }
 class Robot extends GameObject {
     constructor(xStart, yStart, name) {
         super(xStart, yStart, name);
-        this.xVelo = 0;
         this.yVelo = 0;
         this.flip = 1;
-        this.leftKey = 0;
-        this.rightKey = 0;
         this.downKey = 0;
         this.spaceKey = 0;
         this.spaceKey2 = 0;
-        this.left = false;
-        this.right = false;
         this.duck = false;
         this.space = false;
         this.jumping = false;
-        this.leftKey = 65;
-        this.rightKey = 68;
         this.downKey = 83;
         this.spaceKey = 32;
         this.spaceKey2 = 87;
@@ -95,11 +133,9 @@ class Robot extends GameObject {
             this.jumping = true;
         }
         if (this.left) {
-            this.xVelo -= 1;
             this.flip = -1;
         }
         if (this.right) {
-            this.xVelo += 1;
             this.flip = 1;
         }
         if (this.duck) {
@@ -124,8 +160,7 @@ class Robot extends GameObject {
         else if (this._x > 1240) {
             this._x = -200;
         }
-        this._div.style.transform = `translateY(${this._y}px)`;
-        return this.xVelo;
+        this._div.style.transform = `translateY(${this._y}px) scaleX(${this.flip})`;
     }
     getRectangle() {
         return this._div.getBoundingClientRect();
@@ -148,6 +183,7 @@ class Code extends GameObject {
             this._div.remove();
             this.collected = false;
         }
+        this.move("code");
     }
     getRectangle() {
         return this._div.getBoundingClientRect();
@@ -159,7 +195,6 @@ class Code extends GameObject {
 class Enemy1 extends GameObject {
     constructor(xStart, yStart, name) {
         super(xStart, yStart, name);
-        this.xVelo = 0;
         this.yVelo = 0;
         this.leftspeed = 0;
         this.rightspeed = 0;
@@ -174,7 +209,7 @@ class Enemy1 extends GameObject {
         if (newX < 0 - this._div.clientWidth) {
             this._div.remove();
         }
-        this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
+        this.move("enemy1");
     }
     getRectangle() {
         return this._div.getBoundingClientRect();
@@ -187,7 +222,6 @@ class Enemy1 extends GameObject {
 class Enemy2 extends GameObject {
     constructor(xStart, yStart, name) {
         super(xStart, yStart, name);
-        this.xVelo = 0;
         this.yVelo = 0;
         this.leftspeed = 0;
         this.rightspeed = 0;
@@ -212,7 +246,7 @@ class Enemy2 extends GameObject {
             if (newX > 0 && newX < (1440 - this._div.clientWidth)) {
                 this._x = newX;
             }
-            this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
+            this.move("enemy2");
         }
     }
     getRectangle() {
@@ -242,6 +276,7 @@ class Tree extends GameObject {
 class Background extends GameObject {
     constructor(xStart, yStart, name) {
         super(xStart, yStart, name);
+        this.move("background");
     }
 }
 class Game {

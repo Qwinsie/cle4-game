@@ -18,6 +18,8 @@ class Code extends GameObject {
             this._div.remove()
             this.collected = false
         }
+
+        this.move("code")
     }
 
     // General Functions

@@ -7,5 +7,8 @@ class Background extends GameObject {
     // Constructor
     constructor(xStart: number, yStart: number, name : string) {
         super(xStart, yStart, name)
+        this.move("background")
     }
+
+
 }
