@@ -71,7 +71,7 @@ class Robot extends GameObject {
     }
 
     public update(){
-        // Robot is jumping
+        // Robot is jumping when on the ground
         if(this.space && this.jumping == false){
             this.yVelo -= 40;
             this.jumping = true;

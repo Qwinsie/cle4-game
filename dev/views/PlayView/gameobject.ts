@@ -86,7 +86,7 @@ class GameObject {
             if(this.right){
                 this.xVelo -= 1;
             }
-
+            // Standard velocity values for all gameobjects, except robot 
             this._x += this.xVelo;
             this.xVelo *= 0.9;
 
