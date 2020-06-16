@@ -1,38 +1,34 @@
 /// <reference path="../gameobject.ts"/>
 
 class Enemy2 extends GameObject {
-    // Fields
 
     private leftspeed : number = 0
     private rightspeed : number = 0
 
     private alive : boolean = true
 
-    // Inputs
-
-
     constructor(xStart : number, yStart : number, name : string) {
         super(xStart, yStart, name)
     }
 
     public update() {
+        // Stop jumping when in jumping action
         if(this.jumping == false){
             this.yVelo -= 40;
             this.jumping = true;
         }
-
+        // Standard Velocity values for Enemy2 to move
         this.yVelo += 1.0;
         this._y += this.yVelo;
         this.yVelo *= 0.98;
 
-        // Land on the ground
+        // If Enemy2 lands on the ground stop falling
         if(this._y > 600){
             this.jumping = false;
             this._y = 600;
             this.yVelo = 0;
         }
 
-        // Moving Enemy left OR right
         let newX = this._x - this.leftspeed + this.rightspeed
 
         if (newX < this._x || newX > this._x || this._y <= 600){
@@ -41,11 +37,6 @@ class Enemy2 extends GameObject {
             }
             super.update("enemy2")
         }
-    }
-
-    // General Functions
-    public getRectangle() {
-        return this._div.getBoundingClientRect()
     }
 
     public kill() {

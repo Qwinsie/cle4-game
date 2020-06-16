@@ -45,10 +45,6 @@ class GameTerminal1 {
     }
 
 
-    // Functions
-
-    // Init Functions
-
     // gameLoop
     private gameLoop(){
         this.player.update()

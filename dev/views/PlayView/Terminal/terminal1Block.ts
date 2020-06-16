@@ -43,10 +43,6 @@ class Terminal1Block {
         window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
     }
 
-    
-    // Functions
-
-    // Init Functions
 
     // Loop Functions
     private onKeyDown(e: KeyboardEvent): void {

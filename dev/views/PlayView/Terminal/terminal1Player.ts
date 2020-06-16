@@ -38,11 +38,6 @@ class Terminal1Player {
         window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
     }
 
-
-    // Functions
-
-    // Init Functions
-
     // Loop Functions
     private onKeyDown(e: KeyboardEvent): void {
         switch (e.keyCode) {
@@ -69,8 +64,8 @@ class Terminal1Player {
     public update() {
         let newPosX = this._x - this.leftSpeed + this.rightSpeed
 
-        // check player in screen
-        if (newPosX > 0 && newPosX + 100 < window.innerWidth) this._x = newPosX
+        // Checks if player is still inside the screen
+        if (newPosX > 0 && newPosX + 400 < window.innerWidth) this._x = newPosX
 
         this._div.style.transform = `translate(${this._x}px, ${this._y}px) scale(0.3)`
     }

@@ -27,12 +27,6 @@ class GameObject {
         this._x = xStart;
         this._y = yStart;
         console.log(`${name} has been created`);
-        if (name !== "code") {
-            this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
-        }
-        else {
-            this._div.style.transform = `translate(${this._x}px, ${this._y}px) scale(0.2)`;
-        }
     }
     onKeyDown(e) {
         switch (e.keyCode) {
@@ -131,6 +125,11 @@ class Robot extends GameObject {
                 break;
         }
     }
+    getFutureRectangle() {
+        let rect = this._div.getBoundingClientRect();
+        rect.x += this.xVelo;
+        return rect;
+    }
     update() {
         if (this.space && this.jumping == false) {
             this.yVelo -= 40;
@@ -158,21 +157,7 @@ class Robot extends GameObject {
             this._y = 600 - 16 - 32;
             this.yVelo = 0;
         }
-        if (this._x < -200) {
-            this._x = 1240;
-        }
-        else if (this._x > 1240) {
-            this._x = -200;
-        }
         this._div.style.transform = `translate(${this._x}px, ${this._y}px) scaleX(${this.flip})`;
-    }
-    getRectangle() {
-        return this._div.getBoundingClientRect();
-    }
-    getFutureRectangle() {
-        let rect = this._div.getBoundingClientRect();
-        rect.x += this.xVelo;
-        return rect;
     }
 }
 class Code extends GameObject {
@@ -188,9 +173,6 @@ class Code extends GameObject {
             this.collected = false;
         }
         super.update("code");
-    }
-    getRectangle() {
-        return this._div.getBoundingClientRect();
     }
     getFutureRectangle() {
         return this._div.getBoundingClientRect();
@@ -213,9 +195,6 @@ class Enemy1 extends GameObject {
             this._div.remove();
         }
         super.update("enemy1");
-    }
-    getRectangle() {
-        return this._div.getBoundingClientRect();
     }
     kill() {
         this.alive = false;
@@ -250,9 +229,6 @@ class Enemy2 extends GameObject {
             super.update("enemy2");
         }
     }
-    getRectangle() {
-        return this._div.getBoundingClientRect();
-    }
     kill() {
         this.alive = false;
         this._div.remove();
@@ -270,9 +246,6 @@ class Tree extends GameObject {
         }
         super.update("tree");
     }
-    getRectangle() {
-        return this._div.getBoundingClientRect();
-    }
 }
 class Background extends GameObject {
     constructor(xStart, yStart, name) {
@@ -284,8 +257,6 @@ class Game {
     constructor() {
         this.gameobjects = [];
         this.score = 0;
-        this.enemy1killed = false;
-        this.enemy2killed = false;
         this.playingTerminal1 = false;
         this.upKey = 87;
         this.downKey = 83;
@@ -305,11 +276,6 @@ class Game {
         this.gameobjects.push(new Background(0, 0, "background"));
         this.gameobjects.push(new Tree(500, 400, "tree"));
         this.gameobjects.push(new Enemy1(1000, 630, "enemy1"));
-        this.gameobjects.push(new Enemy1(2000, 630, "enemy1"));
-        this.gameobjects.push(new Enemy1(3000, 630, "enemy1"));
-        this.gameobjects.push(new Enemy1(4000, 630, "enemy1"));
-        this.gameobjects.push(new Enemy1(5000, 630, "enemy1"));
-        this.gameobjects.push(new Enemy1(6000, 630, "enemy1"));
         this.gameobjects.push(new Enemy2(1200, 630, "enemy2"));
         this.gameobjects.push(new Code(300, 200, "code"));
         this.gameobjects.push(new Robot(200, 600, "robot"));
@@ -321,23 +287,23 @@ class Game {
                 gameobject.update(`${gameobject}`);
                 if (gameobject instanceof Robot) {
                     let robot = gameobject;
-                    for (const gameobjectZonderRobot of this.gameobjects)
-                        if (this.checkCollision(robot.getFutureRectangle(), gameobjectZonderRobot.getRectangle())) {
-                            if (gameobjectZonderRobot instanceof Code) {
-                                gameobjectZonderRobot.collected = true;
+                    for (const gameObjectWithoutRobot of this.gameobjects)
+                        if (this.checkCollision(robot.getFutureRectangle(), gameObjectWithoutRobot.getRectangle())) {
+                            if (gameObjectWithoutRobot instanceof Code) {
+                                gameObjectWithoutRobot.collected = true;
                                 this.updateScore(1);
                                 this.launchGameTerminal1();
                             }
-                            if (gameobjectZonderRobot instanceof Tree) {
-                                gameobjectZonderRobot.fixed = true;
+                            if (gameObjectWithoutRobot instanceof Tree) {
+                                gameObjectWithoutRobot.fixed = true;
                             }
-                            if (gameobjectZonderRobot instanceof Enemy1) {
+                            if (gameObjectWithoutRobot instanceof Enemy1) {
                                 this.updateScore(1);
-                                gameobjectZonderRobot.kill();
+                                gameObjectWithoutRobot.kill();
                             }
-                            if (gameobjectZonderRobot instanceof Enemy2) {
+                            if (gameObjectWithoutRobot instanceof Enemy2) {
                                 this.updateScore(1);
-                                gameobjectZonderRobot.kill();
+                                gameObjectWithoutRobot.kill();
                             }
                         }
                     if (!this.playingTerminal1) {
@@ -345,11 +311,6 @@ class Game {
                     }
                 }
             }
-        }
-    }
-    arrayLoop() {
-        for (let i = 0; i < this.gameobjects.length; i++) {
-            return [i];
         }
     }
     checkCollision(a, b) {
@@ -412,7 +373,7 @@ class Terminal1Player {
     }
     update() {
         let newPosX = this._x - this.leftSpeed + this.rightSpeed;
-        if (newPosX > 0 && newPosX + 100 < window.innerWidth)
+        if (newPosX > 0 && newPosX + 400 < window.innerWidth)
             this._x = newPosX;
         this._div.style.transform = `translate(${this._x}px, ${this._y}px) scale(0.3)`;
     }

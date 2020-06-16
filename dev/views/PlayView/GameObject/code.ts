@@ -12,7 +12,7 @@ class Code extends GameObject {
 
     // Loop Functions
     public update() : void {
-
+        // When Code is collected, remove the div.
         if(this.collected) {
             console.log("collected")
             this._div.remove()
@@ -20,11 +20,6 @@ class Code extends GameObject {
         }
 
         super.update("code")
-    }
-
-    // General Functions
-    public getRectangle() {
-        return this._div.getBoundingClientRect()
     }
 
     public getFutureRectangle(){

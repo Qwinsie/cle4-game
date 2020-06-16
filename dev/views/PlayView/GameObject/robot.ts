@@ -1,7 +1,6 @@
 /// <reference path="../gameobject.ts"/>
 
 class Robot extends GameObject {
-    // Fields
 
     private flip : number = 1
 
@@ -13,7 +12,6 @@ class Robot extends GameObject {
     private duck : boolean = false
     private space : boolean = false
 
-    // Constructor
     constructor(xStart : number, yStart : number, name : string) {        
         super(xStart, yStart, name)
 
@@ -26,7 +24,6 @@ class Robot extends GameObject {
         window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
     }
 
-    // Loop Functions
     protected onKeyDown(e: KeyboardEvent): void{
         switch (e.keyCode){
             case this.leftKey:
@@ -67,13 +64,19 @@ class Robot extends GameObject {
         }
     }
 
-    public update(){
+    public getFutureRectangle(){
+        let rect = this._div.getBoundingClientRect()
+        rect.x += this.xVelo
+        return rect
+    }
 
+    public update(){
+        // Robot is jumping
         if(this.space && this.jumping == false){
             this.yVelo -= 40;
             this.jumping = true;
         }
-
+        // Robot moves left, flip character
         if(this.left){
             this.flip = -1
         }
@@ -81,42 +84,26 @@ class Robot extends GameObject {
         if(this.right){
             this.flip = 1
         }
-
+        // Change Robot position to ducking
         if(this.duck){
             this._div.classList.add("robot-duck")
         } else {
             this._div.classList.remove("robot-duck")
         }
-
+        // Standard Velocity values for the Robot to move
         this.yVelo += 1.7;
         this._x += this.xVelo;
         this._y += this.yVelo;
         this.xVelo *= 0.9;
         this.yVelo *= 0.9;
 
+        // Stops the Robot when touching the ground
         if(this._y > 600 - 16 -32){
             this.jumping = false;
             this._y = 600 - 16 - 32;
             this.yVelo = 0;
         }
 
-        if (this._x < -200){
-            this._x = 1240
-        } else if(this._x > 1240){
-            this._x = -200
-        }
-
         this._div.style.transform = `translate(${this._x}px, ${this._y}px) scaleX(${this.flip})`
-    }
-
-    // General Functions
-    public getRectangle() {
-        return this._div.getBoundingClientRect()
-    }
-
-    public getFutureRectangle(){
-        let rect = this._div.getBoundingClientRect()
-        rect.x += this.xVelo
-        return rect
     }
 }
