@@ -51,21 +51,22 @@ class Game {
         }
 
         this.gameobjects.push(new Background(0,0,"background"))
-        this.gameobjects.push(new Tree(1000,400,"tree"))
+        this.gameobjects.push(new Tree(1200,400,"tree"))
         this.gameobjects.push(new Checkpoint(2000,470,"checkpoint"))
         this.gameobjects.push(new Enemy1(3000,630,"enemy1"))
         this.gameobjects.push(new Enemy2(3500,630,"enemy2"))
-        this.gameobjects.push(new Code(800,200,"code"))
-        this.gameobjects.push(new Robot(600,600,"robot"))
-        this.timer = 300
-        setInterval(this.timeIt, 1000)
+        this.gameobjects.push(new Code(1000,200,"code"))
+        this.gameobjects.push(new Sign(700,400,"sign"))
+        this.gameobjects.push(new Robot(500,600,"robot"))
+        // this.timer = 300
+        // setInterval(this.timeIt, 1000)
         this.gameLoop()
     }
 
-    private timeIt() {
-        this.timer - 1
-        console.log(this.timer);
-    }
+    // private timeIt() {
+    //     this.timer -= 1;
+    //     console.log(this.timer);
+    // }
     
     public gameLoop(): void {
 

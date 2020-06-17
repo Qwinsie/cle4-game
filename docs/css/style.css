@@ -102,6 +102,11 @@ checkpoint {
     width: 230px; height: 260px;
 }
 
+sign {
+    background-image: url(../img/sign.png);
+    width: 275px; height: 280px;
+}
+
 
 canvas {
     width:1440px; height: 900px;
