@@ -11,8 +11,11 @@ class Game {
     private gameobjects : GameObject[] = []
 
     private score : number = 0
+    private robot : Robot
+    private background : Background
 
-    public playingTerminal1 : boolean = false
+    public playingTerminal : boolean = false
+    public currentTerminal : GameTerminal1
     
     // Inputs
     private upKey : number = 87
@@ -38,56 +41,59 @@ class Game {
         game.appendChild(this.div)
 
         // Pushing all gameobjects for the Game with parameters (x,y,"name")
-        this.gameobjects.push(new Background(0,0,"background"))
-        this.gameobjects.push(new Tree(500,400,"tree"))
-        this.gameobjects.push(new Enemy1(1000,630,"enemy1"))
-        this.gameobjects.push(new Enemy2(1200,630,"enemy2"))
-        this.gameobjects.push(new Code(300,200,"code"))
-        this.gameobjects.push(new Robot(200,600,"robot"))
+        this.background = new Background(0, 0, "background", this)
+        this.gameobjects.push(this.background)
+        this.gameobjects.push(new Tree(500,400,"tree", this))
+        this.gameobjects.push(new Enemy1(1000,630,"enemy1", this))
+        this.gameobjects.push(new Enemy2(1200,630,"enemy2", this))
+        this.gameobjects.push(new Code(300,200,"code", this))
+
+        this.robot = new Robot(200, 600, "robot", this)
+        this.gameobjects.push(this.robot)
         
         this.gameLoop()
     }
     
     public gameLoop(): void {
-        // Looping through the array of gameobjects to use for collision.
-        for (const gameobject of this.gameobjects) {
-            
-            // Updating all gameobjects
-            gameobject.update(`${gameobject}`)
-        
-            if(gameobject instanceof Robot) {
-            
-                let robot = gameobject
-                // Checking if there is collision between the Robot and other gameobjects.
-                for(const gameObjectWithoutRobot of this.gameobjects)
-                if (this.checkCollision(robot.getFutureRectangle(), gameObjectWithoutRobot.getRectangle())) {
-
-                    if(gameObjectWithoutRobot instanceof Code) {
-                        gameObjectWithoutRobot.collected = true
-                        this.updateScore(1)
-                        this.launchGameTerminal1()
-                    }
-                    if(gameObjectWithoutRobot instanceof Tree) {
-                        gameObjectWithoutRobot.fixed = true
-                    }
-
-                    if(gameObjectWithoutRobot instanceof Enemy1) {
-                        this.updateScore(1)
-                        gameObjectWithoutRobot.kill()
-                    }
-                    if(gameObjectWithoutRobot instanceof Enemy2) {
-                        this.updateScore(1)
-                        gameObjectWithoutRobot.kill()
-                    }
-                }
-                
-                // Stop gameLoop when playingTerminal is activated
-                if(!this.playingTerminal1) {
-                    requestAnimationFrame(()=>this.gameLoop())
-                }
+        // update gameobjects OR game terminal
+        if (!this.playingTerminal) {
+            // Looping through the array of gameobjects to use for collision.
+            for (const gameobject of this.gameobjects) {
+                this.checkRobotCollisions()
+                gameobject.update()
             }
-            
+        } else {
+            this.currentTerminal.update()
         }
+
+        // gameloop altijd in game.ts
+        requestAnimationFrame(() => this.gameLoop())
+    }
+
+    private checkRobotCollisions(){
+        // Checking if there is collision between the Robot and other gameobjects.
+        for (const gameObjectWithoutRobot of this.gameobjects)
+            if (this.checkCollision(this.robot.getFutureRectangle(), gameObjectWithoutRobot.getRectangle())) {
+
+                if (gameObjectWithoutRobot instanceof Code) {
+                    gameObjectWithoutRobot.collected = true
+                    this.updateScore(1)
+                    this.launchGameTerminal1()
+                }
+                if (gameObjectWithoutRobot instanceof Tree) {
+                    gameObjectWithoutRobot.fixed = true
+                }
+
+                if (gameObjectWithoutRobot instanceof Enemy1) {
+                    this.updateScore(1)
+                    gameObjectWithoutRobot.kill()
+                }
+                if (gameObjectWithoutRobot instanceof Enemy2) {
+                    this.updateScore(1)
+                    gameObjectWithoutRobot.kill()
+                }
+   
+            }
     }
 
     private checkCollision(a: ClientRect, b: ClientRect) {
@@ -97,6 +103,23 @@ class Game {
                 b.top <= a.bottom)
     }
 
+    public checkBackgroundCanmove(left:boolean, right:boolean) : boolean {
+        // CHECK HIER OF DE ACHTERGROND MAG BWEGEN OF NIET
+        let bgposition = this.background.getRectangle() as DOMRect
+        if(bgposition.left >= 0 && left == true) {
+            // bg niet scrollen als je naar links loopt terwijl bg al helemaal links staat
+            return false
+        } 
+        console.log(bgposition.width - window.innerWidth)
+        if(bgposition.width - window.innerWidth < bgposition.x && right == true ) {
+            // bg niet scrollen als je naar rechts loopt terwijl bg al helemaal rechts staat
+            return false
+        }
+
+        // bg kan scrollen
+        return true
+    }
+
     private updateScore(addScoreAmount: number) {
         this.score += addScoreAmount
         document.getElementsByTagName("score")[0].innerHTML = `Score: ${this.score}`
@@ -104,10 +127,9 @@ class Game {
     
     // Launch Terminal (Puzzle 1)
     private launchGameTerminal1(): void {
-        let gameTerminal1 : GameTerminal1
         console.log("TERMINAL STARTING")
-        gameTerminal1 = new GameTerminal1(this)
-        console.log("TERMINAL STARTED")
+        this.currentTerminal = new GameTerminal1(this)
+        this.playingTerminal = true
     }
 
     public reset(): void {

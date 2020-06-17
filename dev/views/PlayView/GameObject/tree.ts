@@ -4,8 +4,9 @@ class Tree extends GameObject {
 
     public fixed : boolean = false
 
-    constructor(xStart: number, yStart: number, name : string) {
-        super(xStart, yStart, name)
+    constructor(xStart: number, yStart: number, name: string, game: Game) {
+        super(xStart, yStart, name, game)
+        super.draw()
    }
     // Fixing the tree
     public update() {
@@ -14,6 +15,6 @@ class Tree extends GameObject {
             this.fixed = false
         }
 
-        super.update("tree")
+        super.update()
     }
 }

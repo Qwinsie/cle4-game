@@ -2,8 +2,6 @@
 
 class Robot extends GameObject {
 
-    private flip : number = 1
-
     // Inputs
     private downKey : number = 0
     private spaceKey : number = 0
@@ -12,8 +10,8 @@ class Robot extends GameObject {
     private duck : boolean = false
     private space : boolean = false
 
-    constructor(xStart : number, yStart : number, name : string) {        
-        super(xStart, yStart, name)
+    constructor(xStart: number, yStart: number, name: string, game: Game) {        
+        super(xStart, yStart, name, game)
 
         this.downKey = 83
         this.spaceKey = 32
@@ -65,7 +63,7 @@ class Robot extends GameObject {
     }
 
     public getFutureRectangle(){
-        let rect = this._div.getBoundingClientRect()
+        let rect : DOMRect = this._div.getBoundingClientRect() as DOMRect
         rect.x += this.xVelo
         return rect
     }
@@ -78,11 +76,11 @@ class Robot extends GameObject {
         }
         // Robot moves left, flip character
         if(this.left){
-            this.flip = -1
+            this.xscale = -1
         }
 
         if(this.right){
-            this.flip = 1
+            this.xscale = 1
         }
         // Change Robot position to ducking
         if(this.duck){
@@ -104,6 +102,7 @@ class Robot extends GameObject {
             this.yVelo = 0;
         }
 
-        this._div.style.transform = `translate(${this._x}px, ${this._y}px) scaleX(${this.flip})`
+        super.update()
+        //this._div.style.transform = `translate(${this._x}px, ${this._y}px) scaleX(${this.flip})`
     }
 }
