@@ -273,7 +273,7 @@ class Game {
         this.div = document.createElement("div");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.div);
-        this.gameobjects.push(new Background(0, 0, "background"));
+        this.gameobjects.push(new Background(-1440, 0, "background"));
         this.gameobjects.push(new Tree(500, 400, "tree"));
         this.gameobjects.push(new Enemy1(1000, 630, "enemy1"));
         this.gameobjects.push(new Enemy2(1200, 630, "enemy2"));
