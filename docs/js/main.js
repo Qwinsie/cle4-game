@@ -9,6 +9,7 @@ class GameObject {
         this.left = false;
         this.right = false;
         this.jumping = true;
+        this.backgroundmoving = true;
         this.spawn(xStart, yStart, name);
         this.leftKey = 65;
         this.rightKey = 68;
@@ -52,23 +53,36 @@ class GameObject {
         return this._div.getBoundingClientRect();
     }
     update(name) {
-        if (name !== "robot") {
-            if (this.left) {
-                this.xVelo += 1;
-            }
-            if (this.right) {
-                this.xVelo -= 1;
-            }
-            this._x += this.xVelo;
-            this.xVelo *= 0.9;
-            if (name !== "code") {
-                this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
-            }
-            else {
-                this._div.style.transform = `translate(${this._x}px, ${this._y}px) scale(0.2)`;
+        if (this.backgroundmoving == true) {
+            if (name !== "robot") {
+                if (this.left) {
+                    this.xVelo += 1;
+                }
+                if (this.right) {
+                    this.xVelo -= 1;
+                }
+                this._x += this.xVelo;
+                this.xVelo *= 0.9;
+                if (name !== "code") {
+                    this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
+                }
+                else {
+                    this._div.style.transform = `translate(${this._x}px, ${this._y}px) scale(0.2)`;
+                }
             }
         }
         else {
+            if (name == "robot") {
+                if (this.left) {
+                    this.xVelo += 1;
+                }
+                if (this.right) {
+                    this.xVelo -= 1;
+                }
+                this._x += this.xVelo;
+                this.xVelo *= 0.9;
+                this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
+            }
         }
     }
 }
@@ -273,7 +287,7 @@ class Game {
         this.div = document.createElement("div");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.div);
-        this.gameobjects.push(new Background(-1440, 0, "background"));
+        this.gameobjects.push(new Background(0, 0, "background"));
         this.gameobjects.push(new Tree(500, 400, "tree"));
         this.gameobjects.push(new Enemy1(1000, 630, "enemy1"));
         this.gameobjects.push(new Enemy2(1200, 630, "enemy2"));
@@ -283,32 +297,30 @@ class Game {
     }
     gameLoop() {
         for (const gameobject of this.gameobjects) {
-            for (let i = 0; i < 1; i++) {
-                gameobject.update(`${gameobject}`);
-                if (gameobject instanceof Robot) {
-                    let robot = gameobject;
-                    for (const gameObjectWithoutRobot of this.gameobjects)
-                        if (this.checkCollision(robot.getFutureRectangle(), gameObjectWithoutRobot.getRectangle())) {
-                            if (gameObjectWithoutRobot instanceof Code) {
-                                gameObjectWithoutRobot.collected = true;
-                                this.updateScore(1);
-                                this.launchGameTerminal1();
-                            }
-                            if (gameObjectWithoutRobot instanceof Tree) {
-                                gameObjectWithoutRobot.fixed = true;
-                            }
-                            if (gameObjectWithoutRobot instanceof Enemy1) {
-                                this.updateScore(1);
-                                gameObjectWithoutRobot.kill();
-                            }
-                            if (gameObjectWithoutRobot instanceof Enemy2) {
-                                this.updateScore(1);
-                                gameObjectWithoutRobot.kill();
-                            }
+            gameobject.update(`${gameobject}`);
+            if (gameobject instanceof Robot) {
+                let robot = gameobject;
+                for (const gameObjectWithoutRobot of this.gameobjects)
+                    if (this.checkCollision(robot.getFutureRectangle(), gameObjectWithoutRobot.getRectangle())) {
+                        if (gameObjectWithoutRobot instanceof Code) {
+                            gameObjectWithoutRobot.collected = true;
+                            this.updateScore(1);
+                            this.launchGameTerminal1();
                         }
-                    if (!this.playingTerminal1) {
-                        requestAnimationFrame(() => this.gameLoop());
+                        if (gameObjectWithoutRobot instanceof Tree) {
+                            gameObjectWithoutRobot.fixed = true;
+                        }
+                        if (gameObjectWithoutRobot instanceof Enemy1) {
+                            this.updateScore(1);
+                            gameObjectWithoutRobot.kill();
+                        }
+                        if (gameObjectWithoutRobot instanceof Enemy2) {
+                            this.updateScore(1);
+                            gameObjectWithoutRobot.kill();
+                        }
                     }
+                if (!this.playingTerminal1) {
+                    requestAnimationFrame(() => this.gameLoop());
                 }
             }
         }

@@ -19,6 +19,8 @@ class GameObject {
 
     protected jumping : boolean = true
 
+    private backgroundmoving : boolean = true
+
     // Properties
     public get div(): HTMLElement           { return this._div }
     public get x(): number                  { return this._x }
@@ -78,7 +80,10 @@ class GameObject {
     }
 
     public update(name: string) {
-        if (name !== "robot") {
+
+        if (this.backgroundmoving == true ) {
+            if(name !== "robot") {
+
             if(this.left){
                 this.xVelo += 1;
             }
@@ -95,8 +100,23 @@ class GameObject {
             } else {
                 this._div.style.transform = `translate(${this._x}px, ${this._y}px) scale(0.2)`
             }
-        } else {
+        }
 
+        } else {
+            if(name == "robot") {
+                if(this.left){
+                    this.xVelo += 1;
+                }
+        
+                if(this.right){
+                    this.xVelo -= 1;
+                }
+                // Standard velocity values for all gameobjects, except robot 
+                this._x += this.xVelo;
+                this.xVelo *= 0.9;
+    
+                    this._div.style.transform = `translate(${this._x}px, ${this._y}px)`
+            }
         }
     }
 }
