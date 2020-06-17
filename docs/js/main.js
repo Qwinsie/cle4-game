@@ -1,5 +1,5 @@
 class GameObject {
-    constructor(xStart, yStart, name) {
+    constructor(xStart, yStart, name, game) {
         this._x = 0;
         this._y = 0;
         this.xVelo = 0;
@@ -9,22 +9,26 @@ class GameObject {
         this.left = false;
         this.right = false;
         this.jumping = true;
+        this.xscale = 1;
+        this.yscale = 1;
         this.backgroundmoving = true;
         this.spawn(xStart, yStart, name);
+        this.gameInstance = game;
+        this._name = name;
         this.leftKey = 65;
         this.rightKey = 68;
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
+        this.draw();
     }
     get div() { return this._div; }
     get x() { return this._x; }
     get y() { return this._y; }
-    get name() { return this.name; }
     spawn(xStart, yStart, name) {
-        this._div = document.createElement(`${name}`);
+        this._div = document.createElement(name);
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this._div);
-        this._div.id = `${name}`;
+        this._div.id = name;
         this._x = xStart;
         this._y = yStart;
         console.log(`${name} has been created`);
@@ -52,44 +56,39 @@ class GameObject {
     getRectangle() {
         return this._div.getBoundingClientRect();
     }
-    update(name) {
-        if (this.backgroundmoving == true) {
-            if (name !== "robot") {
+    update() {
+        let bgmoving = this.gameInstance.checkBackgroundCanmove(this.left, this.right);
+        if (bgmoving) {
+            if (this._name !== "robot") {
                 if (this.left) {
                     this.xVelo += 1;
                 }
                 if (this.right) {
                     this.xVelo -= 1;
-                }
-                this._x += this.xVelo;
-                this.xVelo *= 0.9;
-                if (name !== "code") {
-                    this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
-                }
-                else {
-                    this._div.style.transform = `translate(${this._x}px, ${this._y}px) scale(0.2)`;
                 }
             }
         }
         else {
-            if (name == "robot") {
-                if (this.left) {
+            if (this._name === "robot") {
+                if (this.right) {
                     this.xVelo += 1;
                 }
-                if (this.right) {
+                if (this.left) {
                     this.xVelo -= 1;
                 }
-                this._x += this.xVelo;
-                this.xVelo *= 0.9;
-                this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
             }
         }
+        this._x += this.xVelo;
+        this.xVelo *= 0.9;
+        this.draw();
+    }
+    draw() {
+        this._div.style.transform = `translate(${this._x}px, ${this._y}px) scale(${this.xscale}, ${this.yscale})`;
     }
 }
 class Robot extends GameObject {
-    constructor(xStart, yStart, name) {
-        super(xStart, yStart, name);
-        this.flip = 1;
+    constructor(xStart, yStart, name, game) {
+        super(xStart, yStart, name, game);
         this.downKey = 0;
         this.spaceKey = 0;
         this.spaceKey2 = 0;
@@ -150,10 +149,10 @@ class Robot extends GameObject {
             this.jumping = true;
         }
         if (this.left) {
-            this.flip = -1;
+            this.xscale = -1;
         }
         if (this.right) {
-            this.flip = 1;
+            this.xscale = 1;
         }
         if (this.duck) {
             this._div.classList.add("robot-duck");
@@ -171,14 +170,17 @@ class Robot extends GameObject {
             this._y = 600 - 16 - 32;
             this.yVelo = 0;
         }
-        this._div.style.transform = `translate(${this._x}px, ${this._y}px) scaleX(${this.flip})`;
+        super.update();
     }
 }
 class Code extends GameObject {
-    constructor(xStart, yStart, name) {
-        super(xStart, yStart, name);
+    constructor(xStart, yStart, name, game) {
+        super(xStart, yStart, name, game);
         this.collisionRobotCode = false;
         this.collected = false;
+        this.xscale = 0.2;
+        this.yscale = 0.2;
+        super.draw();
     }
     update() {
         if (this.collected) {
@@ -186,15 +188,15 @@ class Code extends GameObject {
             this._div.remove();
             this.collected = false;
         }
-        super.update("code");
+        super.update();
     }
     getFutureRectangle() {
         return this._div.getBoundingClientRect();
     }
 }
 class Enemy1 extends GameObject {
-    constructor(xStart, yStart, name) {
-        super(xStart, yStart, name);
+    constructor(xStart, yStart, name, game) {
+        super(xStart, yStart, name, game);
         this.leftspeed = 0;
         this.rightspeed = 0;
         this.alive = true;
@@ -208,7 +210,7 @@ class Enemy1 extends GameObject {
         if (newX < 0 - this._div.clientWidth) {
             this._div.remove();
         }
-        super.update("enemy1");
+        super.update();
     }
     kill() {
         this.alive = false;
@@ -216,8 +218,8 @@ class Enemy1 extends GameObject {
     }
 }
 class Enemy2 extends GameObject {
-    constructor(xStart, yStart, name) {
-        super(xStart, yStart, name);
+    constructor(xStart, yStart, name, game) {
+        super(xStart, yStart, name, game);
         this.leftspeed = 0;
         this.rightspeed = 0;
         this.alive = true;
@@ -240,7 +242,7 @@ class Enemy2 extends GameObject {
             if (newX > 0 && newX < (1440 - this._div.clientWidth)) {
                 this._x = newX;
             }
-            super.update("enemy2");
+            super.update();
         }
     }
     kill() {
@@ -249,22 +251,22 @@ class Enemy2 extends GameObject {
     }
 }
 class Tree extends GameObject {
-    constructor(xStart, yStart, name) {
-        super(xStart, yStart, name);
+    constructor(xStart, yStart, name, game) {
+        super(xStart, yStart, name, game);
         this.fixed = false;
+        super.draw();
     }
     update() {
         if (this.fixed) {
             this._div.classList.add("fixed");
             this.fixed = false;
         }
-        super.update("tree");
+        super.update();
     }
 }
 class Background extends GameObject {
-    constructor(xStart, yStart, name) {
-        super(xStart, yStart, name);
-        super.update("background");
+    constructor(xStart, yStart, name, game) {
+        super(xStart, yStart, name, game);
     }
 }
 class Game {
@@ -272,7 +274,7 @@ class Game {
         this.gameobjects = [];
         this.score = 0;
         this.timer = 0;
-        this.playingTerminal1 = false;
+        this.playingTerminal = false;
         this.upKey = 87;
         this.downKey = 83;
         this.leftKey = 65;
@@ -288,53 +290,65 @@ class Game {
         this.div = document.createElement("div");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.div);
+        this.background = new Background(0, 0, "background", this);
+        this.gameobjects.push(this.background);
+        this.gameobjects.push(new Tree(500, 400, "tree", this));
+        this.gameobjects.push(new Enemy1(1000, 630, "enemy1", this));
+        this.gameobjects.push(new Enemy2(1200, 630, "enemy2", this));
+        this.gameobjects.push(new Code(300, 200, "code", this));
+        this.robot = new Robot(200, 600, "robot", this);
+        this.gameobjects.push(this.robot);
         for (let i = 0; i < 5; i++) {
             let randomX = 400 * i * Math.random() + 200;
             let randomY = Math.random() * 200 + 100;
             let randomXSpeed = 0.1;
             let randomCloudNumber = Math.floor(Math.random() * (4 - 1)) + 1;
             let randomCloud = "cloud" + randomCloudNumber;
-            this.gameobjects.push(new Cloud(randomX, randomY, randomCloud, randomXSpeed));
+            this.gameobjects.push(new Cloud(randomX, randomY, randomCloud, randomXSpeed, this));
         }
-        this.gameobjects.push(new Background(0, 0, "background"));
-        this.gameobjects.push(new Tree(1200, 400, "tree"));
-        this.gameobjects.push(new Checkpoint(2000, 470, "checkpoint"));
-        this.gameobjects.push(new Enemy1(3000, 630, "enemy1"));
-        this.gameobjects.push(new Enemy2(3500, 630, "enemy2"));
-        this.gameobjects.push(new Code(1000, 200, "code"));
-        this.gameobjects.push(new Sign(700, 400, "sign"));
-        this.gameobjects.push(new Robot(500, 600, "robot"));
+        this.gameobjects.push(new Background(0, 0, "background", this));
+        this.gameobjects.push(new Tree(1200, 400, "tree", this));
+        this.gameobjects.push(new Checkpoint(2000, 470, "checkpoint", this));
+        this.gameobjects.push(new Enemy1(3000, 630, "enemy1", this));
+        this.gameobjects.push(new Enemy2(3500, 630, "enemy2", this));
+        this.gameobjects.push(new Code(1000, 200, "code", this));
+        this.gameobjects.push(new Sign(700, 400, "sign", this));
+        this.gameobjects.push(new Robot(500, 600, "robot", this));
         this.gameLoop();
     }
     gameLoop() {
-        for (const gameobject of this.gameobjects) {
-            gameobject.update(`${gameobject}`);
-            if (gameobject instanceof Robot) {
-                let robot = gameobject;
-                for (const gameObjectWithoutRobot of this.gameobjects)
-                    if (this.checkCollision(robot.getFutureRectangle(), gameObjectWithoutRobot.getRectangle())) {
-                        if (gameObjectWithoutRobot instanceof Code) {
-                            gameObjectWithoutRobot.collected = true;
-                            this.updateScore(1);
-                            this.launchGameTerminal1();
-                        }
-                        if (gameObjectWithoutRobot instanceof Tree) {
-                            gameObjectWithoutRobot.fixed = true;
-                        }
-                        if (gameObjectWithoutRobot instanceof Enemy1) {
-                            this.updateScore(1);
-                            gameObjectWithoutRobot.kill();
-                        }
-                        if (gameObjectWithoutRobot instanceof Enemy2) {
-                            this.updateScore(1);
-                            gameObjectWithoutRobot.kill();
-                        }
-                    }
-                if (!this.playingTerminal1) {
-                    requestAnimationFrame(() => this.gameLoop());
-                }
+        this.timer++;
+        if (!this.playingTerminal) {
+            for (const gameobject of this.gameobjects) {
+                this.checkRobotCollisions();
+                gameobject.update();
             }
         }
+        else {
+            this.currentTerminal.update();
+        }
+        requestAnimationFrame(() => this.gameLoop());
+    }
+    checkRobotCollisions() {
+        for (const gameObjectWithoutRobot of this.gameobjects)
+            if (this.checkCollision(this.robot.getFutureRectangle(), gameObjectWithoutRobot.getRectangle())) {
+                if (gameObjectWithoutRobot instanceof Code) {
+                    gameObjectWithoutRobot.collected = true;
+                    this.updateScore(1);
+                    this.launchGameTerminal1();
+                }
+                if (gameObjectWithoutRobot instanceof Tree) {
+                    gameObjectWithoutRobot.fixed = true;
+                }
+                if (gameObjectWithoutRobot instanceof Enemy1) {
+                    this.updateScore(1);
+                    gameObjectWithoutRobot.kill();
+                }
+                if (gameObjectWithoutRobot instanceof Enemy2) {
+                    this.updateScore(1);
+                    gameObjectWithoutRobot.kill();
+                }
+            }
     }
     checkCollision(a, b) {
         return (a.left <= b.right &&
@@ -342,28 +356,38 @@ class Game {
             a.top <= b.bottom &&
             b.top <= a.bottom);
     }
+    checkBackgroundCanmove(left, right) {
+        let bgposition = this.background.getRectangle();
+        if (bgposition.left >= 0 && left == true) {
+            return false;
+        }
+        console.log(bgposition.width - window.innerWidth);
+        if (bgposition.width - window.innerWidth < bgposition.x && right == true) {
+            return false;
+        }
+        return true;
+    }
     updateScore(addScoreAmount) {
         this.score += addScoreAmount;
         document.getElementsByTagName("score")[0].innerHTML = `Score: ${this.score}`;
     }
     launchGameTerminal1() {
-        let gameTerminal1;
         console.log("TERMINAL STARTING");
-        gameTerminal1 = new GameTerminal1(this);
-        console.log("TERMINAL STARTED");
+        this.currentTerminal = new GameTerminal1(this);
+        this.playingTerminal = true;
     }
     reset() {
     }
 }
 window.addEventListener("load", () => new Game());
 class Checkpoint extends GameObject {
-    constructor(xStart, yStart, name) {
-        super(xStart, yStart, name);
+    constructor(xStart, yStart, name, game) {
+        super(xStart, yStart, name, game);
     }
 }
 class Cloud extends GameObject {
-    constructor(xStart, yStart, name, speed) {
-        super(xStart, yStart, name);
+    constructor(xStart, yStart, name, speed, game) {
+        super(xStart, yStart, name, game);
         this.xspeed = 0;
         this.xspeed = speed;
     }
@@ -373,8 +397,8 @@ class Cloud extends GameObject {
     }
 }
 class Sign extends GameObject {
-    constructor(xStart, yStart, name) {
-        super(xStart, yStart, name);
+    constructor(xStart, yStart, name, game) {
+        super(xStart, yStart, name, game);
     }
 }
 class Terminal1Player {
@@ -486,20 +510,16 @@ class GameTerminal1 {
         this.block2 = new Terminal1Block(1000, 79, 75);
         this.background = new Terminal1Background();
         this.border = new Terminal1Border();
-        this.gameInstance.playingTerminal1 = true;
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
-        this.gameLoop();
+        this.update();
     }
-    gameLoop() {
+    update() {
         this.player.update();
         this.block.update();
         this.block2.update();
         this.checkBlockPlayerCollision(this.player);
-        console.log("onegameloop");
-        if (this.gameInstance.playingTerminal1) {
-            requestAnimationFrame(() => this.gameLoop());
-        }
+        console.log("terminal 1 gameloop");
     }
     onKeyDown(e) {
         switch (e.keyCode) {
@@ -539,19 +559,16 @@ class GameTerminal1 {
         console.log("YOU HAVE DIED");
         document.getElementsByTagName("message")[0].innerHTML = `YOU HAVE DIED`;
         this.killAll();
-        this.gameInstance.playingTerminal1 = false;
+        this.gameInstance.playingTerminal = false;
         this.gameInstance.reset();
-        this.gameInstance.gameLoop();
     }
     gameWin() {
         this.killAll();
-        this.gameInstance.playingTerminal1 = false;
-        this.gameInstance.gameLoop();
+        this.gameInstance.playingTerminal = false;
     }
     finnishGame() {
         this.killAll();
-        this.gameInstance.playingTerminal1 = false;
-        this.gameInstance.gameLoop();
+        this.gameInstance.playingTerminal = false;
     }
     killAll() {
         this.block.div.remove();

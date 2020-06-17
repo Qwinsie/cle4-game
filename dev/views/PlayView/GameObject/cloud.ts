@@ -4,8 +4,8 @@ class Cloud extends GameObject {
 
     private xspeed : number = 0
 
-    constructor(xStart: number, yStart: number, name : string, speed : number) {
-        super(xStart, yStart, name)
+    constructor(xStart: number, yStart: number, name : string, speed : number, game:Game) {
+        super(xStart, yStart, name, game)
         this.xspeed = speed
     }
 

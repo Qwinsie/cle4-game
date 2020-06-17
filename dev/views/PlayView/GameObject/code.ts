@@ -6,8 +6,11 @@ class Code extends GameObject {
 
     public collected : boolean = false
 
-    constructor(xStart: number, yStart: number, name : string) {
-        super(xStart, yStart, name)
+    constructor(xStart: number, yStart: number, name: string, game: Game) {
+        super(xStart, yStart, name, game)
+        this.xscale = 0.2
+        this.yscale = 0.2
+        super.draw()
     }
 
     // Loop Functions
@@ -19,7 +22,7 @@ class Code extends GameObject {
             this.collected = false
         }
 
-        super.update("code")
+        super.update()
     }
 
     public getFutureRectangle(){

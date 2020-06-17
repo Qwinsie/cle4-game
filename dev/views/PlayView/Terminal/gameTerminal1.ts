@@ -36,28 +36,26 @@ class GameTerminal1 {
         this.background = new Terminal1Background()
         this.border = new Terminal1Border()
 
-        this.gameInstance.playingTerminal1 = true
-
         window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e))
         window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
 
-        this.gameLoop()
+        this.update()
     }
 
 
     // gameLoop
-    private gameLoop(){
+    public update(){
         this.player.update()
         this.block.update()
         this.block2.update()
 
         this.checkBlockPlayerCollision(this.player)
 
-        console.log("onegameloop")
+        console.log("terminal 1 gameloop")
 
-        if(this.gameInstance.playingTerminal1) {
-            requestAnimationFrame(()=>this.gameLoop())
-        }
+        //if(this.gameInstance.playingTerminal1) {
+        //    requestAnimationFrame(()=>this.gameLoop())
+        //}
     
     }
 
@@ -112,21 +110,18 @@ class GameTerminal1 {
         console.log("YOU HAVE DIED")
         document.getElementsByTagName("message")[0].innerHTML = `YOU HAVE DIED`
         this.killAll()
-        this.gameInstance.playingTerminal1 = false
+        this.gameInstance.playingTerminal = false
         this.gameInstance.reset()
-        this.gameInstance.gameLoop()
     }
 
     gameWin() {
         this.killAll()
-        this.gameInstance.playingTerminal1 = false
-        this.gameInstance.gameLoop()
+        this.gameInstance.playingTerminal = false
     }
 
     finnishGame() {
         this.killAll()
-        this.gameInstance.playingTerminal1 = false
-        this.gameInstance.gameLoop()
+        this.gameInstance.playingTerminal = false
     }
 
     killAll() {

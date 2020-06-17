@@ -7,8 +7,8 @@ class Enemy2 extends GameObject {
 
     private alive : boolean = true
 
-    constructor(xStart : number, yStart : number, name : string) {
-        super(xStart, yStart, name)
+    constructor(xStart: number, yStart: number, name: string, game: Game) {
+        super(xStart, yStart, name, game)
     }
 
     public update() {
@@ -35,7 +35,7 @@ class Enemy2 extends GameObject {
             if (newX > 0 && newX < (1440 - this._div.clientWidth)) {
                 this._x = newX
             }
-            super.update("enemy2")
+            super.update()
         }
     }
 
