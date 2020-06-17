@@ -18,9 +18,9 @@ class Enemy2 extends GameObject {
             this.jumping = true;
         }
         // Standard Velocity values for Enemy2 to move
-        this.yVelo += 1.0;
+        this.yVelo += 1.4;
         this._y += this.yVelo;
-        this.yVelo *= 0.98;
+        this.yVelo *= 0.90;
 
         // If Enemy2 lands on the ground stop falling
         if(this._y > 600){

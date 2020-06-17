@@ -91,11 +91,11 @@ class Robot extends GameObject {
             this._div.classList.remove("robot-duck")
         }
         // Standard Velocity values for the Robot to move
-        this.yVelo += 1.7;
+        this.yVelo += 1.4;
         this._x += this.xVelo;
         this._y += this.yVelo;
         this.xVelo *= 0.9;
-        this.yVelo *= 0.9;
+        this.yVelo *= 0.95;
 
         // Stops the Robot when touching the ground
         if(this._y > 600 - 16 -32){
