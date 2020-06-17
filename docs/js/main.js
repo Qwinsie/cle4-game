@@ -147,11 +147,11 @@ class Robot extends GameObject {
         else {
             this._div.classList.remove("robot-duck");
         }
-        this.yVelo += 1.7;
+        this.yVelo += 1.4;
         this._x += this.xVelo;
         this._y += this.yVelo;
         this.xVelo *= 0.9;
-        this.yVelo *= 0.9;
+        this.yVelo *= 0.95;
         if (this._y > 600 - 16 - 32) {
             this.jumping = false;
             this._y = 600 - 16 - 32;
