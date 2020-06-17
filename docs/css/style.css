@@ -60,8 +60,9 @@ tree {
 
 background {
     background-image: url(../img/background.png);
-    width:1440px; height: 900px;
+    width:14400px; height: 900px;
     background-size: inherit;
+    background-repeat: repeat-x;
     border-image-outset: 10px inherit black;
     z-index: -2;
 }
