@@ -13,6 +13,7 @@ class Game {
     private score : number = 0
     private robot : Robot
     private background : Background
+    private timer : number = 0
 
     public playingTerminal : boolean = false
     public currentTerminal : GameTerminal1
@@ -51,10 +52,35 @@ class Game {
         this.robot = new Robot(200, 600, "robot", this)
         this.gameobjects.push(this.robot)
         
+        // Spawning random clouds
+        for (let i = 0; i < 5; i++) {
+            let randomX = 400 * i * Math.random() + 200
+            let randomY = Math.random() * 200 + 100
+            let randomXSpeed = 0.1 
+            let randomCloudNumber = Math.floor(Math.random() * (4 - 1) ) + 1;
+            let randomCloud = "cloud" + randomCloudNumber
+            this.gameobjects.push(new Cloud(randomX,randomY,randomCloud,randomXSpeed,this))
+        }
+
+        // geen interval gebruiken, je hebt al een gameloop
+        // de interval blijft ook doorlopen als de gameloop stopt / tab inactief is
+        // setInterval(this.timeIt, 1000)
         this.gameLoop()
     }
+
+    /*
+    private timeIt() {
+        this.timer - 1
+        console.log(this.timer);
+    }
+    */
     
     public gameLoop(): void {
+        this.timer++
+        // hier kan je een timer bijhouden, 60fps
+        //console.log(this.timer)
+        
+        
         // update gameobjects OR game terminal
         if (!this.playingTerminal) {
             // Looping through the array of gameobjects to use for collision.
@@ -80,6 +106,7 @@ class Game {
                     this.updateScore(1)
                     this.launchGameTerminal1()
                 }
+
                 if (gameObjectWithoutRobot instanceof Tree) {
                     gameObjectWithoutRobot.fixed = true
                 }

@@ -273,6 +273,7 @@ class Game {
     constructor() {
         this.gameobjects = [];
         this.score = 0;
+        this.timer = 0;
         this.playingTerminal = false;
         this.upKey = 87;
         this.downKey = 83;
@@ -297,9 +298,18 @@ class Game {
         this.gameobjects.push(new Code(300, 200, "code", this));
         this.robot = new Robot(200, 600, "robot", this);
         this.gameobjects.push(this.robot);
+        for (let i = 0; i < 5; i++) {
+            let randomX = 400 * i * Math.random() + 200;
+            let randomY = Math.random() * 200 + 100;
+            let randomXSpeed = 0.1;
+            let randomCloudNumber = Math.floor(Math.random() * (4 - 1)) + 1;
+            let randomCloud = "cloud" + randomCloudNumber;
+            this.gameobjects.push(new Cloud(randomX, randomY, randomCloud, randomXSpeed, this));
+        }
         this.gameLoop();
     }
     gameLoop() {
+        this.timer++;
         if (!this.playingTerminal) {
             for (const gameobject of this.gameobjects) {
                 this.checkRobotCollisions();
@@ -362,6 +372,22 @@ class Game {
     }
 }
 window.addEventListener("load", () => new Game());
+class Checkpoint extends GameObject {
+    constructor(xStart, yStart, name, game) {
+        super(xStart, yStart, name, game);
+    }
+}
+class Cloud extends GameObject {
+    constructor(xStart, yStart, name, speed, game) {
+        super(xStart, yStart, name, game);
+        this.xspeed = 0;
+        this.xspeed = speed;
+    }
+    update() {
+        this._x += this.xspeed;
+        this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
+    }
+}
 class Terminal1Player {
     constructor() {
         this.rightSpeed = 0;
