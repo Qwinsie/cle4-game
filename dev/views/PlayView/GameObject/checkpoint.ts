@@ -1,7 +1,7 @@
 class Checkpoint extends GameObject {
 
-    constructor(xStart: number, yStart: number, name : string) {
-        super(xStart,yStart,name)
+    constructor(xStart: number, yStart: number, name : string, game:Game) {
+        super(xStart,yStart,name, game)
     }
     
 }
