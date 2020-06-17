@@ -11,6 +11,7 @@ class Game {
     private gameobjects : GameObject[] = []
 
     private score : number = 0
+    private timer : number = 0
 
     public playingTerminal1 : boolean = false
     
@@ -38,17 +39,38 @@ class Game {
         game.appendChild(this.div)
 
         // Pushing all gameobjects for the Game with parameters (x,y,"name")
-        this.gameobjects.push(new Background(0,0,"background"))
-        this.gameobjects.push(new Tree(500,400,"tree"))
-        this.gameobjects.push(new Enemy1(1000,630,"enemy1"))
-        this.gameobjects.push(new Enemy2(1200,630,"enemy2"))
-        this.gameobjects.push(new Code(300,200,"code"))
-        this.gameobjects.push(new Robot(200,600,"robot"))
         
+        // Spawning random clouds
+        for (let i = 0; i < 5; i++) {
+            let randomX = 400 * i * Math.random() + 200
+            let randomY = Math.random() * 200 + 100
+            let randomXSpeed = 0.1 
+            let randomCloudNumber = Math.floor(Math.random() * (4 - 1) ) + 1;
+            let randomCloud = "cloud" + randomCloudNumber
+            this.gameobjects.push(new Cloud(randomX,randomY,randomCloud,randomXSpeed))
+        }
+
+        this.gameobjects.push(new Background(0,0,"background"))
+        this.gameobjects.push(new Tree(1000,400,"tree"))
+        this.gameobjects.push(new Checkpoint(2000,470,"checkpoint"))
+        this.gameobjects.push(new Enemy1(3000,630,"enemy1"))
+        this.gameobjects.push(new Enemy2(3500,630,"enemy2"))
+        this.gameobjects.push(new Code(800,200,"code"))
+        this.gameobjects.push(new Robot(600,600,"robot"))
+        this.timer = 300
+        setInterval(this.timeIt, 1000)
         this.gameLoop()
+    }
+
+    private timeIt() {
+        this.timer - 1
+        console.log(this.timer);
     }
     
     public gameLoop(): void {
+
+
+        
         // Looping through the array of gameobjects to use for collision.
         for (const gameobject of this.gameobjects) {
             

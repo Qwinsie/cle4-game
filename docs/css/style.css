@@ -82,6 +82,27 @@ code {
     width: 512px; height: 512px;
 }
 
+cloud1 {
+    background-image: url(../img/cloud1.png);
+    width: 200px; height: 120px;
+}
+
+cloud2 {
+    background-image: url(../img/cloud2.png);
+    width: 190px; height: 120px;
+}
+
+cloud3 {
+    background-image: url(../img/cloud3.png);
+    width: 220px; height: 130px;
+}
+
+checkpoint {
+    background-image: url(../img/checkpoint.png);
+    width: 230px; height: 260px;
+}
+
+
 canvas {
     width:1440px; height: 900px;
     border: 3px inherit black;

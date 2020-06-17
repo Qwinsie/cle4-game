@@ -271,6 +271,7 @@ class Game {
     constructor() {
         this.gameobjects = [];
         this.score = 0;
+        this.timer = 0;
         this.playingTerminal1 = false;
         this.upKey = 87;
         this.downKey = 83;
@@ -287,13 +288,28 @@ class Game {
         this.div = document.createElement("div");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.div);
+        for (let i = 0; i < 5; i++) {
+            let randomX = 400 * i * Math.random() + 200;
+            let randomY = Math.random() * 200 + 100;
+            let randomXSpeed = 0.1;
+            let randomCloudNumber = Math.floor(Math.random() * (4 - 1)) + 1;
+            let randomCloud = "cloud" + randomCloudNumber;
+            this.gameobjects.push(new Cloud(randomX, randomY, randomCloud, randomXSpeed));
+        }
         this.gameobjects.push(new Background(0, 0, "background"));
-        this.gameobjects.push(new Tree(500, 400, "tree"));
-        this.gameobjects.push(new Enemy1(1000, 630, "enemy1"));
-        this.gameobjects.push(new Enemy2(1200, 630, "enemy2"));
-        this.gameobjects.push(new Code(300, 200, "code"));
-        this.gameobjects.push(new Robot(200, 600, "robot"));
+        this.gameobjects.push(new Tree(1000, 400, "tree"));
+        this.gameobjects.push(new Checkpoint(2000, 470, "checkpoint"));
+        this.gameobjects.push(new Enemy1(3000, 630, "enemy1"));
+        this.gameobjects.push(new Enemy2(3500, 630, "enemy2"));
+        this.gameobjects.push(new Code(800, 200, "code"));
+        this.gameobjects.push(new Robot(600, 600, "robot"));
+        this.timer = 300;
+        setInterval(this.timeIt, 1000);
         this.gameLoop();
+    }
+    timeIt() {
+        this.timer - 1;
+        console.log(this.timer);
     }
     gameLoop() {
         for (const gameobject of this.gameobjects) {
@@ -345,6 +361,22 @@ class Game {
     }
 }
 window.addEventListener("load", () => new Game());
+class Checkpoint extends GameObject {
+    constructor(xStart, yStart, name) {
+        super(xStart, yStart, name);
+    }
+}
+class Cloud extends GameObject {
+    constructor(xStart, yStart, name, speed) {
+        super(xStart, yStart, name);
+        this.xspeed = 0;
+        this.xspeed = speed;
+    }
+    update() {
+        this._x += this.xspeed;
+        this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
+    }
+}
 class Terminal1Player {
     constructor() {
         this.rightSpeed = 0;
