@@ -1,7 +1,7 @@
 # B.O.B
 
-The game B.O.B in TypeScript made by H4CKERMEN.
+The Puzzle/Platformer game B.O.B in TypeScript made by Team H4CKERMEN. This is a DOM-based game.
 
-You want to play? 
-Go to https://qwinsie.github.io/cle4-game/ 
+You want to play? Give it a try by clicking on the following link: https://qwinsie.github.io/cle4-game/ 
+
 Made by: Dennis, Furkan, Lucas and Quincy
