@@ -17,4 +17,5 @@ Made by:
 - [Quincy](https://github.com/Qwinsie) is the Github Repository Owner and Content Creator.<br>
 
 **Note:** We were all involved in the project and helped eachother where we could. We all did coding, designing and creative thinking.<br>
+
 It is MIT licensed (More information about licenses can be found [here](https://choosealicense.com/)). Make sure to [follow the project on github](https://github.com/Qwinsie/cle4-game).
