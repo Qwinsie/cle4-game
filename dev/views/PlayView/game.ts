@@ -132,7 +132,7 @@ class Game {
             }
     }
 
-    private checkCollision(a: ClientRect, b: ClientRect) {
+    private checkCollision(a: ClientRect, b: ClientRect): boolean {
         return (a.left <= b.right &&
                 b.left <= a.right &&
                 a.top <= b.bottom &&

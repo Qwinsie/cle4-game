@@ -122,7 +122,6 @@ class GameObject {
         this.draw()
     }
 
-    
     protected draw() {
         this._div.style.transform = `translate(${this._x}px, ${this._y}px) scale(${this.xscale}, ${this.yscale})`
     }
