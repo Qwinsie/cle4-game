@@ -315,7 +315,6 @@ class Game {
     }
     gameLoop() {
         this.timer++;
-        console.log(this.timer);
         if (!this.playingTerminal) {
             for (const gameobject of this.gameobjects) {
                 this.checkRobotCollisions();

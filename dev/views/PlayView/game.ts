@@ -83,7 +83,7 @@ class Game {
     public gameLoop(): void {
         this.timer++
         // hier kan je een timer bijhouden, 60fps
-        console.log(this.timer)
+        // console.log(this.timer)
         
         
         // update gameobjects OR game terminal
