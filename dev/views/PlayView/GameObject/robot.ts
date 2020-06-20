@@ -102,7 +102,11 @@ class Robot extends GameObject {
             this.yVelo = 0;
         }
 
+        if(this._x < 0){
+            this._x = 0
+            this.xVelo = 0
+        }
+
         super.update()
-        //this._div.style.transform = `translate(${this._x}px, ${this._y}px) scaleX(${this.flip})`
     }
 }

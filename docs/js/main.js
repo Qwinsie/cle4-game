@@ -66,6 +66,8 @@ class GameObject {
                 if (this.right) {
                     this.xVelo -= 1;
                 }
+                this._x += this.xVelo;
+                this.xVelo *= 0.9;
             }
         }
         else {
@@ -78,8 +80,6 @@ class GameObject {
                 }
             }
         }
-        this._x += this.xVelo;
-        this.xVelo *= 0.9;
         this.draw();
     }
     draw() {
@@ -170,6 +170,10 @@ class Robot extends GameObject {
             this._y = 600 - 16 - 32;
             this.yVelo = 0;
         }
+        if (this._x < 0) {
+            this._x = 0;
+            this.xVelo = 0;
+        }
         super.update();
     }
 }
@@ -178,8 +182,6 @@ class Code extends GameObject {
         super(xStart, yStart, name, game);
         this.collisionRobotCode = false;
         this.collected = false;
-        this.xscale = 0.2;
-        this.yscale = 0.2;
         super.draw();
     }
     update() {
@@ -290,14 +292,6 @@ class Game {
         this.div = document.createElement("div");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.div);
-        this.background = new Background(0, 0, "background", this);
-        this.gameobjects.push(this.background);
-        this.gameobjects.push(new Tree(500, 400, "tree", this));
-        this.gameobjects.push(new Enemy1(1000, 630, "enemy1", this));
-        this.gameobjects.push(new Enemy2(1200, 630, "enemy2", this));
-        this.gameobjects.push(new Code(300, 200, "code", this));
-        this.robot = new Robot(200, 600, "robot", this);
-        this.gameobjects.push(this.robot);
         for (let i = 0; i < 5; i++) {
             let randomX = 400 * i * Math.random() + 200;
             let randomY = Math.random() * 200 + 100;
@@ -306,18 +300,21 @@ class Game {
             let randomCloud = "cloud" + randomCloudNumber;
             this.gameobjects.push(new Cloud(randomX, randomY, randomCloud, randomXSpeed, this));
         }
-        this.gameobjects.push(new Background(0, 0, "background", this));
+        this.background = new Background(0, 0, "background", this);
+        this.gameobjects.push(this.background);
         this.gameobjects.push(new Tree(1200, 400, "tree", this));
         this.gameobjects.push(new Checkpoint(2000, 470, "checkpoint", this));
         this.gameobjects.push(new Enemy1(3000, 630, "enemy1", this));
         this.gameobjects.push(new Enemy2(3500, 630, "enemy2", this));
-        this.gameobjects.push(new Code(1000, 200, "code", this));
+        this.gameobjects.push(new Code(1200, 500, "code", this));
         this.gameobjects.push(new Sign(700, 400, "sign", this));
-        this.gameobjects.push(new Robot(500, 600, "robot", this));
+        this.robot = new Robot(200, 600, "robot", this);
+        this.gameobjects.push(this.robot);
         this.gameLoop();
     }
     gameLoop() {
         this.timer++;
+        console.log(this.timer);
         if (!this.playingTerminal) {
             for (const gameobject of this.gameobjects) {
                 this.checkRobotCollisions();
@@ -361,7 +358,6 @@ class Game {
         if (bgposition.left >= 0 && left == true) {
             return false;
         }
-        console.log(bgposition.width - window.innerWidth);
         if (bgposition.width - window.innerWidth < bgposition.x && right == true) {
             return false;
         }
@@ -377,6 +373,7 @@ class Game {
         this.playingTerminal = true;
     }
     reset() {
+        location.reload();
     }
 }
 window.addEventListener("load", () => new Game());
