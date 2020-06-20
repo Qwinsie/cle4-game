@@ -8,8 +8,6 @@ class Code extends GameObject {
 
     constructor(xStart: number, yStart: number, name: string, game: Game) {
         super(xStart, yStart, name, game)
-        this.xscale = 0.2
-        this.yscale = 0.2
         super.draw()
     }
 
