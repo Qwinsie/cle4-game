@@ -16,6 +16,7 @@ class Game {
     private timer : number = 0
 
     public playingTerminal : boolean = false
+    public terminalCount : number = 0
     public currentTerminal : GameTerminal1
     
     // Inputs
@@ -108,7 +109,16 @@ class Game {
                 if (gameObjectWithoutRobot instanceof Code) {
                     gameObjectWithoutRobot.collected = true
                     this.updateScore(1)
-                    this.launchGameTerminal1()
+                    switch(this.terminalCount){
+                        case 0:
+                            this.launchGameTerminal1()
+                            break;
+
+                    }
+                        
+                    
+                    
+                    
                 }
 
                 if (gameObjectWithoutRobot instanceof Tree) {
@@ -161,6 +171,7 @@ class Game {
         console.log("TERMINAL STARTING")
         this.currentTerminal = new GameTerminal1(this)
         this.playingTerminal = true
+        this.terminalCount = 1
     }
 
     public reset(): void {

@@ -277,6 +277,7 @@ class Game {
         this.score = 0;
         this.timer = 0;
         this.playingTerminal = false;
+        this.terminalCount = 0;
         this.upKey = 87;
         this.downKey = 83;
         this.leftKey = 65;
@@ -332,7 +333,11 @@ class Game {
                 if (gameObjectWithoutRobot instanceof Code) {
                     gameObjectWithoutRobot.collected = true;
                     this.updateScore(1);
-                    this.launchGameTerminal1();
+                    switch (this.terminalCount) {
+                        case 0:
+                            this.launchGameTerminal1();
+                            break;
+                    }
                 }
                 if (gameObjectWithoutRobot instanceof Tree) {
                     gameObjectWithoutRobot.fixed = true;
@@ -371,6 +376,7 @@ class Game {
         console.log("TERMINAL STARTING");
         this.currentTerminal = new GameTerminal1(this);
         this.playingTerminal = true;
+        this.terminalCount = 1;
     }
     reset() {
         location.reload();
