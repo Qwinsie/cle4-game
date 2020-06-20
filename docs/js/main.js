@@ -522,7 +522,6 @@ class GameTerminal1 {
         this.block.update();
         this.block2.update();
         this.checkBlockPlayerCollision(this.player);
-        console.log("terminal 1 gameloop");
     }
     onKeyDown(e) {
         switch (e.keyCode) {

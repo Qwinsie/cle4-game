@@ -51,7 +51,7 @@ class GameTerminal1 {
 
         this.checkBlockPlayerCollision(this.player)
 
-        console.log("terminal 1 gameloop")
+        // console.log("terminal 1 gameloop")
 
         //if(this.gameInstance.playingTerminal1) {
         //    requestAnimationFrame(()=>this.gameLoop())
