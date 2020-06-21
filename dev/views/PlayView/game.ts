@@ -15,6 +15,8 @@ class Game {
     private background : Background
     private timer : number = 0
 
+    private gameObjectsWithoutRobot2
+
     public playingTerminal : boolean = false
     public currentTerminal : GameTerminal1
     
@@ -42,7 +44,7 @@ class Game {
         game.appendChild(this.div)
 
         // Spawning random clouds
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 1; i++) {
             let randomX = 400 * i * Math.random() + 200
             let randomY = Math.random() * 200 + 100
             let randomXSpeed = 0.1 
@@ -62,28 +64,21 @@ class Game {
         this.gameobjects.push(new Code(1200,500,"code",this))
         this.gameobjects.push(new Sign(700,400,"sign",this))
 
+        this.gameObjectsWithoutRobot2 = this.gameobjects
+
         this.robot = new Robot(200, 600, "robot", this)
         this.gameobjects.push(this.robot)
         
-        // this.timer = 300
+        this.timer = 300
         // geen interval gebruiken, je hebt al een gameloop
         // de interval blijft ook doorlopen als de gameloop stopt / tab inactief is
         // setInterval(this.timeIt, 1000)
         this.gameLoop()
     }
 
-    /*
-    private timeIt() {
-        this.timer - 1
-        console.log(this.timer);
-    }
-    */
-    
     public gameLoop(): void {
-        this.timer++
         // hier kan je een timer bijhouden, 60fps
-        console.log(this.timer)
-        
+        this.updateTimer()
         
         // update gameobjects OR game terminal
         if (!this.playingTerminal) {
@@ -102,13 +97,16 @@ class Game {
 
     private checkRobotCollisions(){
         // Checking if there is collision between the Robot and other gameobjects.
-        for (const gameObjectWithoutRobot of this.gameobjects)
+        for (const gameObjectWithoutRobot of this.gameObjectsWithoutRobot2)
             if (this.checkCollision(this.robot.getFutureRectangle(), gameObjectWithoutRobot.getRectangle())) {
-
+                console.log(gameObjectWithoutRobot);
+                
                 if (gameObjectWithoutRobot instanceof Code) {
                     gameObjectWithoutRobot.collected = true
+                    console.log("test");
                     this.updateScore(1)
                     this.launchGameTerminal1()
+                    this.playingTerminal = true
                 }
 
                 if (gameObjectWithoutRobot instanceof Tree) {
@@ -155,12 +153,17 @@ class Game {
         this.score += addScoreAmount
         document.getElementsByTagName("score")[0].innerHTML = `Score: ${this.score}`
     }
+
+    private updateTimer() {
+        this.timer -= 1
+        document.getElementsByTagName("timer")[0].innerHTML = `Timer: ${this.timer}`
+    }
     
     // Launch Terminal (Puzzle 1)
     private launchGameTerminal1(): void {
+        this.playingTerminal = true
         console.log("TERMINAL STARTING")
         this.currentTerminal = new GameTerminal1(this)
-        this.playingTerminal = true
     }
 
     public reset(): void {
