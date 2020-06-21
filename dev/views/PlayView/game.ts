@@ -80,7 +80,7 @@ class Game {
         this.gameobjects.push(this.robot)
         
         this.timer = 0 /* The timer that counts the amount of seconds */
-        this.realtimer = 10 /* The amount of seconds that the player start with */
+        this.realtimer = 300 /* The amount of seconds that the player start with */
         this.maxtimer = this.realtimer
 
         this.gameLoop()

@@ -315,7 +315,7 @@ class Game {
         this.robot = new Robot(200, 600, "robot", this);
         this.gameobjects.push(this.robot);
         this.timer = 0;
-        this.realtimer = 10;
+        this.realtimer = 300;
         this.maxtimer = this.realtimer;
         this.gameLoop();
     }
