@@ -109,6 +109,8 @@ class Game {
                 if (gameObjectWithoutRobot instanceof Code) {
                     gameObjectWithoutRobot.collected = true
                     this.updateScore(1)
+
+                    // Switch function for knowing which terminal is played. 
                     switch(this.terminalCount){
                         case 0:
                             this.launchGameTerminal1()

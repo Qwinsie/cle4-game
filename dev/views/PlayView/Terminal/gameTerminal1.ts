@@ -14,6 +14,8 @@ class GameTerminal1 {
 
     private score : number = 0
 
+    private timer : number = 0
+
     // Inputs
     private xKey : number
 
@@ -40,6 +42,13 @@ class GameTerminal1 {
         window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
 
         this.update()
+
+        //Game timer init
+        this.gameTimer(4,"countdown")
+        
+        if(this.timer == 0){
+            this.gameTimer(0,"timer")
+        }
     }
 
 
@@ -72,6 +81,45 @@ class GameTerminal1 {
         switch (e.keyCode) {
             case this.xKey:
                 break
+        }
+    }
+
+    // Delay function for timer, creates delay between each count
+    private delay(delay: number){
+        return new Promise(r => {
+            setTimeout(r, delay)
+        })
+    }
+
+    // Global gametimer function (getSeconds = total seconds, getType = what type counter)
+    async gameTimer(getSeconds: number, getType: string)  {
+        
+        //NOTE: Verander van een switch statement naar een if statement
+        switch(getType){
+            case "countdown":
+                this.timer = getSeconds
+                for(let i = getSeconds; i > 0; i--){
+                    
+                    await this.delay(1500)
+                    this.timer = this.timer - 1
+                    
+                    
+                    document.getElementsByTagName("message")[0].innerHTML = `${this.timer}`
+                    if(this.timer == 0){
+                        document.getElementsByTagName("message")[0].innerHTML = ''
+                        this.timer = 0
+                    }
+                }
+                break;
+            
+            case "timer":
+                this.timer = getSeconds
+                for(let i = getSeconds; i = 0; i++){
+                    await this.delay(1000)
+                    this.timer = this.timer + 1
+                    document.getElementsByTagName("message")[0].innerHTML = `${this.timer}`
+                }
+                break;
         }
     }
 

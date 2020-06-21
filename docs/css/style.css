@@ -147,12 +147,16 @@ Terminal1Block {
 }
 
 messagebox {
+    font-family: 'Press Start 2P', cursive;
     z-index: 2;
-    position: fixed;
     z-index: 12;
 }
 
 message {
+    position: absolute;
+    left: 47%;
+    top: 50%;
+    color: red;
     font-size: 100px;
     z-index: 12;
 }

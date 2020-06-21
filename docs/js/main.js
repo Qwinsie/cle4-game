@@ -1,3 +1,12 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 class GameObject {
     constructor(xStart, yStart, name, game) {
         this._x = 0;
@@ -501,6 +510,7 @@ class Terminal1Block {
 class GameTerminal1 {
     constructor(gameInstance) {
         this.score = 0;
+        this.timer = 0;
         console.log("TERMINAL CLASS STARTED");
         this._div = document.createElement("div");
         this.gameInstance = gameInstance;
@@ -515,6 +525,10 @@ class GameTerminal1 {
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
         this.update();
+        this.gameTimer(4, "countdown");
+        if (this.timer == 0) {
+            this.gameTimer(0, "timer");
+        }
     }
     update() {
         this.player.update();
@@ -534,6 +548,37 @@ class GameTerminal1 {
             case this.xKey:
                 break;
         }
+    }
+    delay(delay) {
+        return new Promise(r => {
+            setTimeout(r, delay);
+        });
+    }
+    gameTimer(getSeconds, getType) {
+        return __awaiter(this, void 0, void 0, function* () {
+            switch (getType) {
+                case "countdown":
+                    this.timer = getSeconds;
+                    for (let i = getSeconds; i > 0; i--) {
+                        yield this.delay(1500);
+                        this.timer = this.timer - 1;
+                        document.getElementsByTagName("message")[0].innerHTML = `${this.timer}`;
+                        if (this.timer == 0) {
+                            document.getElementsByTagName("message")[0].innerHTML = '';
+                            this.timer = 0;
+                        }
+                    }
+                    break;
+                case "timer":
+                    this.timer = getSeconds;
+                    for (let i = getSeconds; i = 0; i++) {
+                        yield this.delay(1000);
+                        this.timer = this.timer + 1;
+                        document.getElementsByTagName("message")[0].innerHTML = `${this.timer}`;
+                    }
+                    break;
+            }
+        });
     }
     checkBlockPlayerCollision(player) {
         let hit = this.checkCollision(player.getRectangle(), this.block.getRectangle());
