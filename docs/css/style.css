@@ -139,7 +139,7 @@ battery.red {
     background-image: url(../img/battery_red.png);
 }
 
-battery.flicker {
+battery.shutter {
     background-image: url(../img/battery_flicker.gif);
 }
 

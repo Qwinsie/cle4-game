@@ -315,7 +315,7 @@ class Game {
         this.robot = new Robot(200, 600, "robot", this);
         this.gameobjects.push(this.robot);
         this.timer = 0;
-        this.realtimer = 300;
+        this.realtimer = 10;
         this.maxtimer = this.realtimer;
         this.gameLoop();
     }
@@ -336,29 +336,28 @@ class Game {
         this.timer++;
         if (this.timer > (60 * 2.75)) {
             this.realtimer--;
-            console.log(`De tijd = ${this.realtimer}`);
+            console.log(`Timer: ${this.realtimer}`);
             let timeperc = Math.round(100 * this.realtimer / this.maxtimer);
             document.getElementsByTagName("timerperc")[0].innerHTML = `${timeperc}%`;
             this.timer = 0;
         }
+        if (this.realtimer <= 0) {
+            this.reset();
+        }
         if (this.realtimer <= this.maxtimer / 100 * 10) {
-            this.batterydiv.classList.remove("red");
-            this.batterydiv.classList.add("flicker");
+            this.batterydiv.className = "shutter";
         }
         else if (this.realtimer <= this.maxtimer / 100 * 25) {
-            this.batterydiv.classList.remove("orange");
-            this.batterydiv.classList.add("red");
+            this.batterydiv.className = "red";
         }
         else if (this.realtimer <= this.maxtimer / 100 * 50) {
-            this.batterydiv.classList.remove("yellow");
-            this.batterydiv.classList.add("orange");
+            this.batterydiv.className = "orange";
         }
         else if (this.realtimer <= this.maxtimer / 100 * 75) {
-            this.batterydiv.classList.remove("green");
-            this.batterydiv.classList.add("yellow");
+            this.batterydiv.className = "yellow";
         }
         else if (this.realtimer <= this.maxtimer / 100 * 100) {
-            this.batterydiv.classList.add("green");
+            this.batterydiv.className = "green";
         }
     }
     checkRobotCollisions() {
@@ -374,9 +373,8 @@ class Game {
                     }
                 }
                 if (gameObjectWithoutRobot instanceof Checkpoint) {
-                    this.realtimer = this.maxtimer;
+                    this.realtimer = this.maxtimer + 1;
                     gameObjectWithoutRobot.reached = true;
-                    console.log(this.gameObjectsWithoutRobot2);
                 }
                 if (gameObjectWithoutRobot instanceof Endpoint) {
                     gameObjectWithoutRobot.reached = true;
@@ -660,8 +658,8 @@ class GameTerminal1 {
             b.top <= a.bottom);
     }
     gameOver() {
-        console.log("YOU HAVE DIED");
-        document.getElementsByTagName("message")[0].innerHTML = `YOU HAVE DIED`;
+        console.log("GAME OVER");
+        document.getElementsByTagName("message")[0].innerHTML = `Game Over`;
         this.killAll();
         this.gameInstance.playingTerminal = false;
         this.gameInstance.reset();
