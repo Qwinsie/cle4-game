@@ -86,6 +86,17 @@ timer {
     -webkit-text-stroke: 1px rgb(0, 0, 0);
 }
 
+timerperc {
+    color:white;
+    font-size:40px;
+    width:100%;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 140px;       /*The same as your div height*/
+    font-family: 'Press Start 2P';
+    -webkit-text-stroke: 1.5px rgb(0, 0, 0);
+}
+
 code {
     background-image: url(../img/code.gif);
     width: 80px; height: 80px;
@@ -106,6 +117,32 @@ cloud3 {
     width: 220px; height: 130px;
 }
 
+battery {
+    top:0; right:0;
+    width: 290px; height: 140px;
+    transform: scale(0.5);
+}
+
+battery.green {
+    background-image: url(../img/battery_green.png);
+}
+
+battery.orange {
+    background-image: url(../img/battery_orange.png);
+}
+
+battery.yellow {
+    background-image: url(../img/battery_yellow.png);
+}
+
+battery.red {
+    background-image: url(../img/battery_red.png);
+}
+
+battery.flicker {
+    background-image: url(../img/battery_flicker.gif);
+}
+
 checkpoint {
     background-image: url(../img/checkpoint.png);
     width: 230px; height: 260px;
@@ -116,7 +153,7 @@ endpoint {
     width: 230px; height: 260px;
 }
 
-.green {
+checkpoint.green {
     background-image: url(../img/checkpoint_green.png);
     width: 230px; height: 260px;
 }

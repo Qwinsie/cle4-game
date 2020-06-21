@@ -286,12 +286,14 @@ class Game {
         this.score = 0;
         this.timer = 0;
         this.realtimer = 0;
+        this.maxtimer = 0;
         this.playingTerminal = false;
         this.terminalCount = 0;
         this.finished = false;
         this.div = document.createElement("div");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.div);
+        this.batterydiv = document.getElementsByTagName("battery")[0];
         for (let i = 0; i < 1; i++) {
             let randomX = 400 * i * Math.random() + 200;
             let randomY = Math.random() * 200 + 100;
@@ -314,15 +316,36 @@ class Game {
         this.gameobjects.push(this.robot);
         this.timer = 0;
         this.realtimer = 300;
+        this.maxtimer = this.realtimer;
         this.gameLoop();
     }
     gameLoop() {
         this.timer++;
-        if (this.timer > (60 * 3)) {
-            console.log("1 seconden zijn verstreken");
+        if (this.timer > (60 * 2.75)) {
             this.realtimer--;
-            document.getElementsByTagName("timer")[0].innerHTML = `Timer: ${this.realtimer}`;
+            console.log(`De tijd = ${this.realtimer}`);
+            let timeperc = Math.round(100 * this.realtimer / this.maxtimer);
+            document.getElementsByTagName("timerperc")[0].innerHTML = `${timeperc}%`;
             this.timer = 0;
+        }
+        if (this.realtimer <= this.maxtimer / 100 * 10) {
+            this.batterydiv.classList.remove("red");
+            this.batterydiv.classList.add("flicker");
+        }
+        else if (this.realtimer <= this.maxtimer / 100 * 25) {
+            this.batterydiv.classList.remove("orange");
+            this.batterydiv.classList.add("red");
+        }
+        else if (this.realtimer <= this.maxtimer / 100 * 50) {
+            this.batterydiv.classList.remove("yellow");
+            this.batterydiv.classList.add("orange");
+        }
+        else if (this.realtimer <= this.maxtimer / 100 * 75) {
+            this.batterydiv.classList.remove("green");
+            this.batterydiv.classList.add("yellow");
+        }
+        else if (this.realtimer <= this.maxtimer / 100 * 100) {
+            this.batterydiv.classList.add("green");
         }
         if (!this.playingTerminal) {
             for (const gameobject of this.gameobjects) {
@@ -387,10 +410,6 @@ class Game {
     updateScore(addScoreAmount) {
         this.score += addScoreAmount;
         document.getElementsByTagName("score")[0].innerHTML = `Score: ${this.score}`;
-    }
-    updateTimer() {
-        this.timer -= 1;
-        document.getElementsByTagName("timer")[0].innerHTML = `Timer: ${this.timer}`;
     }
     launchGameTerminal1() {
         this.playingTerminal = true;

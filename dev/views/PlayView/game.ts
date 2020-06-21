@@ -8,6 +8,7 @@
 class Game {
     // Fields
     private div : HTMLElement
+    private batterydiv
     private gameobjects : GameObject[] = []
 
     public score : number = 0
@@ -15,6 +16,7 @@ class Game {
     private background : Background
     private timer : number = 0
     private realtimer : number = 0
+    private maxtimer : number = 0
 
     private gameObjectsWithoutRobot2
 
@@ -47,6 +49,8 @@ class Game {
         let game = document.getElementsByTagName("game")[0]
         game.appendChild(this.div)
 
+        this.batterydiv = document.getElementsByTagName("battery")[0]
+
         // Spawning random clouds
         for (let i = 0; i < 1; i++) {
             let randomX = 400 * i * Math.random() + 200
@@ -76,22 +80,38 @@ class Game {
         
         this.timer = 0
         this.realtimer = 300
-        // geen interval gebruiken, je hebt al een gameloop
-        // de interval blijft ook doorlopen als de gameloop stopt / tab inactief is
-        // setInterval(this.timeIt, 1000)
+        this.maxtimer = this.realtimer
+
         this.gameLoop()
     }
 
     public gameLoop(): void {
-        // hier kan je een timer bijhouden, 60fps
         this.timer++
 
-        if(this.timer > (60 * 3)) {
-            console.log("1 seconden zijn verstreken");
+        if(this.timer > (60 * 2.75)) {
             this.realtimer--
-            document.getElementsByTagName("timer")[0].innerHTML = `Timer: ${this.realtimer}`
+            console.log(`De tijd = ${this.realtimer}`)
+            let timeperc = Math.round(100*this.realtimer/this.maxtimer)
+            document.getElementsByTagName("timerperc")[0].innerHTML = `${timeperc}%`
             this.timer = 0
         }
+
+        if(this.realtimer <= this.maxtimer/100*10) {
+            this.batterydiv.classList.remove("red")
+            this.batterydiv.classList.add("flicker")
+        } else if (this.realtimer <= this.maxtimer/100*25) {
+            this.batterydiv.classList.remove("orange")
+            this.batterydiv.classList.add("red")
+        } else if (this.realtimer <= this.maxtimer/100*50) {
+            this.batterydiv.classList.remove("yellow")
+            this.batterydiv.classList.add("orange")
+        } else if (this.realtimer <= this.maxtimer/100*75) {
+            this.batterydiv.classList.remove("green")
+            this.batterydiv.classList.add("yellow")
+        } else if (this.realtimer <= this.maxtimer/100*100) {
+            this.batterydiv.classList.add("green")
+        }
+        
         
         // update gameobjects OR game terminal
         if (!this.playingTerminal) {
@@ -178,11 +198,6 @@ class Game {
     private updateScore(addScoreAmount: number) {
         this.score += addScoreAmount
         document.getElementsByTagName("score")[0].innerHTML = `Score: ${this.score}`
-    }
-
-    private updateTimer() {
-        this.timer -= 1
-        document.getElementsByTagName("timer")[0].innerHTML = `Timer: ${this.timer}`
     }
     
     // Launch Terminal (Puzzle 1)
