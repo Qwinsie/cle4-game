@@ -1,4 +1,4 @@
-class Checkpoint extends GameObject {
+class Endpoint extends GameObject {
 
     public reached : boolean = false
 
@@ -7,10 +7,9 @@ class Checkpoint extends GameObject {
     }
     
     public update() : void {
-        // When Checkpoint is reached, add class.
+        // When Endpoint is reached 
         if(this.reached) {
             console.log("collected")
-            this._div.classList.add("green")
             this.reached = false
         }
 

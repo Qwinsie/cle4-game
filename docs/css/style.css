@@ -111,6 +111,16 @@ checkpoint {
     width: 230px; height: 260px;
 }
 
+endpoint {
+    background-image: url(../img/endpoint.png);
+    width: 230px; height: 260px;
+}
+
+.green {
+    background-image: url(../img/checkpoint_green.png);
+    width: 230px; height: 260px;
+}
+
 sign {
     background-image: url(../img/sign.png);
     width: 275px; height: 280px;
