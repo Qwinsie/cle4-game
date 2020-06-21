@@ -155,8 +155,8 @@ class GameTerminal1 {
         }
 
     gameOver() {
-        console.log("YOU HAVE DIED")
-        document.getElementsByTagName("message")[0].innerHTML = `YOU HAVE DIED`
+        console.log("GAME OVER")
+        document.getElementsByTagName("message")[0].innerHTML = `Game Over`
         this.killAll()
         this.gameInstance.playingTerminal = false
         this.gameInstance.reset()
