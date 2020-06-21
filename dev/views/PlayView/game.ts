@@ -10,10 +10,11 @@ class Game {
     private div : HTMLElement
     private gameobjects : GameObject[] = []
 
-    private score : number = 0
+    public score : number = 0
     private robot : Robot
     private background : Background
     private timer : number = 0
+    private realtimer : number = 0
 
     private gameObjectsWithoutRobot2
 
@@ -21,21 +22,23 @@ class Game {
     public terminalCount : number = 0
     public currentTerminal : GameTerminal1
     
+    private finished : boolean = false
+
     // Inputs
-    private upKey : number = 87
-    private downKey : number = 83
-    private leftKey : number = 65
-    private rightKey : number = 68
+    // private upKey : number = 87
+    // private downKey : number = 83
+    // private leftKey : number = 65
+    // private rightKey : number = 68
 
-    private oneKey : number = 74
-    private twoKey : number = 75
-    private threeKey : number = 76
-    private fourKey : number = 73
-    private fiveKey : number = 79
-    private sixKey : number = 80
+    // private oneKey : number = 74
+    // private twoKey : number = 75
+    // private threeKey : number = 76
+    // private fourKey : number = 73
+    // private fiveKey : number = 79
+    // private sixKey : number = 80
 
-    private spaceKey : number = 32
-    private escapeKey : number = 27
+    // private spaceKey : number = 32
+    // private escapeKey : number = 27
 
     // Constructor 
     constructor() {
@@ -64,13 +67,15 @@ class Game {
         this.gameobjects.push(new Enemy2(3500,630,"enemy2",this))
         this.gameobjects.push(new Code(1200,500,"code",this))
         this.gameobjects.push(new Sign(700,400,"sign",this))
+        this.gameobjects.push(new Endpoint(4000,470,"endpoint",this))
 
         this.gameObjectsWithoutRobot2 = this.gameobjects
 
         this.robot = new Robot(200, 600, "robot", this)
         this.gameobjects.push(this.robot)
         
-        this.timer = 300
+        this.timer = 0
+        this.realtimer = 300
         // geen interval gebruiken, je hebt al een gameloop
         // de interval blijft ook doorlopen als de gameloop stopt / tab inactief is
         // setInterval(this.timeIt, 1000)
@@ -79,7 +84,14 @@ class Game {
 
     public gameLoop(): void {
         // hier kan je een timer bijhouden, 60fps
-        this.updateTimer()
+        this.timer++
+
+        if(this.timer > (60 * 3)) {
+            console.log("1 seconden zijn verstreken");
+            this.realtimer--
+            document.getElementsByTagName("timer")[0].innerHTML = `Timer: ${this.realtimer}`
+            this.timer = 0
+        }
         
         // update gameobjects OR game terminal
         if (!this.playingTerminal) {
@@ -100,11 +112,9 @@ class Game {
         // Checking if there is collision between the Robot and other gameobjects.
         for (const gameObjectWithoutRobot of this.gameObjectsWithoutRobot2)
             if (this.checkCollision(this.robot.getFutureRectangle(), gameObjectWithoutRobot.getRectangle())) {
-                console.log(gameObjectWithoutRobot);
                 
                 if (gameObjectWithoutRobot instanceof Code) {
                     gameObjectWithoutRobot.collected = true
-                    console.log("test");
                     this.updateScore(1)
                     // Switch function for knowing which terminal is played. 
                     switch(this.terminalCount){
@@ -112,6 +122,17 @@ class Game {
                             this.launchGameTerminal1()
                             break;
                     }
+                }
+
+                if (gameObjectWithoutRobot instanceof Checkpoint) {
+                    gameObjectWithoutRobot.reached = true
+                    console.log(this.gameObjectsWithoutRobot2);
+                }
+
+                if (gameObjectWithoutRobot instanceof Endpoint) {
+                    gameObjectWithoutRobot.reached = true
+                    this.finished = true
+
                 }
 
                 if (gameObjectWithoutRobot instanceof Tree) {

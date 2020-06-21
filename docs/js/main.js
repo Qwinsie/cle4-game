@@ -285,20 +285,10 @@ class Game {
         this.gameobjects = [];
         this.score = 0;
         this.timer = 0;
+        this.realtimer = 0;
         this.playingTerminal = false;
         this.terminalCount = 0;
-        this.upKey = 87;
-        this.downKey = 83;
-        this.leftKey = 65;
-        this.rightKey = 68;
-        this.oneKey = 74;
-        this.twoKey = 75;
-        this.threeKey = 76;
-        this.fourKey = 73;
-        this.fiveKey = 79;
-        this.sixKey = 80;
-        this.spaceKey = 32;
-        this.escapeKey = 27;
+        this.finished = false;
         this.div = document.createElement("div");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.div);
@@ -318,18 +308,22 @@ class Game {
         this.gameobjects.push(new Enemy2(3500, 630, "enemy2", this));
         this.gameobjects.push(new Code(1200, 500, "code", this));
         this.gameobjects.push(new Sign(700, 400, "sign", this));
+        this.gameobjects.push(new Endpoint(4000, 470, "endpoint", this));
         this.gameObjectsWithoutRobot2 = this.gameobjects;
         this.robot = new Robot(200, 600, "robot", this);
         this.gameobjects.push(this.robot);
-        this.timer = 300;
+        this.timer = 0;
+        this.realtimer = 300;
         this.gameLoop();
     }
     gameLoop() {
-<<<<<<< HEAD
-        this.updateTimer();
-=======
         this.timer++;
->>>>>>> e65f0ea68aa3b6da33dbf975916083df9b82fa8d
+        if (this.timer > (60 * 3)) {
+            console.log("1 seconden zijn verstreken");
+            this.realtimer--;
+            document.getElementsByTagName("timer")[0].innerHTML = `Timer: ${this.realtimer}`;
+            this.timer = 0;
+        }
         if (!this.playingTerminal) {
             for (const gameobject of this.gameobjects) {
                 this.checkRobotCollisions();
@@ -344,21 +338,22 @@ class Game {
     checkRobotCollisions() {
         for (const gameObjectWithoutRobot of this.gameObjectsWithoutRobot2)
             if (this.checkCollision(this.robot.getFutureRectangle(), gameObjectWithoutRobot.getRectangle())) {
-                console.log(gameObjectWithoutRobot);
                 if (gameObjectWithoutRobot instanceof Code) {
                     gameObjectWithoutRobot.collected = true;
-                    console.log("test");
                     this.updateScore(1);
-<<<<<<< HEAD
-                    this.launchGameTerminal1();
-                    this.playingTerminal = true;
-=======
                     switch (this.terminalCount) {
                         case 0:
                             this.launchGameTerminal1();
                             break;
                     }
->>>>>>> e65f0ea68aa3b6da33dbf975916083df9b82fa8d
+                }
+                if (gameObjectWithoutRobot instanceof Checkpoint) {
+                    gameObjectWithoutRobot.reached = true;
+                    console.log(this.gameObjectsWithoutRobot2);
+                }
+                if (gameObjectWithoutRobot instanceof Endpoint) {
+                    gameObjectWithoutRobot.reached = true;
+                    this.finished = true;
                 }
                 if (gameObjectWithoutRobot instanceof Tree) {
                     gameObjectWithoutRobot.fixed = true;
@@ -401,11 +396,8 @@ class Game {
         this.playingTerminal = true;
         console.log("TERMINAL STARTING");
         this.currentTerminal = new GameTerminal1(this);
-<<<<<<< HEAD
-=======
         this.playingTerminal = true;
         this.terminalCount = 1;
->>>>>>> e65f0ea68aa3b6da33dbf975916083df9b82fa8d
     }
     reset() {
         location.reload();
@@ -415,6 +407,15 @@ window.addEventListener("load", () => new Game());
 class Checkpoint extends GameObject {
     constructor(xStart, yStart, name, game) {
         super(xStart, yStart, name, game);
+        this.reached = false;
+    }
+    update() {
+        if (this.reached) {
+            console.log("collected");
+            this._div.classList.add("green");
+            this.reached = false;
+        }
+        super.update();
     }
 }
 class Cloud extends GameObject {
@@ -426,6 +427,19 @@ class Cloud extends GameObject {
     update() {
         this._x += this.xspeed;
         this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
+    }
+}
+class Endpoint extends GameObject {
+    constructor(xStart, yStart, name, game) {
+        super(xStart, yStart, name, game);
+        this.reached = false;
+    }
+    update() {
+        if (this.reached) {
+            console.log("collected");
+            this.reached = false;
+        }
+        super.update();
     }
 }
 class Sign extends GameObject {
