@@ -320,6 +320,19 @@ class Game {
         this.gameLoop();
     }
     gameLoop() {
+        this.timerUpdate();
+        if (!this.playingTerminal) {
+            for (const gameobject of this.gameobjects) {
+                this.checkRobotCollisions();
+                gameobject.update();
+            }
+        }
+        else {
+            this.currentTerminal.update();
+        }
+        requestAnimationFrame(() => this.gameLoop());
+    }
+    timerUpdate() {
         this.timer++;
         if (this.timer > (60 * 2.75)) {
             this.realtimer--;
@@ -347,16 +360,6 @@ class Game {
         else if (this.realtimer <= this.maxtimer / 100 * 100) {
             this.batterydiv.classList.add("green");
         }
-        if (!this.playingTerminal) {
-            for (const gameobject of this.gameobjects) {
-                this.checkRobotCollisions();
-                gameobject.update();
-            }
-        }
-        else {
-            this.currentTerminal.update();
-        }
-        requestAnimationFrame(() => this.gameLoop());
     }
     checkRobotCollisions() {
         for (const gameObjectWithoutRobot of this.gameObjectsWithoutRobot2)
@@ -371,6 +374,7 @@ class Game {
                     }
                 }
                 if (gameObjectWithoutRobot instanceof Checkpoint) {
+                    this.realtimer = this.maxtimer;
                     gameObjectWithoutRobot.reached = true;
                     console.log(this.gameObjectsWithoutRobot2);
                 }

@@ -86,6 +86,24 @@ class Game {
     }
 
     public gameLoop(): void {
+        this.timerUpdate()
+        
+        // update gameobjects OR game terminal
+        if (!this.playingTerminal) {
+            // Looping through the array of gameobjects to use for collision.
+            for (const gameobject of this.gameobjects) {
+                this.checkRobotCollisions()
+                gameobject.update()
+            }
+        } else {
+            this.currentTerminal.update()
+        }
+
+        // gameloop altijd in game.ts
+        requestAnimationFrame(() => this.gameLoop())
+    }
+
+    private timerUpdate(): void {
         this.timer++
 
         if(this.timer > (60 * 2.75)) {
@@ -111,21 +129,6 @@ class Game {
         } else if (this.realtimer <= this.maxtimer/100*100) {
             this.batterydiv.classList.add("green")
         }
-        
-        
-        // update gameobjects OR game terminal
-        if (!this.playingTerminal) {
-            // Looping through the array of gameobjects to use for collision.
-            for (const gameobject of this.gameobjects) {
-                this.checkRobotCollisions()
-                gameobject.update()
-            }
-        } else {
-            this.currentTerminal.update()
-        }
-
-        // gameloop altijd in game.ts
-        requestAnimationFrame(() => this.gameLoop())
     }
 
     private checkRobotCollisions(){
@@ -145,6 +148,7 @@ class Game {
                 }
 
                 if (gameObjectWithoutRobot instanceof Checkpoint) {
+                    this.realtimer = this.maxtimer
                     gameObjectWithoutRobot.reached = true
                     console.log(this.gameObjectsWithoutRobot2);
                 }
@@ -152,7 +156,6 @@ class Game {
                 if (gameObjectWithoutRobot instanceof Endpoint) {
                     gameObjectWithoutRobot.reached = true
                     this.finished = true
-
                 }
 
                 if (gameObjectWithoutRobot instanceof Tree) {
