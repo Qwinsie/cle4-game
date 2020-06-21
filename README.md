@@ -2,11 +2,11 @@
 
 The Puzzle/Platformer Arcade Game B.O.B in TypeScript made by Team H4CKERMEN. This is a DOM-based game.<br>
 
-![Preview](https://raw.githubusercontent.com/Qwinsie/cle4-game/master/docs/img/preview.PNG)<br
+![Preview](https://raw.githubusercontent.com/Qwinsie/cle4-game/master/docs/img/preview.PNG)
 
 ## How to play:
 Your name is B.O.B, the Robot that gets powered on for the first time. Your objective is to explore and learn the world by hunting the codeclouds. But be fast, your battery cannot run forever. Luckily there are checkpoints on the way that will recharge your battery so that you can continue on.<br> 
-![Battery](https://raw.githubusercontent.com/Qwinsie/cle4-game/master/docs/img/battery.gif)<br>
+![Battery](https://raw.githubusercontent.com/Qwinsie/cle4-game/master/docs/img/battery.gif)
 
 Do you need help with playing the game? Send me a message and I will try to help you out.
 
