@@ -370,7 +370,6 @@ class Game {
         }
         this.background = new Background(0, 0, "background", this);
         this.gameobjects.push(this.background);
-        this.gameobjects.push(new Tree(1200, 400, "tree", this));
         this.gameobjects.push(new Checkpoint(2000, 470, "checkpoint", this));
         this.gameobjects.push(new Enemy1(3000, 630, "enemy1", this));
         this.gameobjects.push(new Enemy2(3500, 630, "enemy2", this));
@@ -381,6 +380,11 @@ class Game {
         this.gameObjectsWithoutRobot2 = this.gameobjects;
         this.robot = new Robot(200, 600, "robot", this);
         this.gameobjects.push(this.robot);
+        this.gameobjects.push(new Tree(1200, 400, "tree", this));
+        for (let i = 4; i < 20; i++) {
+            let treeX = +i * 400 + (Math.random() * 300);
+            this.gameobjects.push(new Tree(treeX, 400, "tree", this));
+        }
         this.timer = 0;
         this.realtimer = 300;
         this.maxtimer = this.realtimer;
