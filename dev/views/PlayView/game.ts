@@ -14,11 +14,14 @@ class Game {
     public score : number = 0
     private robot : Robot
     private background : Background
-    private timer : number = 0
+    public timer : number = 0
     private realtimer : number = 0
+    private realtimerup : number = 0
     private maxtimer : number = 0
 
     private gameObjectsWithoutRobot2
+
+    private scoreboardview
 
     public playingTerminal : boolean = false
     public terminalCount : number = 0
@@ -70,6 +73,7 @@ class Game {
         this.gameobjects.push(new Checkpoint(2000,470,"checkpoint",this))
         this.gameobjects.push(new Enemy1(3000,630,"enemy1",this))
         this.gameobjects.push(new Enemy2(3500,630,"enemy2",this))
+        this.gameobjects.push(new Enemy2(700,630,"enemy2",this))
         this.gameobjects.push(new Code(1200,500,"code",this))
         this.gameobjects.push(new Sign(700,400,"sign",this))
         this.gameobjects.push(new Endpoint(4000,470,"endpoint",this))
@@ -94,6 +98,12 @@ class Game {
             // Looping through the array of gameobjects to use for collision.
             for (const gameobject of this.gameobjects) {
                 this.checkRobotCollisions()
+                if (gameobject instanceof Enemy2) {
+                    if(this.realtimerup >= 3 ) {
+                        gameobject.jump()
+                        this.realtimerup = 0
+                    }
+                }
                 gameobject.update()
             }
         } else {
@@ -109,6 +119,8 @@ class Game {
         // Timer that counts the amount of seconds. (not perfect)
         if(this.timer > (60 * 2.75)) {
             this.realtimer--
+            this.realtimerup++
+            console.log(this.realtimerup)
             console.log(`Timer: ${this.realtimer}`)
             let timeperc = Math.round(100*this.realtimer/this.maxtimer)
             document.getElementsByTagName("timerperc")[0].innerHTML = `${timeperc}%`
@@ -130,15 +142,16 @@ class Game {
         } else if (this.realtimer <= this.maxtimer/100*100) { /* 100% */
             this.batterydiv.className = "green"
         }
+
     }
 
     private checkRobotCollisions(): void {
         // Checking if there is collision between the Robot and other gameobjects.
-        for (const gameObjectWithoutRobot of this.gameObjectsWithoutRobot2)
-            if (this.checkCollision(this.robot.getFutureRectangle(), gameObjectWithoutRobot.getRectangle())) {
+        for (const otherObjects of this.gameObjectsWithoutRobot2)
+            if (this.checkCollision(this.robot.getFutureRectangle(), otherObjects.getRectangle())) {
                 
-                if (gameObjectWithoutRobot instanceof Code) {
-                    gameObjectWithoutRobot.collected = true
+                if (otherObjects instanceof Code) {
+                    otherObjects.collected = true
                     this.updateScore(1)
                     // Switch function for knowing which terminal is played. 
                     switch(this.terminalCount){
@@ -148,27 +161,30 @@ class Game {
                     }
                 }
 
-                if (gameObjectWithoutRobot instanceof Checkpoint) {
+                if (otherObjects instanceof Checkpoint) {
                     this.realtimer = this.maxtimer + 1
-                    gameObjectWithoutRobot.reached = true
+                    otherObjects.reached = true
                 }
 
-                if (gameObjectWithoutRobot instanceof Endpoint) {
-                    gameObjectWithoutRobot.reached = true
+                if (otherObjects instanceof Endpoint) {
+                    otherObjects.reached = true
+                    if(!this.finished) {
+                        this.reachedEndPoint()
+                    }
                     this.finished = true
                 }
 
-                if (gameObjectWithoutRobot instanceof Tree) {
-                    gameObjectWithoutRobot.fixed = true
+                if (otherObjects instanceof Tree) {
+                    otherObjects.fixed = true
                 }
 
-                if (gameObjectWithoutRobot instanceof Enemy1) {
+                if (otherObjects instanceof Enemy1) {
                     this.updateScore(1)
-                    gameObjectWithoutRobot.kill()
+                    otherObjects.kill()
                 }
-                if (gameObjectWithoutRobot instanceof Enemy2) {
+                if (otherObjects instanceof Enemy2) {
                     this.updateScore(1)
-                    gameObjectWithoutRobot.kill()
+                    otherObjects.kill()
                 }
    
             }
@@ -210,6 +226,11 @@ class Game {
         this.currentTerminal = new GameTerminal1(this)
         this.playingTerminal = true
         this.terminalCount = 1
+    }
+
+    private reachedEndPoint() : void {
+        this.scoreboardview = new ScoreBoardView()
+        this.scoreboardview.createForm(this.score)
     }
 
     public reset(): void {
