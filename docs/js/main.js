@@ -7,6 +7,73 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+class ScoreBoardView {
+    constructor() {
+        this.$form = null;
+        this.$nameField = null;
+        this.$scoreField = null;
+        this.currentScore = null;
+        console.log("ScoreBoardView created");
+    }
+    createForm(score) {
+        this.createform = document.createElement("form");
+        this.createform.setAttribute("action", "");
+        this.createform.setAttribute("method", "post");
+        let game = document.getElementsByTagName("game")[0];
+        game.appendChild(this.createform);
+        let heading = document.createElement('h2');
+        heading.innerHTML = "Score";
+        this.createform.appendChild(heading);
+        var line = document.createElement('hr');
+        this.createform.appendChild(line);
+        var linebreak = document.createElement('br');
+        this.createform.appendChild(linebreak);
+        var namelabel = document.createElement('label');
+        namelabel.innerHTML = "Your Name : ";
+        this.createform.appendChild(namelabel);
+        var inputelement = document.createElement('input');
+        inputelement.setAttribute("type", "text");
+        inputelement.setAttribute("name", "dname");
+        this.createform.appendChild(inputelement);
+        var linebreak = document.createElement('br');
+        this.createform.appendChild(linebreak);
+        var usernamelabel = document.createElement('label');
+        usernamelabel.innerHTML = "Score : ";
+        this.createform.appendChild(usernamelabel);
+        var heading2 = document.createElement('h2');
+        heading2.innerHTML = `${score}`;
+        this.createform.appendChild(heading2);
+        var linebreak = document.createElement('br');
+        this.createform.appendChild(linebreak);
+    }
+    addScore(name, score) {
+        console.log(name + " " + score);
+        let list = document.querySelector("#scores");
+        const newli = document.createElement("li");
+        newli.innerHTML = `${name} ${score}`;
+    }
+    getScore() {
+        let score = localStorage.getItem('score');
+        if (score) {
+            return JSON.parse(score);
+        }
+        else {
+            return [];
+        }
+    }
+    fillFieldsFromLocalStorage() {
+        if (localStorage.getItem('name') !== null) {
+            this.$nameField.value = localStorage.getItem('name');
+            this.$scoreField.value = localStorage.getItem('score');
+        }
+    }
+    submitHandler(e) {
+        e.preventDefault();
+        localStorage.setItem('name', this.$nameField.value);
+        this.currentScore.push(this.$scoreField.value);
+        localStorage.setItem('score', JSON.stringify(this.currentScore));
+    }
+}
 class GameObject {
     constructor(xStart, yStart, name, game) {
         this._x = 0;
@@ -238,23 +305,21 @@ class Enemy2 extends GameObject {
     update() {
         if (this.jumping == false) {
             this.yVelo -= 40;
+            this.yVelo += 1.4;
+            this._y += this.yVelo;
+            this.yVelo *= 0.90;
             this.jumping = true;
+            console.log("Jumping");
         }
-        this.yVelo += 1.4;
-        this._y += this.yVelo;
-        this.yVelo *= 0.90;
         if (this._y > 600) {
-            this.jumping = false;
             this._y = 600;
             this.yVelo = 0;
         }
-        let newX = this._x - this.leftspeed + this.rightspeed;
-        if (newX < this._x || newX > this._x || this._y <= 600) {
-            if (newX > 0 && newX < (1440 - this._div.clientWidth)) {
-                this._x = newX;
-            }
-            super.update();
-        }
+        super.update();
+    }
+    jump() {
+        this.jumping = false;
+        console.log("Ready to jump");
     }
     kill() {
         this.alive = false;
@@ -286,6 +351,7 @@ class Game {
         this.score = 0;
         this.timer = 0;
         this.realtimer = 0;
+        this.realtimerup = 0;
         this.maxtimer = 0;
         this.playingTerminal = false;
         this.terminalCount = 0;
@@ -308,6 +374,7 @@ class Game {
         this.gameobjects.push(new Checkpoint(2000, 470, "checkpoint", this));
         this.gameobjects.push(new Enemy1(3000, 630, "enemy1", this));
         this.gameobjects.push(new Enemy2(3500, 630, "enemy2", this));
+        this.gameobjects.push(new Enemy2(700, 630, "enemy2", this));
         this.gameobjects.push(new Code(1200, 500, "code", this));
         this.gameobjects.push(new Sign(700, 400, "sign", this));
         this.gameobjects.push(new Endpoint(4000, 470, "endpoint", this));
@@ -324,6 +391,12 @@ class Game {
         if (!this.playingTerminal) {
             for (const gameobject of this.gameobjects) {
                 this.checkRobotCollisions();
+                if (gameobject instanceof Enemy2) {
+                    if (this.realtimerup >= 3) {
+                        gameobject.jump();
+                        this.realtimerup = 0;
+                    }
+                }
                 gameobject.update();
             }
         }
@@ -336,6 +409,8 @@ class Game {
         this.timer++;
         if (this.timer > (60 * 2.75)) {
             this.realtimer--;
+            this.realtimerup++;
+            console.log(this.realtimerup);
             console.log(`Timer: ${this.realtimer}`);
             let timeperc = Math.round(100 * this.realtimer / this.maxtimer);
             document.getElementsByTagName("timerperc")[0].innerHTML = `${timeperc}%`;
@@ -361,10 +436,10 @@ class Game {
         }
     }
     checkRobotCollisions() {
-        for (const gameObjectWithoutRobot of this.gameObjectsWithoutRobot2)
-            if (this.checkCollision(this.robot.getFutureRectangle(), gameObjectWithoutRobot.getRectangle())) {
-                if (gameObjectWithoutRobot instanceof Code) {
-                    gameObjectWithoutRobot.collected = true;
+        for (const otherObjects of this.gameObjectsWithoutRobot2)
+            if (this.checkCollision(this.robot.getFutureRectangle(), otherObjects.getRectangle())) {
+                if (otherObjects instanceof Code) {
+                    otherObjects.collected = true;
                     this.updateScore(1);
                     switch (this.terminalCount) {
                         case 0:
@@ -372,24 +447,27 @@ class Game {
                             break;
                     }
                 }
-                if (gameObjectWithoutRobot instanceof Checkpoint) {
+                if (otherObjects instanceof Checkpoint) {
                     this.realtimer = this.maxtimer + 1;
-                    gameObjectWithoutRobot.reached = true;
+                    otherObjects.reached = true;
                 }
-                if (gameObjectWithoutRobot instanceof Endpoint) {
-                    gameObjectWithoutRobot.reached = true;
+                if (otherObjects instanceof Endpoint) {
+                    otherObjects.reached = true;
+                    if (!this.finished) {
+                        this.reachedEndPoint();
+                    }
                     this.finished = true;
                 }
-                if (gameObjectWithoutRobot instanceof Tree) {
-                    gameObjectWithoutRobot.fixed = true;
+                if (otherObjects instanceof Tree) {
+                    otherObjects.fixed = true;
                 }
-                if (gameObjectWithoutRobot instanceof Enemy1) {
+                if (otherObjects instanceof Enemy1) {
                     this.updateScore(1);
-                    gameObjectWithoutRobot.kill();
+                    otherObjects.kill();
                 }
-                if (gameObjectWithoutRobot instanceof Enemy2) {
+                if (otherObjects instanceof Enemy2) {
                     this.updateScore(1);
-                    gameObjectWithoutRobot.kill();
+                    otherObjects.kill();
                 }
             }
     }
@@ -419,6 +497,10 @@ class Game {
         this.currentTerminal = new GameTerminal1(this);
         this.playingTerminal = true;
         this.terminalCount = 1;
+    }
+    reachedEndPoint() {
+        this.scoreboardview = new ScoreBoardView();
+        this.scoreboardview.createForm(this.score);
     }
     reset() {
         location.reload();
@@ -457,7 +539,6 @@ class Endpoint extends GameObject {
     }
     update() {
         if (this.reached) {
-            console.log("collected");
             this.reached = false;
         }
         super.update();
