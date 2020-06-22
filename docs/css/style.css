@@ -11,6 +11,22 @@ game * {
     background-repeat: no-repeat;
 }
 
+form {
+    position: absolute;
+    color: white;
+    text-align: center;
+    font-size:26px;
+    margin-top: 150px;
+    width:100%;
+    vertical-align: middle;
+}
+
+form * {
+    position: relative;
+    font-family: 'Press Start 2P', cursive;
+    -webkit-text-stroke: 1px rgb(0, 0, 0);
+}
+
 leaderboard * {
     position: absolute;
 }
