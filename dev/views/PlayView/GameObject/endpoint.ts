@@ -9,7 +9,6 @@ class Endpoint extends GameObject {
     public update() : void {
         // When Endpoint is reached 
         if(this.reached) {
-            console.log("collected")
             this.reached = false
         }
 
