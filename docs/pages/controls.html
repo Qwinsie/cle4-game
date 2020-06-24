@@ -6,24 +6,29 @@
     <title>Controls</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='../css/menu.css'>
+    <link href='https://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
     <game>
         <div class="canvas">
             <div class="div8">
-                <h2>&lt;&lt; Back</h2>
+                <h2 class="selected">&lt;&lt; Back</h2>
             </div>
             <div class="walk">
                 <img src="../img/joystick.png" alt="joystick" class="joystick">
                 <h2>Left.bll / Right.bll</h2>
+                <h2>(A key / D key)</h2>
             </div>
             <div class="jump">
                 <img src="../img/button.png" alt="buttons" class="button">
                 <h2>Jump.bll</h2>
+                <h2>(Space bar<br>|| W key)</h2>
             </div>
             <div class="sneak">
                 <img src="../img/button.png" alt="buttons" class="button">
                 <h2>Sneak.bll</h2>
+                <h2>(S key)</h2>
             </div>
             <div class="dash">
                 <img src="../img/button.png" alt="buttons" class="button">
@@ -44,5 +49,13 @@
             <div class="div9"></div>
         </div>
     </game>
+    <script>
+        $(document).on('keyup', function(e) {
+                        
+            if (e.which == 13 || e.which == 32){
+               window.location.href = "../index.html"
+            }
+            });
+    </script>
 </body>
 </html>
