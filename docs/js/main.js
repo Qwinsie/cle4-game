@@ -507,8 +507,19 @@ class Game {
         this.scoreboardview = new ScoreBoardView();
         this.scoreboardview.createForm(this.score);
     }
+    delay(delay) {
+        return new Promise(r => {
+            setTimeout(r, delay);
+        });
+    }
     reset() {
-        location.reload();
+        return __awaiter(this, void 0, void 0, function* () {
+            document.getElementsByTagName("score")[0].remove();
+            document.getElementsByTagName("battery")[0].remove();
+            this.robot.div.remove();
+            yield this.delay(5000);
+            location.reload();
+        });
     }
 }
 window.addEventListener("load", () => new Game());
@@ -819,14 +830,11 @@ class GameTerminal1 {
             b.top <= a.bottom);
     }
     gameOver() {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log("GAME OVER");
-            document.getElementsByTagName("message")[0].innerHTML = `Game Over`;
-            this.killAll();
-            this.gameInstance.playingTerminal = false;
-            yield this.delay(5000);
-            this.gameInstance.reset();
-        });
+        console.log("GAME OVER");
+        document.getElementsByTagName("message")[0].innerHTML = `Game Over`;
+        this.killAll();
+        this.gameInstance.playingTerminal = false;
+        this.gameInstance.reset();
     }
     gameWin() {
         this.killAll();

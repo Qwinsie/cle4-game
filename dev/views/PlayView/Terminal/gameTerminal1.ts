@@ -228,12 +228,11 @@ class GameTerminal1 {
             b.top <= a.bottom)
         }
 
-    async gameOver() {
+    gameOver() {
         console.log("GAME OVER")
         document.getElementsByTagName("message")[0].innerHTML = `Game Over`
         this.killAll()
         this.gameInstance.playingTerminal = false
-        await this.delay(5000)
         this.gameInstance.reset()
     }
 
