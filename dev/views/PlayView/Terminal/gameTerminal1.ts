@@ -169,7 +169,7 @@ class GameTerminal1 {
             this.countdown = getSeconds
             for(let i = getSeconds; i > 0; i--){
                     
-                await this.delay(1000)
+                await this.delay(600)
                 this.countdown = this.countdown - 1
                 
                 

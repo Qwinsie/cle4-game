@@ -769,7 +769,7 @@ class GameTerminal1 {
         return __awaiter(this, void 0, void 0, function* () {
             this.countdown = getSeconds;
             for (let i = getSeconds; i > 0; i--) {
-                yield this.delay(1000);
+                yield this.delay(600);
                 this.countdown = this.countdown - 1;
                 document.getElementsByTagName("message")[0].innerHTML = `${this.countdown}`;
                 if (this.countdown == 0) {
