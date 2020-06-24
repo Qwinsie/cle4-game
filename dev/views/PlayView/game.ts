@@ -9,18 +9,18 @@ class Game {
     // Fields
     private div : HTMLElement
     private batterydiv
-    private gameobjects : GameObject[] = []
-
-    public score : number = 0
+    
     private robot : Robot
     private background : Background
+
+    private gameobjects : GameObject[] = []
+
     public timer : number = 0
     private realtimer : number = 0
     private realtimerup : number = 0
     private maxtimer : number = 0
-
-    private gameObjectsWithoutRobot2
-
+    
+    public score : number = 0
     private scoreboardview
 
     public playingTerminal : boolean = false
@@ -28,22 +28,6 @@ class Game {
     public currentTerminal : GameTerminal1
     
     private finished : boolean = false
-
-    // Inputs
-    // private upKey : number = 87
-    // private downKey : number = 83
-    // private leftKey : number = 65
-    // private rightKey : number = 68
-
-    // private oneKey : number = 74
-    // private twoKey : number = 75
-    // private threeKey : number = 76
-    // private fourKey : number = 73
-    // private fiveKey : number = 79
-    // private sixKey : number = 80
-
-    // private spaceKey : number = 32
-    // private escapeKey : number = 27
 
     // Constructor 
     constructor() {
@@ -55,7 +39,7 @@ class Game {
         this.batterydiv = document.getElementsByTagName("battery")[0]
 
         // Spawning random clouds
-        for (let i = 0; i < 1; i++) {
+        for (let i = 0; i < 2; i++) {
             let randomX = 400 * i * Math.random() + 200
             let randomY = Math.random() * 200 + 100
             let randomXSpeed = 0.1 
@@ -69,24 +53,33 @@ class Game {
         this.gameobjects.push(this.background)
 
         this.gameobjects.push(new Tree(1200,400,"tree",this))
-        for (let i = 3; i < 6; i++) {
-            //Random tree positions
-            let treeX =+ i * 400 + (Math.random()*300)
-            this.gameobjects.push(new Tree(treeX,400,"tree",this))
-        }
         
-        this.gameobjects.push(new Checkpoint(2000,470,"checkpoint",this))
-        this.gameobjects.push(new Enemy1(3000,630,"enemy1",this))
-        this.gameobjects.push(new Enemy2(3500,630,"enemy2",this))
-        this.gameobjects.push(new Enemy2(700,630,"enemy2",this))
-        this.gameobjects.push(new Code(1200,500,"code",this))
-        this.gameobjects.push(new Sign(700,400,"sign",this))
-        this.gameobjects.push(new Endpoint(4000,470,"endpoint",this))
+        this.gameobjects.push(new Tree(1600,400,"tree",this))
+        this.gameobjects.push(new Tree(2000,400,"tree",this))
+        this.gameobjects.push(new Tree(2800,400,"tree",this))
+        this.gameobjects.push(new Tree(3200,400,"tree",this))
+        this.gameobjects.push(new Tree(4300,400,"tree",this))
+        this.gameobjects.push(new Tree(5100,400,"tree",this))
+        this.gameobjects.push(new Tree(5400,400,"tree",this))
+        this.gameobjects.push(new Tree(5500,400,"tree",this))
+        this.gameobjects.push(new Tree(6200,400,"tree",this))
+        this.gameobjects.push(new Tree(6600,400,"tree",this))
+        this.gameobjects.push(new Tree(7000,400,"tree",this))
+        this.gameobjects.push(new Tree(7600,400,"tree",this))
+        this.gameobjects.push(new Tree(8300,400,"tree",this))
 
-        this.gameObjectsWithoutRobot2 = this.gameobjects
+        this.gameobjects.push(new Sign(2500,400,"sign",this))
+
+        this.gameobjects.push(new Checkpoint(3700,470,"checkpoint",this))
+        this.gameobjects.push(new Enemy1(3000,630,"enemy1",this))
+        this.gameobjects.push(new Enemy1(4400,630,"enemy1",this))
+        this.gameobjects.push(new Enemy2(4800,630,"enemy2",this))
+        this.gameobjects.push(new Enemy2(5300,630,"enemy2",this))
+        this.gameobjects.push(new Enemy2(6000,630,"enemy2",this))
+        this.gameobjects.push(new Code(1200,500,"code",this))
+        this.gameobjects.push(new Endpoint(8000,470,"endpoint",this))
 
         this.robot = new Robot(200, 600, "robot", this)
-        this.gameobjects.push(this.robot)
 
         
         this.timer = 0 /* The timer that counts the amount of seconds */
@@ -103,15 +96,17 @@ class Game {
         if (!this.playingTerminal) {
             // Looping through the array of gameobjects to use for collision.
             for (const gameobject of this.gameobjects) {
-                this.checkRobotCollisions()
                 if (gameobject instanceof Enemy2) {
-                    if(this.realtimerup >= 3 ) {
-                        gameobject.jump()
-                        this.realtimerup = 0
-                    }
+                        if(this.realtimerup >= 3 ) {
+                            gameobject.jump()
+                            this.realtimerup = 0
+                        }
+                    // Enemy2 jumps every 3 seconds
                 }
+                this.checkRobotCollisions()
                 gameobject.update()
             }
+            this.robot.update()
         } else {
             this.currentTerminal.update()
         }
@@ -125,9 +120,7 @@ class Game {
         // Timer that counts the amount of seconds. (not perfect)
         if(this.timer > (60 * 2.75)) {
             this.realtimer--
-            this.realtimerup++
-            console.log(this.realtimerup)
-            console.log(`Timer: ${this.realtimer}`)
+            this.realtimerup++ // 3 second timer. 1, 2, 3, 1, 2, 3...
             let timeperc = Math.round(100*this.realtimer/this.maxtimer)
             document.getElementsByTagName("timerperc")[0].innerHTML = `${timeperc}%`
             this.timer = 0
@@ -153,11 +146,10 @@ class Game {
 
     private checkRobotCollisions(): void {
         // Checking if there is collision between the Robot and other gameobjects.
-        for (const otherObjects of this.gameObjectsWithoutRobot2)
-            if (this.checkCollision(this.robot.getFutureRectangle(), otherObjects.getRectangle())) {
-                
-                if (otherObjects instanceof Code) {
-                    otherObjects.collected = true
+        for (const gameObject of this.gameobjects)
+            if (this.checkCollision(this.robot.getFutureRectangle(), gameObject.getRectangle())) {
+                if (gameObject instanceof Code) {
+                    gameObject.collected = true
                     this.updateScore(1)
                     // Switch function for knowing which terminal is played. 
                     switch(this.terminalCount){
@@ -167,30 +159,31 @@ class Game {
                     }
                 }
 
-                if (otherObjects instanceof Checkpoint) {
+                if (gameObject instanceof Checkpoint) {
                     this.realtimer = this.maxtimer + 1
-                    otherObjects.reached = true
+                    gameObject.reached = true
                 }
 
-                if (otherObjects instanceof Endpoint) {
-                    otherObjects.reached = true
+                if (gameObject instanceof Endpoint) {
+                    this.realtimer = this.maxtimer + 1
+                    gameObject.reached = true
                     if(!this.finished) {
                         this.reachedEndPoint()
                     }
                     this.finished = true
                 }
 
-                if (otherObjects instanceof Tree) {
-                    otherObjects.fixed = true
+                if (gameObject instanceof Tree) {
+                    gameObject.fixed = true
                 }
-
-                if (otherObjects instanceof Enemy1) {
+                
+                if (gameObject instanceof Enemy1) {
                     this.updateScore(1)
-                    otherObjects.kill()
+                    gameObject.kill()
                 }
-                if (otherObjects instanceof Enemy2) {
+                if (gameObject instanceof Enemy2) {
                     this.updateScore(1)
-                    otherObjects.kill()
+                    gameObject.kill()
                 }
    
             }
