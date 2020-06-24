@@ -603,43 +603,19 @@ class Terminal1Player {
     }
 }
 class Terminal1Block {
-    constructor(x = 0, upkey = 0, downkey = 0, y = 0) {
+    constructor(x = 0, y = 0) {
         this.downSpeed = 0;
         this.upSpeed = 0;
         this.blockSpeed = 20;
         this._div = document.createElement("Terminal1Block");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this._div);
-        this.upkey = upkey;
-        this.downkey = downkey;
         this._x = x;
         this._y = y;
-        window.addEventListener("keydown", (e) => this.onKeyDown(e));
-        window.addEventListener("keyup", (e) => this.onKeyUp(e));
     }
     get div() { return this._div; }
     get x() { return this._x; }
     get y() { return this._y; }
-    onKeyDown(e) {
-        switch (e.keyCode) {
-            case this.upkey:
-                this.upSpeed = this.blockSpeed;
-                break;
-            case this.downkey:
-                this.downSpeed = this.blockSpeed;
-                break;
-        }
-    }
-    onKeyUp(e) {
-        switch (e.keyCode) {
-            case this.upkey:
-                this.upSpeed = 0;
-                break;
-            case this.downkey:
-                this.downSpeed = 0;
-                break;
-        }
-    }
     update() {
         let newPosY = this._y - this.upSpeed + this.downSpeed;
         this._y = newPosY;
@@ -660,8 +636,8 @@ class GameTerminal1 {
         game.appendChild(this._div);
         this.xKey = 100;
         this.player = new Terminal1Player();
-        this.block = new Terminal1Block(70, 0, 0, -400);
-        this.block2 = new Terminal1Block(720, 0, 0, -400);
+        this.block = new Terminal1Block(70, -400);
+        this.block2 = new Terminal1Block(720, -400);
         this.background = new Terminal1Background();
         this.border = new Terminal1Border();
         window.addEventListener("keydown", (e) => this.onKeyDown(e));

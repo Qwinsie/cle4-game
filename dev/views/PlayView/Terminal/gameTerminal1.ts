@@ -33,8 +33,8 @@ class GameTerminal1 {
         this.xKey = 100
 
         this.player = new Terminal1Player()
-        this.block = new Terminal1Block(70, 0, 0, -400)
-        this.block2 = new Terminal1Block(720, 0, 0, -400)
+        this.block = new Terminal1Block(70, -400)
+        this.block2 = new Terminal1Block(720, -400)
         this.background = new Terminal1Background()
         this.border = new Terminal1Border()
 
