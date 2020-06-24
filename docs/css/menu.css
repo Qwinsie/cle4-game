@@ -1,5 +1,6 @@
 body {
     /*font-family: ;*/
+        background-color: #3f3f3f;
     overflow:hidden;
     margin:0px; padding:0px;
 }
@@ -15,7 +16,17 @@ game {
     display: block;
     box-sizing: border-box;
     background-repeat: no-repeat;
+    margin:0px; padding:0px;
+    left:calc(50% - 712px);
+    top:calc(50% - 450px);
+    width:1440px; height:900px;
+    border-radius: 10px;
+    overflow: hidden;
+    border:3px solid rgb(150, 150, 150);
+    box-shadow: 12px 12px 0px rgba(0, 0, 0, 0.5);
 }
+
+
 
 .canvas {
     display: grid;
@@ -24,8 +35,8 @@ game {
     grid-column-gap: 10px;
     grid-row-gap: 10px;
     height: 100%;
-    width: 1440px;
-    height: 900px;
+    width: 1320px;
+    height: 780px;
     background-color: #0d0d0d;
     border: solid gray 40px;
     padding: 20px;
@@ -33,8 +44,8 @@ game {
 
 .start-container {
     height: 100%;
-    width: 1440px;
-    height: 900px;
+    width: 1320px;
+    height: 780px;
     background-color: #0d0d0d;
     border: solid gray 40px;
     padding: 20px;
