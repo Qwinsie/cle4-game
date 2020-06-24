@@ -298,6 +298,8 @@ class Enemy2 extends GameObject {
     constructor(xStart, yStart, name, game) {
         super(xStart, yStart, name, game);
         this.alive = true;
+        this.timer = 0;
+        this.enemyJumpTimer(0);
     }
     update() {
         this.yVelo += 1.4;
@@ -308,6 +310,26 @@ class Enemy2 extends GameObject {
             this.yVelo = 0;
         }
         super.update();
+    }
+    delay(delay) {
+        return new Promise(r => {
+            setTimeout(r, delay);
+        });
+    }
+    enemyJumpTimer(getSeconds) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.timer = getSeconds;
+            for (let i = getSeconds; i >= 0; i++) {
+                yield this.delay(3000);
+                this.timer = this.timer + 1;
+                console.log(this.timer);
+                if (this.timer == 3) {
+                    console.log("Jump!");
+                    this.jump();
+                    this.timer = 0;
+                }
+            }
+        });
     }
     jump() {
         this.jumping = true;
@@ -395,12 +417,6 @@ class Game {
         this.timerUpdate();
         if (!this.playingTerminal) {
             for (const gameobject of this.gameobjects) {
-                if (gameobject instanceof Enemy2) {
-                    if (this.realtimerup >= 3) {
-                        gameobject.jump();
-                        this.realtimerup = 0;
-                    }
-                }
                 this.checkRobotCollisions();
                 gameobject.update();
             }
