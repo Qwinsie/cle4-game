@@ -6,6 +6,9 @@ html, body {
 
 }
 
+audio {
+    display: none;
+}
 
 game * {
     position: absolute;

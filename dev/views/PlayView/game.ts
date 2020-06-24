@@ -221,8 +221,7 @@ class Game {
     }
 
     private reachedEndPoint() : void {
-        this.scoreboardview = new ScoreBoardView()
-        this.scoreboardview.createForm(this.score)
+        this.scoreboardview = new ScoreBoardView(this.score)
     }
 
     //Delay function, delay before stepping into next line
