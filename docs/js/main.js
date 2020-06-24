@@ -612,6 +612,7 @@ class Terminal1Block {
         game.appendChild(this._div);
         this._x = x;
         this._y = y;
+        this.update();
     }
     get div() { return this._div; }
     get x() { return this._x; }
@@ -619,16 +620,15 @@ class Terminal1Block {
     makeBlockMove(f, down) {
         if (f) {
             this.downSpeed = down;
-            if (this._y == 70) {
-                console.log("stop");
-                this.downSpeed = 0;
-                this._y = 70;
-            }
         }
     }
     update() {
         let newPosY = this._y - this.upSpeed + this.downSpeed;
         this._y = newPosY;
+        if (this._y == 100) {
+            this.downSpeed = 0;
+            this._y = 70;
+        }
         this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
     }
     getRectangle() {
@@ -652,16 +652,15 @@ class Terminal2Block {
     makeBlockMove(f, down) {
         if (f) {
             this.downSpeed = down;
-            if (this._y == 70) {
-                console.log("stop!");
-                this.downSpeed = 0;
-                this._y = 70;
-            }
         }
     }
     update() {
         let newPosY = this._y - this.upSpeed + this.downSpeed;
         this._y = newPosY;
+        if (this.y == 100) {
+            this.downSpeed = 0;
+            this._y = 70;
+        }
         this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
     }
     getRectangle() {

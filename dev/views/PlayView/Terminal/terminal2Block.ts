@@ -43,11 +43,7 @@ class Terminal2Block {
     public makeBlockMove(f:boolean, down:number){
         if(f){
             this.downSpeed = down
-            if(this._y == 70){
-                console.log("stop!")
-                this.downSpeed = 0
-                this._y = 70
-            }
+            
         }
     }
 
@@ -60,6 +56,11 @@ class Terminal2Block {
         // if (newPosY > 0 && newPosY + 100 < window.innerHeight) 
 
         this._y = newPosY
+        if(this.y == 100){
+            this.downSpeed = 0
+            this._y = 70
+        }
+
         this._div.style.transform = `translate(${this._x}px, ${this._y}px)`
     }
 
