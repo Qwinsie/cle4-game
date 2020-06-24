@@ -231,8 +231,19 @@ class Game {
         this.scoreboardview = new ScoreBoardView(this.score)
     }
 
-    public reset(): void {
-        location.reload();
+    //Delay function, delay before stepping into next line
+    private delay(delay: number){
+        return new Promise(r => {
+            setTimeout(r, delay)
+        })
+    }
+
+    async reset() {
+        document.getElementsByTagName("score")[0].remove()
+        document.getElementsByTagName("battery")[0].remove()
+        this.robot.div.remove()
+        await this.delay(3000)
+        location.reload()
     }
 }
 window.addEventListener("load", () => new Game())

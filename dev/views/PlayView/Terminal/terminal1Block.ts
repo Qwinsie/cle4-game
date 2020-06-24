@@ -11,6 +11,7 @@ class Terminal1Block {
     private upSpeed : number = 0
 
     private blockSpeed : number = 20
+    private block1Down : boolean = true
 
     // Inputs
     private downkey : number
@@ -46,6 +47,8 @@ class Terminal1Block {
     public makeBlockMove(f:boolean, down:number){
         if(f){
             this.downSpeed = down
+            this.block1Down = true
+            return this.block1Down
         }
     }
 
@@ -62,6 +65,7 @@ class Terminal1Block {
             this.downSpeed = 0
             this._y = 70
         }
+
 
         this._div.style.transform = `translate(${this._x}px, ${this._y}px)`
     }

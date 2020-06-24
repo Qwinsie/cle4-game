@@ -12,6 +12,7 @@ class Terminal2Block {
     private upSpeed : number = 0
 
     private blockSpeed : number = 20
+    private block2Down : boolean
 
     // Inputs
     private downkey : number
@@ -43,9 +44,12 @@ class Terminal2Block {
     public makeBlockMove(f:boolean, down:number){
         if(f){
             this.downSpeed = down
-            
+            this.block2Down = true
+            return this.block2Down
         }
     }
+
+    
 
   
 
@@ -56,7 +60,7 @@ class Terminal2Block {
         // if (newPosY > 0 && newPosY + 100 < window.innerHeight) 
 
         this._y = newPosY
-        if(this.y == 100){
+        if(this._y == 100){
             this.downSpeed = 0
             this._y = 70
         }
