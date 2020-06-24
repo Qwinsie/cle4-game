@@ -29,8 +29,19 @@ class Game {
     
     private finished : boolean = false
 
+    private $form : HTMLElement;
+    private $nameField : HTMLInputElement
+    private $scoreField : HTMLFormElement
+    // private currentScore = null;
+
     // Constructor 
     constructor() {
+
+        // Get HTML Tags from Form
+        this.$form = document.getElementById('form') as HTMLElement;
+        this.$nameField = document.getElementById('name') as HTMLInputElement;
+        this.$scoreField = document.getElementById('score') as HTMLFormElement;
+        
         this.div = document.createElement("div")
 
         let game = document.getElementsByTagName("game")[0]
@@ -228,7 +239,14 @@ class Game {
     }
 
     private reachedEndPoint() : void {
-        this.scoreboardview = new ScoreBoardView(this.score)
+        if(!this.finished) {
+            // this.scoreboardview = new ScoreBoardView(this.score)
+            let form = document.getElementsByTagName("form")[0]
+            form.className = ""
+            this.formFillIn()
+        }
+        this.finished = true
+
     }
 
     //Delay function, delay before stepping into next line
@@ -244,6 +262,53 @@ class Game {
         this.robot.div.remove()
         await this.delay(3000)
         location.reload()
+    }
+
+    private formFillIn() {
+        // getAllScores()
+
+        // Check if localStorage werkt
+        if (typeof window.localStorage === "undefined") {
+            console.error('Local storage is not available in your browser');
+            return;
+        }
+    
+
+
+
+        this.fillFieldsFromLocalStorage();
+
+        // Send Data to LocalStorage
+        this.$form.addEventListener('submit', (e : Event) => this.submitHandler(e));
+    }
+
+    private fillFieldsFromLocalStorage()
+    {
+        // Get Name + Score from LocalStorage
+        // let previousHighScore = localStorage.getItem('score')
+        let currentScore = this.score
+        let name = localStorage.getItem('name')
+        
+        if (name) {
+            this.$nameField.value = name;
+            console.log(this.$nameField.value);
+        }
+
+        if (currentScore) {
+            this.$scoreField.value = currentScore;
+        } else {
+            this.$scoreField.value = 0
+        }
+    }
+
+    private submitHandler(e)
+    {
+        e.preventDefault();
+        localStorage.setItem('name', this.$nameField.value);
+        // localStorage.setItem('score', $scoreField.value);
+
+        localStorage.setItem('score', this.$scoreField.value)
+    
     }
 }
 window.addEventListener("load", () => new Game())
