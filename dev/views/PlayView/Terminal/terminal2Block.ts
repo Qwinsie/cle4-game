@@ -6,6 +6,7 @@ class Terminal2Block {
 
     private _x : number
     private _y : number
+    private newPosY : number
 
     private downSpeed : number = 0
     private upSpeed : number = 0
@@ -37,6 +38,17 @@ class Terminal2Block {
         this._y = y
 
      
+    }
+
+    public makeBlockMove(f:boolean, down:number){
+        if(f){
+            this.downSpeed = down
+            if(this._y == 70){
+                console.log("stop!")
+                this.downSpeed = 0
+                this._y = 70
+            }
+        }
     }
 
   

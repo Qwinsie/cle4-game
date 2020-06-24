@@ -41,6 +41,17 @@ class Terminal1Block {
 
     }
 
+    public makeBlockMove(f:boolean, down:number){
+        if(f){
+            this.downSpeed = down
+            if(this._y == 70){
+                console.log("stop")
+                this.downSpeed = 0
+                this._y = 70
+            }
+        }
+    }
+
 
 
     public update() {

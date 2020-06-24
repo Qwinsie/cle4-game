@@ -144,11 +144,11 @@ class GameTerminal1 {
                 if(this.totalBlinks == 0){
                     this.blinkStop = true
 
-                    // Make block fall booleans true depended on the random number
+                    //Make block fall booleans true depended on the random number
                     if(randomNumber == 0){
-                        this.block1Fall = true
+                        this.block.makeBlockMove(true, 50)
                     } else if(randomNumber == 1){
-                        this.block2Fall == true
+                        this.block2.makeBlockMove(true, 50)
                     }
 
                     this.blockBlinker(getRandomBlock, "stop")

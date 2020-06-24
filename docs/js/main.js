@@ -616,6 +616,16 @@ class Terminal1Block {
     get div() { return this._div; }
     get x() { return this._x; }
     get y() { return this._y; }
+    makeBlockMove(f, down) {
+        if (f) {
+            this.downSpeed = down;
+            if (this._y == 70) {
+                console.log("stop");
+                this.downSpeed = 0;
+                this._y = 70;
+            }
+        }
+    }
     update() {
         let newPosY = this._y - this.upSpeed + this.downSpeed;
         this._y = newPosY;
@@ -639,6 +649,16 @@ class Terminal2Block {
     get div() { return this._div; }
     get x() { return this._x; }
     get y() { return this._y; }
+    makeBlockMove(f, down) {
+        if (f) {
+            this.downSpeed = down;
+            if (this._y == 70) {
+                console.log("stop!");
+                this.downSpeed = 0;
+                this._y = 70;
+            }
+        }
+    }
     update() {
         let newPosY = this._y - this.upSpeed + this.downSpeed;
         this._y = newPosY;
@@ -734,10 +754,10 @@ class GameTerminal1 {
                     if (this.totalBlinks == 0) {
                         this.blinkStop = true;
                         if (randomNumber == 0) {
-                            this.block1Fall = true;
+                            this.block.makeBlockMove(true, 50);
                         }
                         else if (randomNumber == 1) {
-                            this.block2Fall == true;
+                            this.block2.makeBlockMove(true, 50);
                         }
                         this.blockBlinker(getRandomBlock, "stop");
                     }
