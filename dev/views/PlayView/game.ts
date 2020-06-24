@@ -243,7 +243,7 @@ class Game {
         document.getElementsByTagName("score")[0].remove()
         document.getElementsByTagName("battery")[0].remove()
         this.robot.div.remove()
-        await this.delay(5000)
+        await this.delay(3000)
         location.reload();
     }
 }
