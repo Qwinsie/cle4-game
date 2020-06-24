@@ -48,7 +48,7 @@ class ScoreBoardView {
         game.appendChild(this.createform)
 
         let heading = document.createElement('h2'); // Heading of Form
-        heading.innerHTML = "Score";
+        heading.innerHTML = "You did it!";
         this.createform.appendChild(heading);
 
         var line = document.createElement('hr'); // Giving Horizontal Row After Heading
