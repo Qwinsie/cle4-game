@@ -1,15 +1,38 @@
-body {
+html, body {
     /* font-family: (Eigen font); */
+    background-color: #3f3f3f;
     overflow:hidden;
     margin:0px; padding:0px;
+
 }
+
 
 game * {
     position: absolute;
     display: block;
     box-sizing: border-box;
     background-repeat: no-repeat;
+    margin:0px; padding:0px;
 }
+
+game {
+    position: absolute;
+    display: block;
+    margin:0px; padding:0px;
+    box-sizing: border-box;
+    background-repeat: no-repeat;
+    
+    left:calc(50% - 712px);
+    top:calc(50% - 450px);
+    width:1440px; height:900px;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+    border:3px solid rgb(150, 150, 150);
+    box-shadow: 12px 12px 0px rgba(0, 0, 0, 0.5);
+}
+
 
 form {
     position: absolute;
