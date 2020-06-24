@@ -244,7 +244,7 @@ class Game {
         document.getElementsByTagName("battery")[0].remove()
         this.robot.div.remove()
         await this.delay(3000)
-        location.reload();
+        location.reload()
     }
 }
 window.addEventListener("load", () => new Game())
