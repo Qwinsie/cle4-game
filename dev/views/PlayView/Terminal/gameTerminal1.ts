@@ -199,7 +199,7 @@ class GameTerminal1 {
                 this.timer = this.timer + 1
                 if(this.timer == 3){    
                     this.gameWin()
-                    this.updateScore(2)
+                    this.updateScore(2) 
                     document.getElementsByTagName("gamemessage")[0].innerHTML = ``
                 }
             }
