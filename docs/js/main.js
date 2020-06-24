@@ -797,12 +797,14 @@ class GameTerminal1 {
                         if (randomNumber == 0) {
                             this.block.makeBlockMove(true, 50);
                             if (this.block.makeBlockMove(true, 50)) {
+                                document.getElementsByTagName("gamemessage")[0].innerHTML = `Well Done!`;
                                 this.terminalTimer(0);
                             }
                         }
                         else if (randomNumber == 1) {
                             this.block2.makeBlockMove(true, 50);
                             if (this.block2.makeBlockMove(true, 50)) {
+                                document.getElementsByTagName("gamemessage")[0].innerHTML = `Well Done!`;
                                 this.terminalTimer(0);
                             }
                         }
@@ -835,6 +837,7 @@ class GameTerminal1 {
                 if (this.timer == 3) {
                     this.gameWin();
                     this.updateScore(2);
+                    document.getElementsByTagName("gamemessage")[0].innerHTML = ``;
                 }
             }
         });
