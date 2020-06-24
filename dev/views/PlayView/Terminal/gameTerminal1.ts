@@ -1,5 +1,6 @@
 /// <reference path="terminal1Player.ts"/>
 /// <reference path="terminal1Block.ts"/>
+/// <reference path="terminal2Block.ts"/>
 
 class GameTerminal1 {
     // Fields
@@ -8,7 +9,7 @@ class GameTerminal1 {
 
     private player : Terminal1Player
     private block : Terminal1Block
-    private block2 : Terminal1Block
+    private block2 : Terminal2Block
     private background : Terminal1Background
     private border : Terminal1Border
 
@@ -21,6 +22,9 @@ class GameTerminal1 {
     private chosenBlock : boolean = false
     private totalBlinks : number = 3
     private blinkInterval : any
+    protected blinkStop : boolean = false
+    public block1Fall : boolean = false
+    public block2Fall : boolean = false
 
     // Inputs
     private xKey : number
@@ -40,7 +44,7 @@ class GameTerminal1 {
 
         this.player = new Terminal1Player()
         this.block = new Terminal1Block(70, -400)
-        this.block2 = new Terminal1Block(720, -400)
+        this.block2 = new Terminal2Block(720, -400)
         this.background = new Terminal1Background()
         this.border = new Terminal1Border()
 
@@ -63,7 +67,6 @@ class GameTerminal1 {
         this.block2.update()
 
         this.checkBlockPlayerCollision(this.player)
-        console.log(this.chosenBlock)
 
         
 
@@ -129,7 +132,8 @@ class GameTerminal1 {
         if(!this.chosenBlock){
             this.blinkBool = true
             let randomNumber = Math.floor(Math.random() * 2) + 0
-            let getRandomBlock = document.getElementsByTagName("terminal1block")[randomNumber]
+            let blocks = [document.getElementsByTagName("terminal1block")[0], document.getElementsByTagName("terminal2block")[0]]
+            let getRandomBlock = blocks[randomNumber]
             this.blockBlinker(getRandomBlock, "start")
 
             for(let i = this.totalBlinks; i > 0; i--){
@@ -138,8 +142,17 @@ class GameTerminal1 {
 
                 console.log(this.totalBlinks)
                 if(this.totalBlinks == 0){
-                    console.log("stop")
+                    this.blinkStop = true
+
+                    // Make block fall booleans true depended on the random number
+                    if(randomNumber == 0){
+                        this.block1Fall = true
+                    } else if(randomNumber == 1){
+                        this.block2Fall == true
+                    }
+
                     this.blockBlinker(getRandomBlock, "stop")
+                    
                 }
                 
                 

@@ -1,8 +1,8 @@
-class Terminal1Block {
+class Terminal2Block {
     // Fields
     private _div : HTMLElement
     private gameInstance : Game
-   
+    private terminal: GameTerminal1
 
     private _x : number
     private _y : number
@@ -26,9 +26,8 @@ class Terminal1Block {
 
     // Construtor
     constructor(x : number = 0,  
-                y : number = 0,
-                ) {
-        this._div = document.createElement("Terminal1Block")
+                y : number = 0,) {
+        this._div = document.createElement("Terminal2Block")
 
         let game = document.getElementsByTagName("game")[0]
         game.appendChild(this._div)
@@ -38,9 +37,9 @@ class Terminal1Block {
         this._y = y
 
      
-
     }
 
+  
 
 
     public update() {

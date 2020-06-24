@@ -241,6 +241,12 @@ Terminal1Block {
     z-index: 11;
 }
 
+Terminal2Block {
+    background-image: url(../img/terminal1/terminal1_block1.png);
+    width:650px; height:734px;
+    z-index: 11;
+}
+
 .terminal-block-blink {
     background-image: url(../img/terminal1/terminal1_block1_red.png);
     width:650px; height:734px;

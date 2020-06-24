@@ -625,6 +625,29 @@ class Terminal1Block {
         return this._div.getBoundingClientRect();
     }
 }
+class Terminal2Block {
+    constructor(x = 0, y = 0) {
+        this.downSpeed = 0;
+        this.upSpeed = 0;
+        this.blockSpeed = 20;
+        this._div = document.createElement("Terminal2Block");
+        let game = document.getElementsByTagName("game")[0];
+        game.appendChild(this._div);
+        this._x = x;
+        this._y = y;
+    }
+    get div() { return this._div; }
+    get x() { return this._x; }
+    get y() { return this._y; }
+    update() {
+        let newPosY = this._y - this.upSpeed + this.downSpeed;
+        this._y = newPosY;
+        this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
+    }
+    getRectangle() {
+        return this._div.getBoundingClientRect();
+    }
+}
 class GameTerminal1 {
     constructor(gameInstance) {
         this.score = 0;
@@ -632,6 +655,9 @@ class GameTerminal1 {
         this.blinkBool = false;
         this.chosenBlock = false;
         this.totalBlinks = 3;
+        this.blinkStop = false;
+        this.block1Fall = false;
+        this.block2Fall = false;
         console.log("TERMINAL CLASS STARTED");
         this._div = document.createElement("div");
         this.gameInstance = gameInstance;
@@ -640,7 +666,7 @@ class GameTerminal1 {
         this.xKey = 100;
         this.player = new Terminal1Player();
         this.block = new Terminal1Block(70, -400);
-        this.block2 = new Terminal1Block(720, -400);
+        this.block2 = new Terminal2Block(720, -400);
         this.background = new Terminal1Background();
         this.border = new Terminal1Border();
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
@@ -653,7 +679,6 @@ class GameTerminal1 {
         this.block.update();
         this.block2.update();
         this.checkBlockPlayerCollision(this.player);
-        console.log(this.chosenBlock);
     }
     onKeyDown(e) {
         switch (e.keyCode) {
@@ -699,14 +724,21 @@ class GameTerminal1 {
             if (!this.chosenBlock) {
                 this.blinkBool = true;
                 let randomNumber = Math.floor(Math.random() * 2) + 0;
-                let getRandomBlock = document.getElementsByTagName("terminal1block")[randomNumber];
+                let blocks = [document.getElementsByTagName("terminal1block")[0], document.getElementsByTagName("terminal2block")[0]];
+                let getRandomBlock = blocks[randomNumber];
                 this.blockBlinker(getRandomBlock, "start");
                 for (let i = this.totalBlinks; i > 0; i--) {
                     yield this.delay(1000);
                     this.totalBlinks = this.totalBlinks - 1;
                     console.log(this.totalBlinks);
                     if (this.totalBlinks == 0) {
-                        console.log("stop");
+                        this.blinkStop = true;
+                        if (randomNumber == 0) {
+                            this.block1Fall = true;
+                        }
+                        else if (randomNumber == 1) {
+                            this.block2Fall == true;
+                        }
                         this.blockBlinker(getRandomBlock, "stop");
                     }
                 }
