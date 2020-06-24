@@ -6,6 +6,10 @@ html, body {
 
 }
 
+.hidden {
+    display: none;
+}
+
 audio {
     display: none;
 }
@@ -50,9 +54,16 @@ form {
 form * {
     position: relative;
     font-family: 'Press Start 2P', cursive;
+    text-align: center;
     -webkit-text-stroke: 1px rgb(0, 0, 0);
+    margin-top: 10px;
 }
-
+form input {
+width: 50%;
+left:25%;
+height: 50px;
+font-size:40px;
+}
 leaderboard * {
     position: absolute;
 }
