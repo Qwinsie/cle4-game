@@ -96,13 +96,6 @@ class Game {
         if (!this.playingTerminal) {
             // Looping through the array of gameobjects to use for collision.
             for (const gameobject of this.gameobjects) {
-                if (gameobject instanceof Enemy2) {
-                    // Enemy2 jumps every 3 seconds
-                        if(this.realtimerup >= 3 ) {
-                            gameobject.jump()
-                            this.realtimerup = 0
-                        }
-                }
                 this.checkRobotCollisions()
                 gameobject.update()
             }
