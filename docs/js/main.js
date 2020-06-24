@@ -673,14 +673,14 @@ class GameTerminal1 {
     blockBlinker(r) {
         setInterval(function () {
             if (this.blinkBool) {
-                r.classlist.add('terminal-block-blink');
+                r.classList.add('terminal-block-blink');
                 this.blinkBool = false;
             }
             else {
-                r.classlist.remove('terminal-block-blink');
+                r.classList.remove('terminal-block-blink');
                 this.blinkBool = true;
             }
-        }, 1500);
+        }, 1000);
     }
     getRandomBlockBlink() {
         return __awaiter(this, void 0, void 0, function* () {

@@ -101,13 +101,13 @@ class GameTerminal1 {
     private blockBlinker(r:any){
         setInterval(function(){
             if(this.blinkBool){
-                r.classlist.add('terminal-block-blink')
+                r.classList.add('terminal-block-blink')
                 this.blinkBool = false
             } else {
-                r.classlist.remove('terminal-block-blink')
+                r.classList.remove('terminal-block-blink')
                 this.blinkBool = true
             }
-        }, 1500)
+        }, 1000)
     }
 
     // Choose between two intervals to select random blocks and make it blink
