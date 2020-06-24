@@ -147,8 +147,14 @@ class GameTerminal1 {
                     //Make block fall booleans true depended on the random number
                     if(randomNumber == 0){
                         this.block.makeBlockMove(true, 50)
+                        if(this.block.makeBlockMove(true, 50)){
+                            this.terminalTimer(0)
+                        }
                     } else if(randomNumber == 1){
                         this.block2.makeBlockMove(true, 50)
+                        if(this.block2.makeBlockMove(true, 50)){
+                            this.terminalTimer(0)
+                        }
                     }
 
                     this.blockBlinker(getRandomBlock, "stop")
@@ -176,7 +182,6 @@ class GameTerminal1 {
                 document.getElementsByTagName("message")[0].innerHTML = `${this.countdown}`
                 if(this.countdown == 0){
                     document.getElementsByTagName("message")[0].innerHTML = ''
-                    this.terminalTimer(0)
                     this.getRandomBlockBlink()
                     
                     
@@ -187,9 +192,13 @@ class GameTerminal1 {
 
     async terminalTimer(getSeconds:number){
         this.timer = getSeconds
-            for(let i = getSeconds; i >= 0; i++){
+            for(let i = getSeconds; i < 3; i++){
                 await this.delay(1000)
                 this.timer = this.timer + 1
+                if(this.timer == 3){
+                    this.gameWin()
+                    this.updateScore(2)
+                }
             }
     }
 
@@ -198,15 +207,10 @@ class GameTerminal1 {
         let hit = this.checkCollision(player.getRectangle(), this.block.getRectangle())
         let hit2 = this.checkCollision(player.getRectangle(), this.block2.getRectangle())
 
-        if (hit) {
-            this.updateScore(-1)
+        if (hit || hit2) {
             this.gameOver()
         }
 
-        if (hit2) {
-            this.updateScore(2)
-            this.gameWin()
-        }
     }
     
     
@@ -225,8 +229,7 @@ class GameTerminal1 {
         }
 
     gameOver() {
-        console.log("GAME OVER")
-        document.getElementsByTagName("message")[0].innerHTML = `Game Over`
+        document.getElementsByTagName("gamemessage")[0].innerHTML = `Game Over`
         this.killAll()
         this.gameInstance.playingTerminal = false
         this.gameInstance.reset()
