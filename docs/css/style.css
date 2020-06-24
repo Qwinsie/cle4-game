@@ -6,6 +6,9 @@ html, body {
 
 }
 
+audio {
+    display: none;
+}
 
 game * {
     position: absolute;
@@ -266,5 +269,19 @@ message {
     color: red;
     font-size: 100px;
     z-index: 12;
+}
+
+.gamemessagebox {
+    left: 35%; top: 35%;
+}
+
+gamemessage {
+    font-family: 'Press Start 2P', cursive;
+    color: red;
+    font-size: 100px;
+    text-align: center;
+    z-index: 12;
+    
+
 }
 

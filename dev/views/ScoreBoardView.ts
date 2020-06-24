@@ -7,17 +7,19 @@ class ScoreBoardView {
     private  $scoreField = null;
     private currentScore = null;
 
-    constructor() {
+    constructor(score:number) {
         console.log("ScoreBoardView created");
         
         // this.currentScore = null;
         // // getAllScores()
     
         // // Check if localStorage werkt
-        // if (typeof window.localStorage === "undefined") {
-        //     console.error('Local storage is not available in your browser');
-        //     return;
-        // }
+        if (typeof window.localStorage === "undefined") {
+            console.error('Local storage is not available in your browser');
+            return;
+        }
+
+        this.createForm(score)
     
         // // Get Name + Score from LocalStorage
         // let currentScore = this.getScore()
@@ -35,7 +37,7 @@ class ScoreBoardView {
         // this.fillFieldsFromLocalStorage();
     
         // // Send Data to LocalStorage
-        // this.$form.addEventListener('submit', this.submitHandler);
+        this.createform.addEventListener('submit', this.submitHandler);
     }
 
     public createForm(score: number) {
@@ -80,7 +82,14 @@ class ScoreBoardView {
         var linebreak = document.createElement('br');
         this.createform.appendChild(linebreak);
 
+        var submitelement = document.createElement('input'); // Append Submit Button
+        submitelement.setAttribute("type", "submit");
+        submitelement.setAttribute("name", "dsubmit");
+        submitelement.setAttribute("value", "Submit");
+        this.createform.appendChild(submitelement);
+
         // this.$form = document.getElementById('form');
+        
     }
 
 
@@ -113,7 +122,6 @@ class ScoreBoardView {
         e.preventDefault();
         localStorage.setItem('name', this.$nameField.value);
         // localStorage.setItem('score', $scoreField.value);
-
 
         this.currentScore.push(this.$scoreField.value)
         localStorage.setItem('score', JSON.stringify(this.currentScore))
