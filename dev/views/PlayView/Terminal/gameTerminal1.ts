@@ -1,5 +1,6 @@
 /// <reference path="terminal1Player.ts"/>
 /// <reference path="terminal1Block.ts"/>
+/// <reference path="terminal2Block.ts"/>
 
 class GameTerminal1 {
     // Fields
@@ -8,13 +9,22 @@ class GameTerminal1 {
 
     private player : Terminal1Player
     private block : Terminal1Block
-    private block2 : Terminal1Block
+    private block2 : Terminal2Block
     private background : Terminal1Background
     private border : Terminal1Border
 
     private score : number = 0
 
-    private timer : number = 0
+    private countdown : number = 0
+    private timer : number
+
+    private blinkBool : boolean = false
+    private chosenBlock : boolean = false
+    private totalBlinks : number = 3
+    private blinkInterval : any
+    protected blinkStop : boolean = false
+    public block1Fall : boolean = false
+    public block2Fall : boolean = false
 
     // Inputs
     private xKey : number
@@ -33,24 +43,22 @@ class GameTerminal1 {
         this.xKey = 100
 
         this.player = new Terminal1Player()
-        this.block = new Terminal1Block(100)
-        this.block2 = new Terminal1Block(1000, 79, 75)
+        this.block = new Terminal1Block(70, -400)
+        this.block2 = new Terminal2Block(720, -400)
         this.background = new Terminal1Background()
         this.border = new Terminal1Border()
 
         window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e))
         window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
 
-        this.update()
-
-        //Game timer init
-        this.gameTimer(4,"countdown")
         
-        if(this.timer == 0){
-            this.gameTimer(0,"timer")
-        }
-    }
 
+        this.update()
+        //Countdown
+        this.terminalCountdown(4)
+        
+
+    }
 
     // gameLoop
     public update(){
@@ -59,6 +67,8 @@ class GameTerminal1 {
         this.block2.update()
 
         this.checkBlockPlayerCollision(this.player)
+
+        
 
         // console.log("terminal 1 gameloop")
 
@@ -84,6 +94,8 @@ class GameTerminal1 {
         }
     }
 
+    
+
     // Delay function for timer, creates delay between each count
     private delay(delay: number){
         return new Promise(r => {
@@ -91,36 +103,94 @@ class GameTerminal1 {
         })
     }
 
-    // Global gametimer function (getSeconds = total seconds, getType = what type counter)
-    async gameTimer(getSeconds: number, getType: string)  {
-        
-        //NOTE: Verander van een switch statement naar een if statement
-        switch(getType){
-            case "countdown":
-                this.timer = getSeconds
-                for(let i = getSeconds; i > 0; i--){
-                    
-                    await this.delay(1500)
-                    this.timer = this.timer - 1
-                    
-                    
-                    document.getElementsByTagName("message")[0].innerHTML = `${this.timer}`
-                    if(this.timer == 0){
-                        document.getElementsByTagName("message")[0].innerHTML = ''
-                        this.timer = 0
-                    }
+    
+    // Function for making block blink between red and original
+    private blockBlinker(r:any, type:string){
+        this.chosenBlock = true
+        if(type == "start"){
+            this.blinkInterval = setInterval(function(){
+                if(this.blinkBool){
+                    r.classList.add('terminal-block-blink')
+                    this.blinkBool = false
+                } else {
+                    r.classList.remove('terminal-block-blink')
+                    this.blinkBool = true
                 }
-                break;
-            
-            case "timer":
-                this.timer = getSeconds
-                for(let i = getSeconds; i = 0; i++){
-                    await this.delay(1000)
-                    this.timer = this.timer + 1
-                    document.getElementsByTagName("message")[0].innerHTML = `${this.timer}`
-                }
-                break;
+            }, 500)
+        } else if(type == "stop"){
+            this.chosenBlock = true
+            this.blinkBool = false
+            clearInterval(this.blinkInterval)
+            r.classList.remove("terminal-block-blink")
         }
+        
+
+    }
+
+    // Choose between two intervals to select random blocks and make it blink
+    async getRandomBlockBlink(){
+        if(!this.chosenBlock){
+            this.blinkBool = true
+            let randomNumber = Math.floor(Math.random() * 2) + 0
+            let blocks = [document.getElementsByTagName("terminal1block")[0], document.getElementsByTagName("terminal2block")[0]]
+            let getRandomBlock = blocks[randomNumber]
+            this.blockBlinker(getRandomBlock, "start")
+
+            for(let i = this.totalBlinks; i > 0; i--){
+                await this.delay(1000)
+                this.totalBlinks = this.totalBlinks - 1
+
+                console.log(this.totalBlinks)
+                if(this.totalBlinks == 0){
+                    this.blinkStop = true
+
+                    //Make block fall booleans true depended on the random number
+                    if(randomNumber == 0){
+                        this.block.makeBlockMove(true, 50)
+                    } else if(randomNumber == 1){
+                        this.block2.makeBlockMove(true, 50)
+                    }
+
+                    this.blockBlinker(getRandomBlock, "stop")
+                    
+                }
+                
+                
+            }
+
+            
+        }
+        
+    }
+
+    // Global gametimer function (getSeconds = total seconds, getType = what type counter)
+    async terminalCountdown(getSeconds: number)  {
+
+            this.countdown = getSeconds
+            for(let i = getSeconds; i > 0; i--){
+                    
+                await this.delay(600)
+                this.countdown = this.countdown - 1
+                
+                
+                document.getElementsByTagName("message")[0].innerHTML = `${this.countdown}`
+                if(this.countdown == 0){
+                    document.getElementsByTagName("message")[0].innerHTML = ''
+                    this.terminalTimer(0)
+                    this.getRandomBlockBlink()
+                    
+                    
+                }
+            }
+        
+    }
+
+    async terminalTimer(getSeconds:number){
+        this.timer = getSeconds
+            for(let i = getSeconds; i >= 0; i++){
+                await this.delay(1000)
+                this.timer = this.timer + 1
+            }
     }
 
     checkBlockPlayerCollision(player : Terminal1Player) {

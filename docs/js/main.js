@@ -565,7 +565,7 @@ class Terminal1Player {
         this.rightKey = 68;
         this.leftKey = 65;
         this._x = 0;
-        this._y = 700;
+        this._y = 600;
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
     }
@@ -594,7 +594,7 @@ class Terminal1Player {
     }
     update() {
         let newPosX = this._x - this.leftSpeed + this.rightSpeed;
-        if (newPosX > 0 && newPosX + 400 < window.innerWidth)
+        if (newPosX > 0 && newPosX + 400 < 1600)
             this._x = newPosX;
         this._div.style.transform = `translate(${this._x}px, ${this._y}px) scale(0.3)`;
     }
@@ -603,46 +603,64 @@ class Terminal1Player {
     }
 }
 class Terminal1Block {
-    constructor(x = 0, upkey = 73, downkey = 74, y = -800) {
+    constructor(x = 0, y = 0) {
         this.downSpeed = 0;
         this.upSpeed = 0;
         this.blockSpeed = 20;
         this._div = document.createElement("Terminal1Block");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this._div);
-        this.upkey = upkey;
-        this.downkey = downkey;
         this._x = x;
         this._y = y;
-        window.addEventListener("keydown", (e) => this.onKeyDown(e));
-        window.addEventListener("keyup", (e) => this.onKeyUp(e));
+        this.update();
     }
     get div() { return this._div; }
     get x() { return this._x; }
     get y() { return this._y; }
-    onKeyDown(e) {
-        switch (e.keyCode) {
-            case this.upkey:
-                this.upSpeed = this.blockSpeed;
-                break;
-            case this.downkey:
-                this.downSpeed = this.blockSpeed;
-                break;
-        }
-    }
-    onKeyUp(e) {
-        switch (e.keyCode) {
-            case this.upkey:
-                this.upSpeed = 0;
-                break;
-            case this.downkey:
-                this.downSpeed = 0;
-                break;
+    makeBlockMove(f, down) {
+        if (f) {
+            this.downSpeed = down;
         }
     }
     update() {
         let newPosY = this._y - this.upSpeed + this.downSpeed;
         this._y = newPosY;
+        if (this._y == 100) {
+            this.downSpeed = 0;
+            this._y = 70;
+        }
+        this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
+    }
+    getRectangle() {
+        return this._div.getBoundingClientRect();
+    }
+}
+class Terminal2Block {
+    constructor(x = 0, y = 0) {
+        this.downSpeed = 0;
+        this.upSpeed = 0;
+        this.blockSpeed = 20;
+        this._div = document.createElement("Terminal2Block");
+        let game = document.getElementsByTagName("game")[0];
+        game.appendChild(this._div);
+        this._x = x;
+        this._y = y;
+    }
+    get div() { return this._div; }
+    get x() { return this._x; }
+    get y() { return this._y; }
+    makeBlockMove(f, down) {
+        if (f) {
+            this.downSpeed = down;
+        }
+    }
+    update() {
+        let newPosY = this._y - this.upSpeed + this.downSpeed;
+        this._y = newPosY;
+        if (this.y == 100) {
+            this.downSpeed = 0;
+            this._y = 70;
+        }
         this._div.style.transform = `translate(${this._x}px, ${this._y}px)`;
     }
     getRectangle() {
@@ -652,7 +670,13 @@ class Terminal1Block {
 class GameTerminal1 {
     constructor(gameInstance) {
         this.score = 0;
-        this.timer = 0;
+        this.countdown = 0;
+        this.blinkBool = false;
+        this.chosenBlock = false;
+        this.totalBlinks = 3;
+        this.blinkStop = false;
+        this.block1Fall = false;
+        this.block2Fall = false;
         console.log("TERMINAL CLASS STARTED");
         this._div = document.createElement("div");
         this.gameInstance = gameInstance;
@@ -660,17 +684,14 @@ class GameTerminal1 {
         game.appendChild(this._div);
         this.xKey = 100;
         this.player = new Terminal1Player();
-        this.block = new Terminal1Block(100);
-        this.block2 = new Terminal1Block(1000, 79, 75);
+        this.block = new Terminal1Block(70, -400);
+        this.block2 = new Terminal2Block(720, -400);
         this.background = new Terminal1Background();
         this.border = new Terminal1Border();
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
         this.update();
-        this.gameTimer(4, "countdown");
-        if (this.timer == 0) {
-            this.gameTimer(0, "timer");
-        }
+        this.terminalCountdown(4);
     }
     update() {
         this.player.update();
@@ -696,29 +717,74 @@ class GameTerminal1 {
             setTimeout(r, delay);
         });
     }
-    gameTimer(getSeconds, getType) {
+    blockBlinker(r, type) {
+        this.chosenBlock = true;
+        if (type == "start") {
+            this.blinkInterval = setInterval(function () {
+                if (this.blinkBool) {
+                    r.classList.add('terminal-block-blink');
+                    this.blinkBool = false;
+                }
+                else {
+                    r.classList.remove('terminal-block-blink');
+                    this.blinkBool = true;
+                }
+            }, 500);
+        }
+        else if (type == "stop") {
+            this.chosenBlock = true;
+            this.blinkBool = false;
+            clearInterval(this.blinkInterval);
+            r.classList.remove("terminal-block-blink");
+        }
+    }
+    getRandomBlockBlink() {
         return __awaiter(this, void 0, void 0, function* () {
-            switch (getType) {
-                case "countdown":
-                    this.timer = getSeconds;
-                    for (let i = getSeconds; i > 0; i--) {
-                        yield this.delay(1500);
-                        this.timer = this.timer - 1;
-                        document.getElementsByTagName("message")[0].innerHTML = `${this.timer}`;
-                        if (this.timer == 0) {
-                            document.getElementsByTagName("message")[0].innerHTML = '';
-                            this.timer = 0;
+            if (!this.chosenBlock) {
+                this.blinkBool = true;
+                let randomNumber = Math.floor(Math.random() * 2) + 0;
+                let blocks = [document.getElementsByTagName("terminal1block")[0], document.getElementsByTagName("terminal2block")[0]];
+                let getRandomBlock = blocks[randomNumber];
+                this.blockBlinker(getRandomBlock, "start");
+                for (let i = this.totalBlinks; i > 0; i--) {
+                    yield this.delay(1000);
+                    this.totalBlinks = this.totalBlinks - 1;
+                    console.log(this.totalBlinks);
+                    if (this.totalBlinks == 0) {
+                        this.blinkStop = true;
+                        if (randomNumber == 0) {
+                            this.block.makeBlockMove(true, 50);
                         }
+                        else if (randomNumber == 1) {
+                            this.block2.makeBlockMove(true, 50);
+                        }
+                        this.blockBlinker(getRandomBlock, "stop");
                     }
-                    break;
-                case "timer":
-                    this.timer = getSeconds;
-                    for (let i = getSeconds; i = 0; i++) {
-                        yield this.delay(1000);
-                        this.timer = this.timer + 1;
-                        document.getElementsByTagName("message")[0].innerHTML = `${this.timer}`;
-                    }
-                    break;
+                }
+            }
+        });
+    }
+    terminalCountdown(getSeconds) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.countdown = getSeconds;
+            for (let i = getSeconds; i > 0; i--) {
+                yield this.delay(600);
+                this.countdown = this.countdown - 1;
+                document.getElementsByTagName("message")[0].innerHTML = `${this.countdown}`;
+                if (this.countdown == 0) {
+                    document.getElementsByTagName("message")[0].innerHTML = '';
+                    this.terminalTimer(0);
+                    this.getRandomBlockBlink();
+                }
+            }
+        });
+    }
+    terminalTimer(getSeconds) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.timer = getSeconds;
+            for (let i = getSeconds; i >= 0; i++) {
+                yield this.delay(1000);
+                this.timer = this.timer + 1;
             }
         });
     }

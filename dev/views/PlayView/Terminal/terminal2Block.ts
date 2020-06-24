@@ -1,11 +1,12 @@
-class Terminal1Block {
+class Terminal2Block {
     // Fields
     private _div : HTMLElement
     private gameInstance : Game
-   
+    private terminal: GameTerminal1
 
     private _x : number
     private _y : number
+    private newPosY : number
 
     private downSpeed : number = 0
     private upSpeed : number = 0
@@ -26,9 +27,8 @@ class Terminal1Block {
 
     // Construtor
     constructor(x : number = 0,  
-                y : number = 0,
-                ) {
-        this._div = document.createElement("Terminal1Block")
+                y : number = 0,) {
+        this._div = document.createElement("Terminal2Block")
 
         let game = document.getElementsByTagName("game")[0]
         game.appendChild(this._div)
@@ -37,18 +37,17 @@ class Terminal1Block {
         this._x = x
         this._y = y
 
-        
-
-        this.update()
-
+     
     }
 
     public makeBlockMove(f:boolean, down:number){
         if(f){
             this.downSpeed = down
+            
         }
     }
 
+  
 
 
     public update() {
@@ -57,8 +56,7 @@ class Terminal1Block {
         // if (newPosY > 0 && newPosY + 100 < window.innerHeight) 
 
         this._y = newPosY
-
-        if(this._y == 100){
+        if(this.y == 100){
             this.downSpeed = 0
             this._y = 70
         }

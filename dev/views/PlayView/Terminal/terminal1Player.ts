@@ -32,7 +32,7 @@ class Terminal1Player {
         this.leftKey = 65
 
         this._x = 0
-        this._y = 700
+        this._y = 600
 
         window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e))
         window.addEventListener("keyup", (e: KeyboardEvent) => this.onKeyUp(e))
@@ -65,7 +65,7 @@ class Terminal1Player {
         let newPosX = this._x - this.leftSpeed + this.rightSpeed
 
         // Checks if player is still inside the screen
-        if (newPosX > 0 && newPosX + 400 < window.innerWidth) this._x = newPosX
+        if (newPosX > 0 && newPosX + 400 < 1600) this._x = newPosX
 
         this._div.style.transform = `translate(${this._x}px, ${this._y}px) scale(0.3)`
     }
