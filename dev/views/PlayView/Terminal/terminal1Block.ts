@@ -25,9 +25,9 @@ class Terminal1Block {
 
     // Construtor
     constructor(x : number = 0, 
-                upkey : number = 73, 
-                downkey : number = 74, 
-                y : number = -800) {
+                upkey : number = 0, 
+                downkey : number = 0, 
+                y : number = 0) {
         this._div = document.createElement("Terminal1Block")
 
         let game = document.getElementsByTagName("game")[0]
@@ -81,3 +81,5 @@ class Terminal1Block {
         return this._div.getBoundingClientRect()
     }
 }
+
+// 866.88 width height: 978.24

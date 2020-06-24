@@ -565,7 +565,7 @@ class Terminal1Player {
         this.rightKey = 68;
         this.leftKey = 65;
         this._x = 0;
-        this._y = 700;
+        this._y = 600;
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
     }
@@ -594,7 +594,7 @@ class Terminal1Player {
     }
     update() {
         let newPosX = this._x - this.leftSpeed + this.rightSpeed;
-        if (newPosX > 0 && newPosX + 400 < window.innerWidth)
+        if (newPosX > 0 && newPosX + 400 < 1600)
             this._x = newPosX;
         this._div.style.transform = `translate(${this._x}px, ${this._y}px) scale(0.3)`;
     }
@@ -603,7 +603,7 @@ class Terminal1Player {
     }
 }
 class Terminal1Block {
-    constructor(x = 0, upkey = 73, downkey = 74, y = -800) {
+    constructor(x = 0, upkey = 0, downkey = 0, y = 0) {
         this.downSpeed = 0;
         this.upSpeed = 0;
         this.blockSpeed = 20;
@@ -660,8 +660,8 @@ class GameTerminal1 {
         game.appendChild(this._div);
         this.xKey = 100;
         this.player = new Terminal1Player();
-        this.block = new Terminal1Block(100);
-        this.block2 = new Terminal1Block(1000, 79, 75);
+        this.block = new Terminal1Block(70, 0, 0, -400);
+        this.block2 = new Terminal1Block(720, 0, 0, -400);
         this.background = new Terminal1Background();
         this.border = new Terminal1Border();
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
