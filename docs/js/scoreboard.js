@@ -66,8 +66,6 @@ function submitHandler(e)
     localStorage.setItem('name', $nameField.value);
     // localStorage.setItem('score', $scoreField.value);
 
-
-    currentScore.push($scoreField.value)
     localStorage.setItem('score', JSON.stringify(currentScore))
 }
 

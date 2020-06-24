@@ -9,22 +9,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 class ScoreBoardView {
     constructor(score) {
-        this.$form = null;
-        this.$nameField = null;
-        this.$scoreField = null;
-        this.currentScore = null;
-        console.log("ScoreBoardView created");
-        if (typeof window.localStorage === "undefined") {
-            console.error('Local storage is not available in your browser');
-            return;
-        }
+        this.form = document.querySelector('form');
+        this.input = document.getElementById('item');
+        this.item = localStorage.getItem('name');
+        this.currentscore = 0;
+        this.currentscore = score;
         this.createForm(score);
-        this.createform.addEventListener('submit', this.submitHandler);
+        this.form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            localStorage.setItem('name', this.input.value);
+            this.input.value = "";
+        });
     }
     createForm(score) {
         this.createform = document.createElement("form");
-        this.createform.setAttribute("action", "");
-        this.createform.setAttribute("method", "post");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.createform);
         let heading = document.createElement('h2');
@@ -38,8 +36,8 @@ class ScoreBoardView {
         namelabel.innerHTML = "Your Name : ";
         this.createform.appendChild(namelabel);
         var inputelement = document.createElement('input');
+        inputelement.setAttribute("id", "item");
         inputelement.setAttribute("type", "text");
-        inputelement.setAttribute("name", "dname");
         this.createform.appendChild(inputelement);
         var linebreak = document.createElement('br');
         this.createform.appendChild(linebreak);
@@ -49,40 +47,6 @@ class ScoreBoardView {
         var heading2 = document.createElement('h2');
         heading2.innerHTML = `${score}`;
         this.createform.appendChild(heading2);
-        var linebreak = document.createElement('br');
-        this.createform.appendChild(linebreak);
-        var submitelement = document.createElement('input');
-        submitelement.setAttribute("type", "submit");
-        submitelement.setAttribute("name", "dsubmit");
-        submitelement.setAttribute("value", "Submit");
-        this.createform.appendChild(submitelement);
-    }
-    addScore(name, score) {
-        console.log(name + " " + score);
-        let list = document.querySelector("#scores");
-        const newli = document.createElement("li");
-        newli.innerHTML = `${name} ${score}`;
-    }
-    getScore() {
-        let score = localStorage.getItem('score');
-        if (score) {
-            return JSON.parse(score);
-        }
-        else {
-            return [];
-        }
-    }
-    fillFieldsFromLocalStorage() {
-        if (localStorage.getItem('name') !== null) {
-            this.$nameField.value = localStorage.getItem('name');
-            this.$scoreField.value = localStorage.getItem('score');
-        }
-    }
-    submitHandler(e) {
-        e.preventDefault();
-        localStorage.setItem('name', this.$nameField.value);
-        this.currentScore.push(this.$scoreField.value);
-        localStorage.setItem('score', JSON.stringify(this.currentScore));
     }
 }
 class GameObject {
@@ -359,6 +323,9 @@ class Game {
         this.playingTerminal = false;
         this.terminalCount = 0;
         this.finished = false;
+        this.$form = document.getElementById('form');
+        this.$nameField = document.getElementById('name');
+        this.$scoreField = document.getElementById('score');
         this.div = document.createElement("div");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this.div);
@@ -515,7 +482,12 @@ class Game {
         this.terminalCount = 1;
     }
     reachedEndPoint() {
-        this.scoreboardview = new ScoreBoardView(this.score);
+        if (!this.finished) {
+            let form = document.getElementsByTagName("form")[0];
+            form.className = "";
+            this.formFillIn();
+        }
+        this.finished = true;
     }
     delay(delay) {
         return new Promise(r => {
@@ -530,6 +502,33 @@ class Game {
             yield this.delay(3000);
             location.reload();
         });
+    }
+    formFillIn() {
+        if (typeof window.localStorage === "undefined") {
+            console.error('Local storage is not available in your browser');
+            return;
+        }
+        this.fillFieldsFromLocalStorage();
+        this.$form.addEventListener('submit', (e) => this.submitHandler(e));
+    }
+    fillFieldsFromLocalStorage() {
+        let currentScore = this.score;
+        let name = localStorage.getItem('name');
+        if (name) {
+            this.$nameField.value = name;
+            console.log(this.$nameField.value);
+        }
+        if (currentScore) {
+            this.$scoreField.value = currentScore;
+        }
+        else {
+            this.$scoreField.value = 0;
+        }
+    }
+    submitHandler(e) {
+        e.preventDefault();
+        localStorage.setItem('name', this.$nameField.value);
+        localStorage.setItem('score', this.$scoreField.value);
     }
 }
 window.addEventListener("load", () => new Game());
