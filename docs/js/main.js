@@ -607,6 +607,7 @@ class Terminal1Block {
         this.downSpeed = 0;
         this.upSpeed = 0;
         this.blockSpeed = 20;
+        this.block1Down = true;
         this._div = document.createElement("Terminal1Block");
         let game = document.getElementsByTagName("game")[0];
         game.appendChild(this._div);
@@ -620,6 +621,8 @@ class Terminal1Block {
     makeBlockMove(f, down) {
         if (f) {
             this.downSpeed = down;
+            this.block1Down = true;
+            return this.block1Down;
         }
     }
     update() {
@@ -652,12 +655,14 @@ class Terminal2Block {
     makeBlockMove(f, down) {
         if (f) {
             this.downSpeed = down;
+            this.block2Down = true;
+            return this.block2Down;
         }
     }
     update() {
         let newPosY = this._y - this.upSpeed + this.downSpeed;
         this._y = newPosY;
-        if (this.y == 100) {
+        if (this._y == 100) {
             this.downSpeed = 0;
             this._y = 70;
         }
@@ -754,9 +759,15 @@ class GameTerminal1 {
                         this.blinkStop = true;
                         if (randomNumber == 0) {
                             this.block.makeBlockMove(true, 50);
+                            if (this.block.makeBlockMove(true, 50)) {
+                                this.terminalTimer(0);
+                            }
                         }
                         else if (randomNumber == 1) {
                             this.block2.makeBlockMove(true, 50);
+                            if (this.block2.makeBlockMove(true, 50)) {
+                                this.terminalTimer(0);
+                            }
                         }
                         this.blockBlinker(getRandomBlock, "stop");
                     }
@@ -773,7 +784,6 @@ class GameTerminal1 {
                 document.getElementsByTagName("message")[0].innerHTML = `${this.countdown}`;
                 if (this.countdown == 0) {
                     document.getElementsByTagName("message")[0].innerHTML = '';
-                    this.terminalTimer(0);
                     this.getRandomBlockBlink();
                 }
             }
@@ -782,22 +792,21 @@ class GameTerminal1 {
     terminalTimer(getSeconds) {
         return __awaiter(this, void 0, void 0, function* () {
             this.timer = getSeconds;
-            for (let i = getSeconds; i >= 0; i++) {
+            for (let i = getSeconds; i < 3; i++) {
                 yield this.delay(1000);
                 this.timer = this.timer + 1;
+                if (this.timer == 3) {
+                    this.gameWin();
+                    this.updateScore(2);
+                }
             }
         });
     }
     checkBlockPlayerCollision(player) {
         let hit = this.checkCollision(player.getRectangle(), this.block.getRectangle());
         let hit2 = this.checkCollision(player.getRectangle(), this.block2.getRectangle());
-        if (hit) {
-            this.updateScore(-1);
+        if (hit || hit2) {
             this.gameOver();
-        }
-        if (hit2) {
-            this.updateScore(2);
-            this.gameWin();
         }
     }
     updateScore(addScoreAmount) {
@@ -810,11 +819,14 @@ class GameTerminal1 {
             b.top <= a.bottom);
     }
     gameOver() {
-        console.log("GAME OVER");
-        document.getElementsByTagName("message")[0].innerHTML = `Game Over`;
-        this.killAll();
-        this.gameInstance.playingTerminal = false;
-        this.gameInstance.reset();
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log("GAME OVER");
+            document.getElementsByTagName("message")[0].innerHTML = `Game Over`;
+            this.killAll();
+            this.gameInstance.playingTerminal = false;
+            yield this.delay(5000);
+            this.gameInstance.reset();
+        });
     }
     gameWin() {
         this.killAll();
