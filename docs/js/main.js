@@ -830,8 +830,7 @@ class GameTerminal1 {
             b.top <= a.bottom);
     }
     gameOver() {
-        console.log("GAME OVER");
-        document.getElementsByTagName("message")[0].innerHTML = `Game Over`;
+        document.getElementsByTagName("gamemessage")[0].innerHTML = `Game Over`;
         this.killAll();
         this.gameInstance.playingTerminal = false;
         this.gameInstance.reset();
