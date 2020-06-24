@@ -629,7 +629,9 @@ class GameTerminal1 {
     constructor(gameInstance) {
         this.score = 0;
         this.countdown = 0;
-        this.blinkBool = true;
+        this.blinkBool = false;
+        this.chosenBlock = false;
+        this.totalBlinks = 3;
         console.log("TERMINAL CLASS STARTED");
         this._div = document.createElement("div");
         this.gameInstance = gameInstance;
@@ -651,6 +653,7 @@ class GameTerminal1 {
         this.block.update();
         this.block2.update();
         this.checkBlockPlayerCollision(this.player);
+        console.log(this.chosenBlock);
     }
     onKeyDown(e) {
         switch (e.keyCode) {
@@ -670,25 +673,43 @@ class GameTerminal1 {
             setTimeout(r, delay);
         });
     }
-    blockBlinker(r) {
-        setInterval(function () {
-            if (this.blinkBool) {
-                r.classList.add('terminal-block-blink');
-                this.blinkBool = false;
-            }
-            else {
-                r.classList.remove('terminal-block-blink');
-                this.blinkBool = true;
-            }
-        }, 1000);
+    blockBlinker(r, type) {
+        this.chosenBlock = true;
+        if (type == "start") {
+            this.blinkInterval = setInterval(function () {
+                if (this.blinkBool) {
+                    r.classList.add('terminal-block-blink');
+                    this.blinkBool = false;
+                }
+                else {
+                    r.classList.remove('terminal-block-blink');
+                    this.blinkBool = true;
+                }
+            }, 500);
+        }
+        else if (type == "stop") {
+            this.chosenBlock = true;
+            this.blinkBool = false;
+            clearInterval(this.blinkInterval);
+            r.classList.remove("terminal-block-blink");
+        }
     }
     getRandomBlockBlink() {
         return __awaiter(this, void 0, void 0, function* () {
-            for (let i = 0; i < 4; i++) {
-                yield this.delay(5000);
+            if (!this.chosenBlock) {
+                this.blinkBool = true;
                 let randomNumber = Math.floor(Math.random() * 2) + 0;
                 let getRandomBlock = document.getElementsByTagName("terminal1block")[randomNumber];
-                this.blockBlinker(getRandomBlock);
+                this.blockBlinker(getRandomBlock, "start");
+                for (let i = this.totalBlinks; i > 0; i--) {
+                    yield this.delay(1000);
+                    this.totalBlinks = this.totalBlinks - 1;
+                    console.log(this.totalBlinks);
+                    if (this.totalBlinks == 0) {
+                        console.log("stop");
+                        this.blockBlinker(getRandomBlock, "stop");
+                    }
+                }
             }
         });
     }
@@ -696,7 +717,7 @@ class GameTerminal1 {
         return __awaiter(this, void 0, void 0, function* () {
             this.countdown = getSeconds;
             for (let i = getSeconds; i > 0; i--) {
-                yield this.delay(1500);
+                yield this.delay(1000);
                 this.countdown = this.countdown - 1;
                 document.getElementsByTagName("message")[0].innerHTML = `${this.countdown}`;
                 if (this.countdown == 0) {
@@ -713,7 +734,6 @@ class GameTerminal1 {
             for (let i = getSeconds; i >= 0; i++) {
                 yield this.delay(1000);
                 this.timer = this.timer + 1;
-                console.log(this.timer);
             }
         });
     }

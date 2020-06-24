@@ -17,7 +17,10 @@ class GameTerminal1 {
     private countdown : number = 0
     private timer : number
 
-    private blinkBool : boolean = true
+    private blinkBool : boolean = false
+    private chosenBlock : boolean = false
+    private totalBlinks : number = 3
+    private blinkInterval : any
 
     // Inputs
     private xKey : number
@@ -60,6 +63,7 @@ class GameTerminal1 {
         this.block2.update()
 
         this.checkBlockPlayerCollision(this.player)
+        console.log(this.chosenBlock)
 
         
 
@@ -98,30 +102,52 @@ class GameTerminal1 {
 
     
     // Function for making block blink between red and original
-    private blockBlinker(r:any){
-        setInterval(function(){
-            if(this.blinkBool){
-                r.classList.add('terminal-block-blink')
-                this.blinkBool = false
-            } else {
-                r.classList.remove('terminal-block-blink')
-                this.blinkBool = true
-            }
-        }, 1000)
+    private blockBlinker(r:any, type:string){
+        this.chosenBlock = true
+        if(type == "start"){
+            this.blinkInterval = setInterval(function(){
+                if(this.blinkBool){
+                    r.classList.add('terminal-block-blink')
+                    this.blinkBool = false
+                } else {
+                    r.classList.remove('terminal-block-blink')
+                    this.blinkBool = true
+                }
+            }, 500)
+        } else if(type == "stop"){
+            this.chosenBlock = true
+            this.blinkBool = false
+            clearInterval(this.blinkInterval)
+            r.classList.remove("terminal-block-blink")
+        }
+        
+
     }
 
     // Choose between two intervals to select random blocks and make it blink
     async getRandomBlockBlink(){
-
-        for(let i = 0; i < 4; i++){
-            await this.delay(5000)
+        if(!this.chosenBlock){
+            this.blinkBool = true
             let randomNumber = Math.floor(Math.random() * 2) + 0
             let getRandomBlock = document.getElementsByTagName("terminal1block")[randomNumber]
-            this.blockBlinker(getRandomBlock)
+            this.blockBlinker(getRandomBlock, "start")
+
+            for(let i = this.totalBlinks; i > 0; i--){
+                await this.delay(1000)
+                this.totalBlinks = this.totalBlinks - 1
+
+                console.log(this.totalBlinks)
+                if(this.totalBlinks == 0){
+                    console.log("stop")
+                    this.blockBlinker(getRandomBlock, "stop")
+                }
+                
+                
+            }
+
+            
         }
         
-
-
     }
 
     // Global gametimer function (getSeconds = total seconds, getType = what type counter)
@@ -130,7 +156,7 @@ class GameTerminal1 {
             this.countdown = getSeconds
             for(let i = getSeconds; i > 0; i--){
                     
-                await this.delay(1500)
+                await this.delay(1000)
                 this.countdown = this.countdown - 1
                 
                 
@@ -139,6 +165,8 @@ class GameTerminal1 {
                     document.getElementsByTagName("message")[0].innerHTML = ''
                     this.terminalTimer(0)
                     this.getRandomBlockBlink()
+                    
+                    
                 }
             }
         
@@ -149,7 +177,6 @@ class GameTerminal1 {
             for(let i = getSeconds; i >= 0; i++){
                 await this.delay(1000)
                 this.timer = this.timer + 1
-                console.log(this.timer)
             }
     }
 
