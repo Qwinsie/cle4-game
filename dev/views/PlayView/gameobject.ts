@@ -57,8 +57,6 @@ class GameObject {
 
         this._x = xStart
         this._y = yStart
-
-        console.log(`${name} has been created`);
     }
 
     protected onKeyDown(e: KeyboardEvent): void {
