@@ -628,7 +628,8 @@ class Terminal1Block {
 class GameTerminal1 {
     constructor(gameInstance) {
         this.score = 0;
-        this.timer = 0;
+        this.countdown = 0;
+        this.blinkBool = true;
         console.log("TERMINAL CLASS STARTED");
         this._div = document.createElement("div");
         this.gameInstance = gameInstance;
@@ -643,10 +644,7 @@ class GameTerminal1 {
         window.addEventListener("keydown", (e) => this.onKeyDown(e));
         window.addEventListener("keyup", (e) => this.onKeyUp(e));
         this.update();
-        this.gameTimer(4, "countdown");
-        if (this.timer == 0) {
-            this.gameTimer(0, "timer");
-        }
+        this.terminalCountdown(4);
     }
     update() {
         this.player.update();
@@ -672,29 +670,50 @@ class GameTerminal1 {
             setTimeout(r, delay);
         });
     }
-    gameTimer(getSeconds, getType) {
+    blockBlinker(r) {
+        setInterval(function () {
+            if (this.blinkBool) {
+                r.classlist.add('terminal-block-blink');
+                this.blinkBool = false;
+            }
+            else {
+                r.classlist.remove('terminal-block-blink');
+                this.blinkBool = true;
+            }
+        }, 1500);
+    }
+    getRandomBlockBlink() {
         return __awaiter(this, void 0, void 0, function* () {
-            switch (getType) {
-                case "countdown":
-                    this.timer = getSeconds;
-                    for (let i = getSeconds; i > 0; i--) {
-                        yield this.delay(1500);
-                        this.timer = this.timer - 1;
-                        document.getElementsByTagName("message")[0].innerHTML = `${this.timer}`;
-                        if (this.timer == 0) {
-                            document.getElementsByTagName("message")[0].innerHTML = '';
-                            this.timer = 0;
-                        }
-                    }
-                    break;
-                case "timer":
-                    this.timer = getSeconds;
-                    for (let i = getSeconds; i = 0; i++) {
-                        yield this.delay(1000);
-                        this.timer = this.timer + 1;
-                        document.getElementsByTagName("message")[0].innerHTML = `${this.timer}`;
-                    }
-                    break;
+            for (let i = 0; i < 4; i++) {
+                yield this.delay(5000);
+                let randomNumber = Math.floor(Math.random() * 2) + 0;
+                let getRandomBlock = document.getElementsByTagName("terminal1block")[randomNumber];
+                this.blockBlinker(getRandomBlock);
+            }
+        });
+    }
+    terminalCountdown(getSeconds) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.countdown = getSeconds;
+            for (let i = getSeconds; i > 0; i--) {
+                yield this.delay(1500);
+                this.countdown = this.countdown - 1;
+                document.getElementsByTagName("message")[0].innerHTML = `${this.countdown}`;
+                if (this.countdown == 0) {
+                    document.getElementsByTagName("message")[0].innerHTML = '';
+                    this.terminalTimer(0);
+                    this.getRandomBlockBlink();
+                }
+            }
+        });
+    }
+    terminalTimer(getSeconds) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.timer = getSeconds;
+            for (let i = getSeconds; i >= 0; i++) {
+                yield this.delay(1000);
+                this.timer = this.timer + 1;
+                console.log(this.timer);
             }
         });
     }
