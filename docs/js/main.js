@@ -8,12 +8,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 class ScoreBoardView {
-    constructor() {
+    constructor(score) {
         this.$form = null;
         this.$nameField = null;
         this.$scoreField = null;
         this.currentScore = null;
         console.log("ScoreBoardView created");
+        if (typeof window.localStorage === "undefined") {
+            console.error('Local storage is not available in your browser');
+            return;
+        }
+        this.createForm(score);
+        this.createform.addEventListener('submit', this.submitHandler);
     }
     createForm(score) {
         this.createform = document.createElement("form");
@@ -45,6 +51,11 @@ class ScoreBoardView {
         this.createform.appendChild(heading2);
         var linebreak = document.createElement('br');
         this.createform.appendChild(linebreak);
+        var submitelement = document.createElement('input');
+        submitelement.setAttribute("type", "submit");
+        submitelement.setAttribute("name", "dsubmit");
+        submitelement.setAttribute("value", "Submit");
+        this.createform.appendChild(submitelement);
     }
     addScore(name, score) {
         console.log(name + " " + score);
@@ -504,8 +515,7 @@ class Game {
         this.terminalCount = 1;
     }
     reachedEndPoint() {
-        this.scoreboardview = new ScoreBoardView();
-        this.scoreboardview.createForm(this.score);
+        this.scoreboardview = new ScoreBoardView(this.score);
     }
     reset() {
         location.reload();
