@@ -6,14 +6,21 @@ The Puzzle/Platformer Arcade Game B.O.B in TypeScript made by Team H4CKERMEN. Th
 
 ## How to play:
 Your name is B.O.B, the Robot that gets powered on for the first time. Your objective is to explore and learn the world by hunting the codeclouds. But be fast, your battery cannot run forever. Luckily there are checkpoints on the way that will recharge your battery so that you can continue on.<br> 
+
+Try to reacht the EndPoint by walking to the right and solving puzzles when interacting with the codeclouds.
+
+This is the Battery, it will be displayed in the top-right corner indicating how much time you have left until your battery runs out of energy. 
+
 ![Battery](https://raw.githubusercontent.com/Qwinsie/cle4-game/master/docs/img/battery.gif)
 
 Do you need help with playing the game? Send me a message and I will try to help you out.
 
 ## Play now!
-You want to play? Give it a try by clicking on the following link: https://qwinsie.github.io/cle4-game/<br>
 You move the robot with 'W', 'A', 'S', 'D'.
+You want to play? Give it a try by clicking on the following link: https://qwinsie.github.io/cle4-game/<br>
+
 The Arcade controls are found over [here](https://qwinsie.github.io/cle4-game/pages/controls.html).
+![Controls](https://raw.githubusercontent.com/Qwinsie/cle4-game/master/docs/img/controls_preview.png)
 
 ## Author and License
 Made by: 
