@@ -19,8 +19,9 @@ Do you need help with playing the game? Send me a message and I will try to help
 You move the robot with 'W', 'A', 'S', 'D'.
 You want to play? Give it a try by clicking on the following link: https://qwinsie.github.io/cle4-game/<br>
 
-The Arcade controls are found over [here](https://qwinsie.github.io/cle4-game/pages/controls.html).
-![Controls](https://raw.githubusercontent.com/Qwinsie/cle4-game/master/docs/img/controls_preview.png)
+The Arcade controls are found over [here](https://qwinsie.github.io/cle4-game/pages/controls.html)<br>
+
+![Controls](https://raw.githubusercontent.com/Qwinsie/cle4-game/master/docs/img/controls_preview.PNG)
 
 ## Author and License
 Made by: 
