@@ -8,6 +8,7 @@ The Puzzle/Platformer Arcade Game B.O.B in TypeScript made by Team H4CKERMEN. Th
 Your name is B.O.B, the Robot that gets powered on for the first time. Your objective is to explore and learn the world by hunting the codeclouds. But be fast, your battery cannot run forever. Luckily there are checkpoints on the way that will recharge your battery so that you can continue on.<br> 
 
 Try to reacht the EndPoint by walking to the right and solving puzzles when interacting with the codeclouds.
+Don't forget to jump on the enemies to gain points and reach the top of the leaderboard.
 
 This is the Battery, it will be displayed in the top-right corner indicating how much time you have left until your battery runs out of energy. 
 
