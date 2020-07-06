@@ -10,6 +10,12 @@ Your name is B.O.B, the Robot that gets powered on for the first time. Your obje
 Try to reacht the EndPoint by walking to the right and solving puzzles when interacting with the codeclouds.
 Don't forget to jump on the enemies to gain points and reach the top of the leaderboard.
 
+You move the robot with 'W', 'A', 'S', 'D'.
+
+The Arcade controls are found over [here](https://qwinsie.github.io/cle4-game/pages/controls.html)<br>
+
+![Controls](https://raw.githubusercontent.com/Qwinsie/cle4-game/master/docs/img/controls_preview.PNG)
+
 This is the Battery, it will be displayed in the top-right corner indicating how much time you have left until your battery runs out of energy. 
 
 ![Battery](https://raw.githubusercontent.com/Qwinsie/cle4-game/master/docs/img/battery.gif)
@@ -17,12 +23,10 @@ This is the Battery, it will be displayed in the top-right corner indicating how
 Do you need help with playing the game? Send me a message and I will try to help you out.
 
 ## Play now!
-You move the robot with 'W', 'A', 'S', 'D'.
+
 You want to play? Give it a try by clicking on the following link: https://qwinsie.github.io/cle4-game/<br>
 
-The Arcade controls are found over [here](https://qwinsie.github.io/cle4-game/pages/controls.html)<br>
 
-![Controls](https://raw.githubusercontent.com/Qwinsie/cle4-game/master/docs/img/controls_preview.PNG)
 
 ## Author and License
 Made by: 
